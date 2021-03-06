@@ -27,9 +27,9 @@ const OptionTable = (props: any) => {
     function renderExpireExercise(option: any) {
         const { currentPrice, handleExercise, handleExpire } = props;
         if (option.expired) {
-            return<Button disabled outline={true} color={`rgb(${colors.black})`}>Expired</Button>;
+            return <b>Loss</b>;
         } else if (option.exercised) {
-            return <Button disabled outline={true} color={`rgb(${colors.black})`}>Exercised</Button>;
+            return <b>Win</b>;
         } if (option.complete) {
             return <Button disabled outline={true} color={`rgb(${colors.black})`}>Completed</Button>;
         } else if (option.timestamp + (3600 * 1000) < new Date().getTime()) {
@@ -57,7 +57,7 @@ const OptionTable = (props: any) => {
         if (showFee) {
             // tslint:disable-next-line:no-console
             console.log(`showing fee value ${web3.utils.fromWei(`${option.lockedValue*0.005}`, "ether")} ${web3.utils.fromWei(`${option.lockedValue}`, "ether")}`);
-            return <STh>{web3.utils.fromWei(`${option.lockedValue*0.005}`, "ether")}  ETH</STh>
+            return <STh>{web3.utils.fromWei(`${option.lockedValue*0.005}`, "ether")}  ETH ({web3.utils.fromWei(`${option.purchaseValue}`, "ether")}  ETH)</STh>
         } else {
 
             // tslint:disable-next-line:no-console
@@ -83,7 +83,7 @@ const OptionTable = (props: any) => {
                         <STh>ID</STh>
                         <STh>Direction</STh>
                         {showFee ?
-                        <STh>Fee</STh>
+                        <STh>Fee (Purchase Price)</STh>
                         : 
                         <>
                         <STh>Value (your bet + house)</STh>{/* 

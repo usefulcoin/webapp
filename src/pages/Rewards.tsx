@@ -136,8 +136,9 @@ class Stake extends React.Component<any, any> {
                 </div>
                 }
                 <br/>
-                <SHelper >Goverance Functionalities will be available on this page soon.</SHelper>
-               
+                <SHelper>Governance will be available here soon</SHelper>
+
+                <div style={{opacity: "0%"}}>
                 <div style={{border: "1px solid black"}}>
                     
                     <StakeBIOP web3={web3} chainId={chainId} address={address}/>
@@ -171,7 +172,7 @@ class Stake extends React.Component<any, any> {
                     <Button disabled>Change Governance Tier Levels</Button>
                     <Button disabled>Close Pool From New Deposits</Button>
                </div>
-
+               </div>
                
             </SRewards>
 

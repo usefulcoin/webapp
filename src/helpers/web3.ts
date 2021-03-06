@@ -61,12 +61,16 @@ export function getRateCalcContract(chainId: number, web3: any) {
 }
 
 
-export function getRate(amount: number, chainId: number, web3: any) {
+export function getRate(currentPrice: number, pair: string, dir: boolean, time: number, stack: number, amount: number, chainId: number, web3: any) {
   return new Promise(async (resolve, reject) => {
-    const rc = getRateCalcContract(chainId, web3)
+    
+      try {
+      const bo = getBOContract(chainId, web3)
     const max = await callPoolMaxAvailable(chainId, web3);
-    await rc.methods
-      .rate(amount, max, 0, 0, true)
+      // tslint:disable-next-line:no-console
+          console.log(`max is ${max}`);
+    await bo.methods
+      .getRate(pair, max, amount, currentPrice, time, dir)
       .call(
         { from: zeroAddress },
         (err: any, data: any) => {
@@ -77,6 +81,13 @@ export function getRate(amount: number, chainId: number, web3: any) {
           resolve(data);
         }
       )
+      } catch(e) {
+
+      // tslint:disable-next-line:no-console
+          console.log(`caught error ${e}`);
+          reject(e);
+      }
+          
   })
 }
 
@@ -483,6 +494,59 @@ export function callBIOPPendingBalance(address: string, chainId: number, web3: a
   })
 }
 
+export function callBetFee(chainId: number, web3: any)  {
+  return new Promise(async (resolve, reject) => {
+    const bo = getBOContract(chainId, web3);
+    await bo.methods
+      .devFundBetFee()
+      .call(
+        { from: zeroAddress },
+        (err: any, data: any) => {
+          if (err) {
+            reject(0)
+          }
+
+          resolve(data);
+        }
+      )
+  })
+}
+
+export function callOpenCalls(chainId: number, web3: any)  {
+  return new Promise(async (resolve, reject) => {
+    const bo = getBOContract(chainId, web3);
+    await bo.methods
+      .oC()
+      .call(
+        { from: zeroAddress },
+        (err: any, data: any) => {
+          if (err) {
+            reject(0)
+          }
+
+          resolve(data);
+        }
+      )
+  })
+}
+export function callOpenPuts(chainId: number, web3: any) {
+  return new Promise(async (resolve, reject) => {
+    const bo = getBOContract(chainId, web3);
+    await bo.methods
+      .oP()
+      .call(
+        { from: zeroAddress },
+        (err: any, data: any) => {
+          if (err) {
+            reject(0)
+          }
+
+          resolve(data);
+        }
+      )
+  })
+}
+
 export function claimRewards(address: string, chainId: number, web3: any, onComplete: any) {
   return new Promise(async (resolve, reject) => {
 
@@ -769,6 +833,24 @@ export function getTotalInterchange( web3: any, chainId: number) {
     const bin = getBOContract(chainId, web3);
     await bin.methods
       .tI()
+      .call(
+        { from: zeroAddress },
+        (err: any, data: any) => {
+          if (err) {
+            reject(err)
+          }
+
+          resolve(data)
+        }
+      )
+  })
+}
+
+export function getOptionData(optionId: any, web3: any, chainId: number) {
+  return new Promise(async (resolve, reject) => {
+    const bin = getBOContract(chainId, web3);
+    await bin.methods
+      .options(optionId)
       .call(
         { from: zeroAddress },
         (err: any, data: any) => {

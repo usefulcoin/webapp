@@ -158,7 +158,7 @@ public setTimeFrame(setting: string) {
           :
           <>
           <SHelper style={{color: `rgb(${colors.black})`}}>{this.renderTimeFrame()}</SHelper>
-          <div style={{width:"400px", height: "300px"}}>
+          <div style={{width:"100%", height: "300px"}}>
           <Line data={data} />
           </div>
           </>

@@ -5,28 +5,30 @@ import Down from "../assets/down.png";
 interface IBetButtonProps {
     up: boolean
     onClick: any
+    active: boolean
   }
 
 const BetButton = (props: IBetButtonProps) => {
-    const {up, onClick} = props;
+    const {up, onClick, active} = props;
     return (
         <div style={{
-            width: "120px",
-            height: "120px",
+            width: "45px",
+            height: "45px",
             background: `url(${up ? Up : Down}) no-repeat`,
             backgroundSize: `cover`,
             backgroundPosition: 'center',
-            margin: '15px',
+            margin: '3px',
             cursor: "pointer",
             color: "white",
-            fontSize: '1.25rem',
+            fontSize: '0.65rem',
             fontWeight: 'bold',
-            verticalAlign: 'middle'
+            verticalAlign: 'middle',
+            opacity: active ? "100%" : "50%"
         }}
         onClick={() => onClick()}
       >
 
-        <div style={{paddingTop: up ? "50px" : "30px"}}>{up ? "UP" : "DOWN"}</div>
+        <div style={{paddingTop: up ? "30px" : "2px"}}>{up ? "UP" : "DOWN"}</div>
         </div>
        
     )

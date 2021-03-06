@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { getOptionsAndCloses, sendExpire, sendExercise, getLatestPrice, blockTimestamp } from "../helpers/web3";
+import { getOptionsAndCloses, sendExpire, sendExercise, getLatestPrice, blockTimestamp, getOptionData } from "../helpers/web3";
 import {add, floorDivide} from '../helpers/bignumber';
 
 import OptionVis from 'src/components/OptionVis';
@@ -132,6 +132,11 @@ class Exercise extends React.Component<any, any> {
                             optionsObjects[options[i].returnValues.id].exercised = true;
                         }
                     } else {
+                        const optionData: any = await getOptionData(options[i].returnValues.id, web3, chainId);
+                        // tslint:disable-next-line:no-console
+            console.log("loaded option data");
+           // tslint:disable-next-line:no-console
+           console.log(optionData);
                         optionsObjects[options[i].returnValues.id] = {
                             blockNumber: options[i].blockNumber,
                             timestamp,
@@ -139,6 +144,7 @@ class Exercise extends React.Component<any, any> {
                             creator: options[i].returnValues.account,
                             strikePrice: options[i].returnValues.sP,
                             lockedValue: options[i].returnValues.lV,
+                            purchaseValue: optionData.pV,
                             type: options[i].returnValues.dir,
                             complete: false
                         }
@@ -178,8 +184,9 @@ class Exercise extends React.Component<any, any> {
             avgValue = add(avgValue, optionsObjects[id].lockedValue);
 
         // tslint:disable-next-line:no-console
-        console.log(`avgValue after ${avgValue}`);
+        console.log(`avgValue after ${avgValue}. purchase value of option = ${optionsObjects[id].purchaseValue}`);
             sortedOptions.push(optionsObjects[id]);
+            
         });
 
         // tslint:disable-next-line:no-console

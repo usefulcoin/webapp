@@ -106,7 +106,7 @@ const Header = (props: IHeaderProps) => {
   const chainData = chainId ? getChainData(chainId) : null
   return (
     <>
-    <SBanner>BIOP V3 is now live!🚀 Looking for v2? <a href="https://biopset-v2.surge.sh" style={{border: "1px solid white"}}>click here</a></SBanner>
+    <SBanner>V4 Test Edition </SBanner>
    
     <SHeader {...props}>
       {connected && chainData ? (

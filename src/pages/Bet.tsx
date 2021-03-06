@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { initiateSwapIfAvailable, sendExercise, sendExpire, callPoolTotalSupply, getLatestPrice, callPoolStakedBalance, callPoolMaxAvailable, getRate, blockTimestamp, getOptionCreation, getOptionCloses, getTotalInterchange } from "../helpers/web3";
+import { /*initiateSwapIfAvailable,*/ callBetFee, sendExercise, sendExpire, callPoolTotalSupply, getLatestPrice, callPoolStakedBalance, callPoolMaxAvailable, getRate, blockTimestamp, getOptionCreation, getOptionCloses, getTotalInterchange, callOpenCalls, callOpenPuts } from "../helpers/web3";
 
 
 // import Right from "../assets/right.png";
@@ -11,10 +11,11 @@ import { enabledPricePairs } from "../constants";
 import Column from 'src/components/Column';
 import OptionTable from 'src/components/OptionTable';
 import BetButton from 'src/components/BetButton';
+import Button from 'src/components/Button';
 import Loading from 'src/components/Loading';
 import PriceChart from 'src/components/PriceChart';
 import { colors } from 'src/styles';
-import { convertAmountFromRawNumber, formatFixedDecimals, floorDivide, divide } from 'src/helpers/bignumber';
+import { convertAmountFromRawNumber, formatFixedDecimals, divide, greaterThan, multiply } from 'src/helpers/bignumber';
 
 const SBet = styled.div`
     width:100%;
@@ -26,9 +27,9 @@ const SHelper = styled.div`
 
 const SBetter = styled.div`
     display: flex;
-    flex-direction: row;
-    height: 300px;
-    width: 450px;
+    flex-direction: column;
+    height: 600px;
+    width: 100%;
 `
 const SInputContainer = styled.div`
     display: flex;
@@ -40,7 +41,7 @@ const SInputContainer = styled.div`
 
 const SInputBbContainer = styled.div`
     flex: 1;
-    height: 75px;
+    height: 80px;
     text-transform: uppercase;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -69,8 +70,22 @@ position: relative;
 const SBetButtonContainer = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
 `;
+
+const SRow = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+const SColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+`;
+
 
 const SSelect = styled.select`
     border-radius: 8px;
@@ -87,8 +102,8 @@ const SInterface = styled.div`
 `
 
 const Times = {
-    "1 HOUR": 60 * 60,/* 
     "30 MIN": 60*30,
+    "1 HOUR": 60 * 60,/*
     "15 MIN": 60*15, */
 };
 
@@ -121,6 +136,9 @@ interface IBetState {
     optionsInterval: any;
     lastBetCall: boolean;
     totalInterchange: number;
+    betDirection: boolean;
+    openOptions: number;
+    betFee: number;
 }
 
 const INITIAL_STATE: IBetState = {
@@ -134,13 +152,16 @@ const INITIAL_STATE: IBetState = {
     amountToWin: 0,
     hasBet: false,
     pair: enabledPricePairs[0],
-    timeFrame: 60 * 60,
+    timeFrame: 30 * 60,// 30 mins
     userOptions: [],
     currentPrice: 0,
     priceInterval: null,
     optionsInterval: null,
     lastBetCall: false,
-    totalInterchange: 0
+    totalInterchange: 0,
+    betDirection: true, // true means call
+    openOptions: 2,
+    betFee: 0
 };
 class Bet extends React.Component<any, any> {
     // @ts-ignore
@@ -156,13 +177,15 @@ class Bet extends React.Component<any, any> {
         this.state.chainId = props.chainId;
     }
 
-    public componentDidMount() {
-        const { address, chainId, web3 } = this.state;
-        initiateSwapIfAvailable(address, chainId, web3);
-        this.getStaked();
-        this.handleBetAmountUpdate({ target: { value: "0.1" } });
+    public async componentDidMount() {
+        const { /*address, chainId, web3,*/ betDirection } = this.state;
+        // initiateSwapIfAvailable(address, chainId, web3);
+        await this.updateBetDirection(betDirection);
+        await this.getStaked();
+        this.updateRate();
         this.loadUserOptions();
         this.getTI();
+        this.loadBetFee();
 
         this.loadCurrentPrice();
 
@@ -186,6 +209,15 @@ class Bet extends React.Component<any, any> {
         // tslint:disable-next-line:no-console
         console.log(`interschange is ${ti}`);
         this.setState({ totalInterchange: ti });
+    }
+    public async loadBetFee() {
+
+        const { chainId, web3 } = this.state;
+        const fee = await callBetFee(chainId, web3);
+
+        // tslint:disable-next-line:no-console
+        console.log(`fee is ${fee}`);
+        this.setState({ betFee: fee });
     }
 
     public async loadCurrentPrice() {
@@ -266,12 +298,13 @@ class Bet extends React.Component<any, any> {
     }
 
     public async getStaked() {
-        const { chainId, web3, address } = this.state;
+        const { chainId, web3, address, openOptions } = this.state;
 
         const staked = await callPoolStakedBalance(address, chainId, web3);
         const totalStaked = await callPoolTotalSupply(chainId, web3);
         let maxBet: string = await callPoolMaxAvailable(chainId, web3);
-        maxBet = divide(maxBet, 5);
+        maxBet = divide(maxBet, 10);
+        maxBet = divide(maxBet, openOptions)
         // tslint:disable-next-line:no-console
         console.log(`type ${maxBet} maxBet`);
 
@@ -280,19 +313,39 @@ class Bet extends React.Component<any, any> {
         this.setState({ totalStaked, staked, maxBet });
     }
 
+     public async updateBetDirection(dir: boolean) {
+        const {chainId, web3} = this.state;
+        let open: any;
+        if (dir) {
+            open = await callOpenCalls(chainId, web3);
+        } else {
+            open = await callOpenPuts(chainId, web3);
+        }
+        
+        this.setState({betDirection: dir, openOptions: open >= 2 ? open : 2});
+    }
+
     public async handleBetAmountUpdate(e: any) {
-        const { chainId, web3, maxBet } = this.state;
         const newBet = e.target.value.split(" ");
-        this.setState({ betAmount: newBet })
-        const amountToWin = await getRate(web3.utils.toWei(`${newBet}`, "ether"), chainId, web3);
+        await this.setState({ betAmount: newBet })
+        await this.updateRate();
+    }
+
+    public async updateRate() {
+        const { chainId, web3, maxBet, betDirection, openOptions, timeFrame, betAmount, currentPrice, pair } = this.state;
         // tslint:disable-next-line:no-console
-        console.log(`new amountToWin ${amountToWin}`);
-        if (newBet > maxBet) {
+        console.log(`maxBet ${convertAmountFromRawNumber(maxBet, 18)}. bet size ${betAmount}`);
+        if (greaterThan(betAmount, convertAmountFromRawNumber(maxBet, 18))) {
             // tslint:disable-next-line:no-console
             console.log(`bet to big`);
-            this.setState({ amountToWin: "BET TO BIG" });
+            this.setState({ amountToWin: "invalid" });
         } else {
+
+            const amountToWin = await getRate(currentPrice, pair.address, betDirection, timeFrame, openOptions, web3.utils.toWei(`${betAmount}`, "ether"), chainId, web3);
+            // tslint:disable-next-line:no-console
+            console.log(`new amountToWin ${amountToWin}.`);
             this.setState({ amountToWin: formatFixedDecimals(`${web3.utils.fromWei(`${amountToWin}`, "ether")}`, 5) });
+            this.loadBetFee();
         }
     }
 
@@ -363,15 +416,16 @@ class Bet extends React.Component<any, any> {
         if (maxBet === 0) {
             return <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>Pool Maxed Out</SHelper>
         } else {
-            return <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>Max Bet Size: {divide(convertAmountFromRawNumber(maxBet, 18), 5)} ETH</SHelper>
+            return <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>Max Bet Size: {convertAmountFromRawNumber(maxBet, 18)} ETH</SHelper>
         }
     }
 
     public renderTimeFrameSelect() {
 
         return (
-            <SSelect onChange={(e: any) => {
-                this.setState({ timeFrame: Times[e.target.value] });
+            <SSelect onChange={async (e: any) => {
+                await this.setState({ timeFrame: Times[e.target.value] });
+                await this.updateRate()
             }}>
                 {Object.keys(Times).map((key: any, i: number) => {
                     return (<option
@@ -408,30 +462,46 @@ class Bet extends React.Component<any, any> {
 
     };
 
+    public openBettingAlert() {
+        alert("You are taking a risk!\nBy using BIOPset to make any bet you are risking 100% of the capital you deposit.\nThe rate shown in the win total is the maximum potential value you can win. It is also shown as a percentage in 'Potential Yield'. This is the amount you can win. If it's not enough for you, don't make the bet.");
+    }
+
 
 
     public renderInput() {
-        const { betAmount, amountToWin, currentPrice, web3 } = this.state;
+        const { betAmount, amountToWin, /*currentPrice, web3,*/ betDirection, betFee } = this.state;
+        // <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>STRIKE PRICE: {formatFixedDecimals(web3.utils.fromWei(floorDivide(currentPrice, 100), "lovelace"), 8)} USD</SHelper>
         return (
             <Column>
                 <SInputContainer>
-                    <SInputBbContainer style={{ backgroundColor: `rgb(${colors.fadedRed})`, color: `rgb(${colors.white})` }}>
+                    <SInputBbContainer style={{ backgroundColor: `rgb(${colors.white})`, color: `rgb(${colors.black})` }}>
                         <span style={{ marginLeft: "0px" }}>PRICE</span><br />
                         <SInputBox>
-                            <SInputBb style={{ backgroundColor: `rgb(${colors.fadedRed})`, color: `rgb(${colors.white})` }} value={betAmount} placeholder={`Amount To Bet`} onChange={(e) => this.handleBetAmountUpdate(e)} id="amountStake" />
+                            <SInputBb style={{ backgroundColor: `rgb(${colors.white})`, color: `rgb(${colors.black})` }} value={betAmount} placeholder={`Amount To Bet`} onChange={(e) => this.handleBetAmountUpdate(e)} id="amountStake" />
 
                             {this.renderMaxBet()}
                         </SInputBox>
                     </SInputBbContainer>
 
+                <SBetButtonContainer>
+                    <BetButton up={true} onClick={() => { this.updateBetDirection(true) }} active={betDirection}/>
+                    <BetButton up={false} onClick={() => { this.updateBetDirection(false) }} active={!betDirection}/>
+                </SBetButtonContainer>
+
                     <SInputBbContainer style={{ backgroundColor: `rgb(${colors.fadedBlue})`, color: `rgb(${colors.white})` }}>
-                        <span style={{ marginLeft: "0px" }}>WIN</span><br />
-                        <SInputBb style={{ backgroundColor: `rgb(${colors.fadedBlue})`, color: `rgb(${colors.white})` }}
-                            value={amountToWin} placeholder={`You Can Win`} id="amountToWin" onChange={(e: any) => {
-                                // tslint:disable-next-line:no-console
-                                console.log(e);
-                            }} />
-                            <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>STRIKE PRICE: {formatFixedDecimals(web3.utils.fromWei(floorDivide(currentPrice, 100), "lovelace"), 8)} USD</SHelper>
+                        <SRow>
+                        <SColumn style={{textAlign: "left"}}>
+                            <span style={{ marginLeft: "20px" }}>Win Total <span style={{cursor: "pointer"}} onClick={() => this.openBettingAlert()}>ⓘ</span>:</span>
+                            <span style={{ marginLeft: "20px" }}>Betting Fee:</span>
+                            <span style={{ marginLeft: "20px" }}>Potential Yield:</span>
+                        </SColumn>
+                        <SColumn style={{textAlign: "right"}}>
+                            <span style={{ marginRight: "20px" }} >{amountToWin}</span>
+                            <span style={{ marginRight: "20px" }}>{divide(betFee, 1000)}%</span>
+                            <span style={{ marginRight: "20px" }}>{greaterThan(multiply(divide(amountToWin, betAmount), 100), 0) ? multiply(divide(amountToWin, betAmount), 100) : "100"}%</span>
+                        </SColumn>
+                         </SRow>
+                            
                     </SInputBbContainer>
 
 
@@ -444,10 +514,12 @@ class Bet extends React.Component<any, any> {
         )
     }
 
+   
+
 
 
     public renderBetApprove() {
-        const { web3, pair } = this.state;
+        const { web3, pair, betDirection } = this.state;
 
                 // tslint:disable-next-line:no-console
                 console.log(`rerender chart with pair ${pair}`);
@@ -456,11 +528,9 @@ class Bet extends React.Component<any, any> {
         return (
             <SBetter>
                 <PriceChart web3={web3} pair={pair} />
-                <SBetButtonContainer>
-                    <BetButton up={true} onClick={() => { this.handleMakeBet(true) }} />
-                    <BetButton up={false} onClick={() => { this.handleMakeBet(false) }} />
-                </SBetButtonContainer>
-
+                <br/>
+                <Button color={betDirection ? `blue` : `red`} onClick={() => {this.handleMakeBet(betDirection)}}>Make {betDirection ? "Call📈 " : "Put📉 "} Bet</Button>
+                
             </SBetter>
         )
 
@@ -504,7 +574,7 @@ class Bet extends React.Component<any, any> {
 
                         : <>
                             <h4><u>Rules:</u></h4>
-                            <ul><li>- A 0.2% fee is charged for each bet</li></ul>
+                            <ul><li>- A 0.2% fee is charged for each winning bet</li></ul>
                         </>
                 }
                 <br />

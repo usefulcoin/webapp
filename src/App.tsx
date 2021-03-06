@@ -1,7 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
 import Web3 from "web3";
-import { convertUtf8ToHex } from "@walletconnect/utils";
 
 import Web3Modal from "web3modal";
 // @ts-ignore
@@ -23,17 +22,10 @@ import Footer from "./components/Footer";
 
 import { apiGetAccountAssets } from "./helpers/api";
 import {
-  hashPersonalMessage,
-  recoverPublicKey,
-  recoverPersonalSignature,
-  formatTestTransaction,
   getChainData
 } from "./helpers/utilities";
 import { IAssetData } from "./helpers/types";
 import {
-  ETH_SEND_TRANSACTION,
-  ETH_SIGN,
-  PERSONAL_SIGN,
   BET,
   EXERCISE_EXPIRE,
   STAKE,
@@ -287,151 +279,7 @@ class App extends React.Component<any, any> {
     this.setState({ showModal: !this.state.showModal });
 
 
-  public testSendTransaction = async () => {
-    const { web3, address, chainId } = this.state;
 
-    if (!web3) {
-      return;
-    }
-
-    const tx = await formatTestTransaction(address, chainId);
-
-    try {
-      // open modal
-      this.toggleModal();
-
-      // toggle pending request indicator
-      this.setState({ pendingRequest: true });
-
-      // @ts-ignore
-      function sendTransaction(_tx: any) {
-        return new Promise((resolve, reject) => {
-          web3.eth
-            .sendTransaction(_tx)
-            .once("transactionHash", (txHash: string) => resolve(txHash))
-            .catch((err: any) => reject(err));
-        });
-      }
-
-      // send transaction
-      const result = await sendTransaction(tx);
-
-      // format displayed result
-      const formattedResult = {
-        action: ETH_SEND_TRANSACTION,
-        txHash: result,
-        from: address,
-        to: address,
-        value: "0 ETH"
-      };
-
-      // display result
-      this.setState({
-        web3,
-        pendingRequest: false,
-        result: formattedResult || null
-      });
-    } catch (error) {
-      console.error(error); // tslint:disable-line
-      this.setState({ web3, pendingRequest: false, result: null });
-    }
-  };
-
-  public testSignMessage = async () => {
-    const { web3, address } = this.state;
-
-    if (!web3) {
-      return;
-    }
-
-    // test message
-    const message = "My email is john@doe.com - 1537836206101";
-
-    // hash message
-    const hash = hashPersonalMessage(message);
-
-    try {
-      // open modal
-      this.toggleModal();
-
-      // toggle pending request indicator
-      this.setState({ pendingRequest: true });
-
-      // send message
-      const result = await web3.eth.sign(hash, address);
-
-      // verify signature
-      const signer = recoverPublicKey(result, hash);
-      const verified = signer.toLowerCase() === address.toLowerCase();
-
-      // format displayed result
-      const formattedResult = {
-        action: ETH_SIGN,
-        address,
-        signer,
-        verified,
-        result
-      };
-
-      // display result
-      this.setState({
-        web3,
-        pendingRequest: false,
-        result: formattedResult || null
-      });
-    } catch (error) {
-      console.error(error); // tslint:disable-line
-      this.setState({ web3, pendingRequest: false, result: null });
-    }
-  };
-
-  public testSignPersonalMessage = async () => {
-    const { web3, address } = this.state;
-
-    if (!web3) {
-      return;
-    }
-
-    // test message
-    const message = "My email is john@doe.com - 1537836206101";
-
-    // encode message (hex)
-    const hexMsg = convertUtf8ToHex(message);
-
-    try {
-      // open modal
-      this.toggleModal();
-
-      // toggle pending request indicator
-      this.setState({ pendingRequest: true });
-
-      // send message
-      const result = await web3.eth.personal.sign(hexMsg, address);
-
-      // verify signature
-      const signer = recoverPersonalSignature(result, message);
-      const verified = signer.toLowerCase() === address.toLowerCase();
-
-      // format displayed result
-      const formattedResult = {
-        action: PERSONAL_SIGN,
-        address,
-        signer,
-        verified,
-        result
-      };
-
-      // display result
-      this.setState({
-        web3,
-        pendingRequest: false,
-        result: formattedResult || null
-      });
-    } catch (error) {
-      console.error(error); // tslint:disable-line
-      this.setState({ web3, pendingRequest: false, result: null });
-    }
-  };
 
 
 
