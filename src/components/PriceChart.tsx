@@ -7,7 +7,7 @@ import {HOUR, MINUTE} from "src/constants";
 
 const SPriceChart = styled.div`
   width: 100%;
-  height: 100%;
+  
   padding: 20px;
   color: white;
   border: 1px solid rgb(${colors.grey});

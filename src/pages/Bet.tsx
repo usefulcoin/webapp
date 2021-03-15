@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { /*initiateSwapIfAvailable,*/ callBetFee, sendExercise, sendExpire, callPoolTotalSupply, getLatestPrice, callPoolStakedBalance, callPoolMaxAvailable, getRate, blockTimestamp, getOptionCreation, getOptionCloses, getTotalInterchange, callOpenCalls, callOpenPuts } from "../helpers/web3";
+import { /*initiateSwapIfAvailable,*/ callBetFee, sendExercise, sendExpire, callPoolTotalSupply, getLatestPrice, callPoolStakedBalance, callPoolMaxAvailable, getDirectRate, blockTimestamp, getOptionCreation, getOptionCloses, getTotalInterchange, callOpenCalls, callOpenPuts } from "../helpers/web3";
 
 
 // import Right from "../assets/right.png";
@@ -28,7 +28,6 @@ const SHelper = styled.div`
 const SBetter = styled.div`
     display: flex;
     flex-direction: column;
-    height: 600px;
     width: 100%;
 `
 const SInputContainer = styled.div`
@@ -37,11 +36,12 @@ const SInputContainer = styled.div`
     width: 100%;
     margin: 0 auto;
     align-items: stretch;
+    padding-bottom: 10px;
 `
 
 const SInputBbContainer = styled.div`
     flex: 1;
-    height: 80px;
+    height: 100px;
     text-transform: uppercase;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -341,7 +341,7 @@ class Bet extends React.Component<any, any> {
             this.setState({ amountToWin: "invalid" });
         } else {
 
-            const amountToWin = await getRate(currentPrice, pair.address, betDirection, timeFrame, openOptions, web3.utils.toWei(`${betAmount}`, "ether"), chainId, web3);
+            const amountToWin = await getDirectRate(currentPrice, pair.address, betDirection, timeFrame, openOptions, web3.utils.toWei(`${betAmount}`, "ether"), chainId, web3);
             // tslint:disable-next-line:no-console
             console.log(`new amountToWin ${amountToWin}.`);
             this.setState({ amountToWin: formatFixedDecimals(`${web3.utils.fromWei(`${amountToWin}`, "ether")}`, 5) });
@@ -494,16 +494,20 @@ class Bet extends React.Component<any, any> {
                             <span style={{ marginLeft: "20px" }}>Win Total <span style={{cursor: "pointer"}} onClick={() => this.openBettingAlert()}>ⓘ</span>:</span>
                             <span style={{ marginLeft: "20px" }}>Betting Fee:</span>
                             <span style={{ marginLeft: "20px" }}>Potential Yield:</span>
+                            <span style={{ marginLeft: "20px" }}>Minimum Yield:</span>
+
                         </SColumn>
                         <SColumn style={{textAlign: "right"}}>
                             <span style={{ marginRight: "20px" }} >{amountToWin}</span>
                             <span style={{ marginRight: "20px" }}>{divide(betFee, 1000)}%</span>
-                            <span style={{ marginRight: "20px" }}>{greaterThan(multiply(divide(amountToWin, betAmount), 100), 0) ? multiply(divide(amountToWin, betAmount), 100) : "100"}%</span>
+                            <span style={{ marginRight: "20px" }}>{greaterThan(multiply(divide(amountToWin,2), 100), 0) ? divide(multiply(divide(amountToWin, betAmount), 100), 2) : "100"}%</span>
+                            <span style={{ marginRight: "20px" }}>-100%</span>
+                      
                         </SColumn>
                          </SRow>
                             
                     </SInputBbContainer>
-
+                    <br/>
 
                 </SInputContainer>
                 <SInputContainer>

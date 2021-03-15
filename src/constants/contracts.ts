@@ -1616,7 +1616,7 @@ export const BO_CONTRACT = {
     ]
   },
   42: {
-    address: '0x377aE5E37a841249073c5e0019365D9E7387dD17',
+    address: '0x1D6a75518D11aB306C3D0028AC3CD85Ee934CCc3',
     "abi": [
     {
       "inputs": [
@@ -5941,7 +5941,7 @@ export const BIOP_CONTRACT = {
     ]
   },
   42: {
-    address: '0x21e08fAef441ACF53430023D37c68e99956595DB',
+    address: '0x5c83EdA48e1BED3a0e0e1f65467b024329FDC0F1',
     "abi": [
       {
         "inputs": [
@@ -6742,7 +6742,7 @@ export const RATECALC_CONTRACT = {
     ]
   },
   42: {
-    address: '0x686dA4FC8Fe45012b6476827b24aa7A2df620926',
+    address: '0x1A859DA25849626295c18fF71934a04E9DDFeC56',
     "abi": [
       {
         "inputs": [
@@ -7274,7 +7274,7 @@ export const DGOV_CONTRACT = {
     ]
   },
   42: {
-    address: '0x4B9e42B2a48324670F702419043500d9A65f0453',
+    address: '0xB20c1BB39449d352557aE81dD996C87eB9BB8626',
     "abi": [
       {
         "inputs": [

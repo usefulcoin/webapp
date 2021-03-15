@@ -60,6 +60,64 @@ export function getRateCalcContract(chainId: number, web3: any) {
   return rc;
 }
 
+export function getDirectRate(currentPrice: number, pair: string, dir: boolean, time: number, stack: number, amount: number, chainId: number, web3: any) {
+  return new Promise(async (resolve, reject) => {
+    
+      try {
+
+      const bo = getBOContract(chainId, web3)
+      const rc = getRateCalcContract(chainId, web3)
+      const stack = await optionStack(bo, dir);
+      const max = await callPoolMaxAvailable(chainId, web3);
+      await rc.methods.
+      rate(amount, max, currentPrice, time, dir, stack)
+      .call(
+        { from: zeroAddress },
+        (err: any, data: any) => {
+          if (err) {
+            reject(err)
+          }
+
+          resolve(data);
+        }
+      )
+
+      } catch(e) {
+
+      // tslint:disable-next-line:no-console
+          console.log(`caught error ${e}`);
+          reject(e);
+      }
+          
+  })
+}
+
+function optionStack(bo: any, direction: boolean) {
+  return new Promise(async (resolve, reject) => {
+    
+      try {
+        const oc = bo.methods.oC();
+        const op = bo.methods.oP();
+        if (direction) {
+        // call
+          resolve(oc-op >= 1 ? oc-op : 1);
+        } else {
+
+          resolve(op-oc >= 1 ? op-oc : 1);
+        }
+
+
+
+      } catch(e) {
+
+      // tslint:disable-next-line:no-console
+          console.log(`caught error ${e}`);
+          reject(e);
+      }
+          
+  })
+}
+
 
 export function getRate(currentPrice: number, pair: string, dir: boolean, time: number, stack: number, amount: number, chainId: number, web3: any) {
   return new Promise(async (resolve, reject) => {
@@ -68,7 +126,7 @@ export function getRate(currentPrice: number, pair: string, dir: boolean, time: 
       const bo = getBOContract(chainId, web3)
     const max = await callPoolMaxAvailable(chainId, web3);
       // tslint:disable-next-line:no-console
-          console.log(`max is ${max}`);
+          console.log(`max is ${max} pair ${pair}, time ${time}, amount ${amount}, chainID: ${chainId}`);
     await bo.methods
       .getRate(pair, max, amount, currentPrice, time, dir)
       .call(
