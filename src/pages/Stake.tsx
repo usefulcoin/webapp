@@ -195,7 +195,8 @@ class Stake extends React.Component<any, any> {
         return(
             <SStake>
 
-                <h1>Stake</h1>
+                <h1>Liquidity Providers</h1>
+                <h5>[ 17% Write APY / 293% Farm APY ]</h5>
                 <p>Use ETH to earn passive premiums on binary option bets.</p>
                 <p>Your stake: <b>{convertAmountFromRawNumber(staked, 18)} ETH</b></p>
                 <p><b>{((staked/totalStaked))*100}%</b> of total staked.</p> 
