@@ -163,7 +163,7 @@ const INITIAL_STATE: IBetState = {
     openOptions: 2,
     betFee: 0
 };
-class Bet extends React.Component<any, any> {
+class Trade extends React.Component<any, any> {
     // @ts-ignore
     public state: IBetState;
 
@@ -416,7 +416,7 @@ class Bet extends React.Component<any, any> {
         if (maxBet === 0) {
             return <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>Pool Maxed Out</SHelper>
         } else {
-            return <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>Max Bet Size: {convertAmountFromRawNumber(maxBet, 18)} ETH</SHelper>
+            return <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>Max Trade Size: {convertAmountFromRawNumber(maxBet, 18)} ETH</SHelper>
         }
     }
 
@@ -492,8 +492,8 @@ class Bet extends React.Component<any, any> {
                         <SRow>
                         <SColumn style={{textAlign: "left"}}>
                             <span style={{ marginLeft: "20px" }}>Win Total <span style={{cursor: "pointer"}} onClick={() => this.openBettingAlert()}>ⓘ</span>:</span>
-                            <span style={{ marginLeft: "20px" }}>Betting Fee:</span>
-                            <span style={{ marginLeft: "20px" }}>Potential Yield:</span>
+                            <span style={{ marginLeft: "20px" }}>Trading Fee:</span>
+                            <span style={{ marginLeft: "20px" }}>Maxium Yield:</span>
                             <span style={{ marginLeft: "20px" }}>Minimum Yield:</span>
 
                         </SColumn>
@@ -533,7 +533,7 @@ class Bet extends React.Component<any, any> {
             <SBetter>
                 <PriceChart web3={web3} pair={pair} />
                 <br/>
-                <Button color={betDirection ? `blue` : `red`} onClick={() => {this.handleMakeBet(betDirection)}}>Make {betDirection ? "Call📈 " : "Put📉 "} Bet</Button>
+                <Button color={betDirection ? `blue` : `red`} onClick={() => {this.handleMakeBet(betDirection)}}>Open {betDirection ? "Call📈 " : "Put📉 "}</Button>
                 
             </SBetter>
         )
@@ -550,8 +550,8 @@ class Bet extends React.Component<any, any> {
         return (
             <SBet>
 
-                <h1>Bet</h1>
-                <p>Play the game anon. Just play the game.</p>
+                <h1>Trade</h1>
+                <p>Dont risk more then you can afford</p>
                 <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
                 <SHelper>Enter a comfy bet size (in ETH) to begin</SHelper>
 
@@ -577,9 +577,7 @@ class Bet extends React.Component<any, any> {
                         </SHelper>
 
                         : <>
-                            <h4><u>Rules:</u></h4>
-                            <ul><li>- A 0.2% fee is charged for each winning bet</li></ul>
-                        </>
+                         </>
                 }
                 <br />
                 <h4>Your Options:</h4>
@@ -600,4 +598,4 @@ class Bet extends React.Component<any, any> {
 
 }
 
-export default Bet
+export default Trade

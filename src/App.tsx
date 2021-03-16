@@ -35,7 +35,7 @@ import {
 // Pages
 import Rewards from './pages/Rewards';
 import Stake from './pages/Stake';
-import Bet from './pages/Bet';
+import Trade from './pages/Trade';
 import Exercise from './pages/Exercise';
 import Landing from './pages/Landing';
 
@@ -302,7 +302,7 @@ class App extends React.Component<any, any> {
     } = this.state;
     switch (page) {
       case BET:
-        return (<Bet
+        return (<Trade
           address={address}
           chainId={chainId}
           web3={web3}

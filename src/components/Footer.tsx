@@ -31,9 +31,10 @@ const Footer = (props: any) => (
     {...props}
   >
     <SLinks>
-         <SLink href="https://docs.biopset.com/">Docs</SLink>
-         <SLink href="https://twitter.com/biopset">Twitter</SLink>
-         <SLink href="https://discord.gg/4SRYBNdE3r">Discord</SLink>
+         <SLink href="https://docs.biopset.com/" target="_">Docs</SLink>
+         <SLink href="https://twitter.com/biopset" target="_">Twitter</SLink>
+         <SLink href="https://discord.gg/4SRYBNdE3r" target="_">Discord</SLink>
+         <SLink href="https://t.me/BIOPset" target="_">Telegram</SLink>
      </SLinks>
      <p>BIOPset © 2021. Do not use 🙅‍♀️ in countries where binary options are regulated.</p>
     
