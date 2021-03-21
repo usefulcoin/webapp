@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import Icon from './Icon'
 import ERC20Icon from './ERC20Icon'
 import eth from '../assets/eth.svg'
-import xdai from '../assets/xdai.png'
 import {
   handleSignificantDecimals,
   convertAmountFromRawNumber
@@ -37,7 +36,7 @@ const AssetRow = (props: any) => {
     asset.symbol && asset.symbol.toLowerCase() === 'eth'
       ? eth
       : asset.symbol && asset.symbol.toLowerCase() === 'biop'
-      ? xdai
+      ? null
       : null
   return (
     <SAssetRow {...props}>
