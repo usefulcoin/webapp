@@ -102,8 +102,8 @@ const SInterface = styled.div`
 `
 
 const Times = {
-    "30 MIN": 60*30,
-    "1 HOUR": 60 * 60,/*
+    "1 Round": 1,
+    "3 Rounds": 3,/*
     "15 MIN": 60*15, */
 };
 
@@ -129,7 +129,7 @@ interface IBetState {
     maxBet: number;
     hasBet: boolean;
     pair: any;
-    timeFrame: number;
+    rounds: number;
     userOptions: any;
     currentPrice: number;
     priceInterval: any;
@@ -152,7 +152,7 @@ const INITIAL_STATE: IBetState = {
     amountToWin: 0,
     hasBet: false,
     pair: enabledPricePairs[0],
-    timeFrame: 30 * 60,// 30 mins
+    rounds: 1,// 30 mins
     userOptions: [],
     currentPrice: 0,
     priceInterval: null,
@@ -332,7 +332,7 @@ class Trade extends React.Component<any, any> {
     }
 
     public async updateRate() {
-        const { chainId, web3, maxBet, betDirection, openOptions, timeFrame, betAmount, currentPrice, pair } = this.state;
+        const { chainId, web3, maxBet, betDirection, openOptions, rounds, betAmount, currentPrice, pair } = this.state;
         // tslint:disable-next-line:no-console
         console.log(`maxBet ${convertAmountFromRawNumber(maxBet, 18)}. bet size ${betAmount}`);
         if (greaterThan(betAmount, convertAmountFromRawNumber(maxBet, 18))) {
@@ -341,7 +341,7 @@ class Trade extends React.Component<any, any> {
             this.setState({ amountToWin: "invalid" });
         } else {
 
-            const amountToWin = await getDirectRate(currentPrice, pair.address, betDirection, timeFrame, openOptions, web3.utils.toWei(`${betAmount}`, "ether"), chainId, web3);
+            const amountToWin = await getDirectRate(currentPrice, pair.address, betDirection, rounds, openOptions, web3.utils.toWei(`${betAmount}`, "ether"), chainId, web3);
             // tslint:disable-next-line:no-console
             console.log(`new amountToWin ${amountToWin}.`);
             this.setState({ amountToWin: formatFixedDecimals(`${web3.utils.fromWei(`${amountToWin}`, "ether")}`, 5) });
@@ -351,12 +351,12 @@ class Trade extends React.Component<any, any> {
 
 
     public async handleMakeBet(direction: boolean) {
-        const { betAmount, web3, chainId, address, timeFrame, pair } = this.state;
+        const { betAmount, web3, chainId, address, rounds, pair } = this.state;
         // tslint:disable-next-line:no-console
         console.log(`makeBet 1`);
         this.setState({ pendingRequest: true, lastBetCall: direction });
         try {
-            await makeBet(address, web3.utils.toWei(`${betAmount}`, "ether"), direction, timeFrame, pair.address, chainId, web3, (param1: any, param2: any) => {
+            await makeBet(address, web3.utils.toWei(`${betAmount}`, "ether"), direction, rounds, pair.address, chainId, web3, (param1: any, param2: any) => {
                 // tslint:disable-next-line:no-console
                 console.log(`makeBet ${param1} maxBet`);
                 // tslint:disable-next-line:no-console
@@ -420,11 +420,11 @@ class Trade extends React.Component<any, any> {
         }
     }
 
-    public renderTimeFrameSelect() {
+    public renderRoundsSelect() {
 
         return (
             <SSelect onChange={async (e: any) => {
-                await this.setState({ timeFrame: Times[e.target.value] });
+                await this.setState({ rounds: Times[e.target.value] });
                 await this.updateRate()
             }}>
                 {Object.keys(Times).map((key: any, i: number) => {
@@ -512,7 +512,7 @@ class Trade extends React.Component<any, any> {
                 </SInputContainer>
                 <SInputContainer>
                     {this.renderPairSelect()}
-                    {this.renderTimeFrameSelect()}
+                    {this.renderRoundsSelect()}
                 </SInputContainer>
             </Column>
         )
@@ -533,7 +533,7 @@ class Trade extends React.Component<any, any> {
             <SBetter>
                 <PriceChart web3={web3} pair={pair} />
                 <br/>
-                <Button color={betDirection ? `blue` : `red`} onClick={() => {this.handleMakeBet(betDirection)}}>Open {betDirection ? "Call📈 " : "Put📉 "}</Button>
+                <Button color={betDirection ? `blue` : `red`} onClick={() => {this.handleMakeBet(betDirection)}}>Buy {betDirection ? "Call📈 " : "Put📉 "}</Button>
                 
             </SBetter>
         )
@@ -551,9 +551,8 @@ class Trade extends React.Component<any, any> {
             <SBet>
 
                 <h1>Trade</h1>
-                <p>Dont risk more then you can afford</p>
+                <p>Dont risk more than you can afford to lose</p>
                 <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
-                <SHelper>Enter a comfy bet size (in ETH) to begin</SHelper>
 
                 {
                     pendingRequest ?
@@ -565,7 +564,7 @@ class Trade extends React.Component<any, any> {
                             {this.renderBetApprove()}
                         </SInterface>
                 }
-                <SHelper>Total Value Interchanged: {formatFixedDecimals(web3.utils.fromWei(`${totalInterchange}`, "ether"), 8)} ETH</SHelper>
+                <SHelper>Trading Volume: {formatFixedDecimals(web3.utils.fromWei(`${totalInterchange}`, "ether"), 8)} ETH</SHelper>
 
                 {
                     hasBet ?

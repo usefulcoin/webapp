@@ -5,15 +5,15 @@ export const colors = {
   grey: '169, 169, 188',
   darkGrey: '113, 119, 138',
   lightGrey: '212, 212, 212',
-  blue: '64, 153, 254',
+  blue: '0, 103, 206',
   lightBlue: '64, 153, 255',
-  fadedBlue: '121,209,234',
+  fadedBlue: '0,89,163',
   yellow: '250, 188, 45',
   orange: '246, 133, 27',
   green: '84, 209, 146',
   pink: '255, 51, 102',
-  red: '214, 75, 71',
-  fadedRed: '236,111,111',
+  red: '214, 0, 0',
+  fadedRed: '165,0,0',
   purple: '110, 107, 233'
 
 }
