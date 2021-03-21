@@ -25,23 +25,23 @@ background-color: rgb(${colors.white});
 const OptionTable = (props: any) => {
 
     function renderExpireExercise(option: any) {
-        const { currentPrice, handleExercise, handleExpire } = props;
+        const { currentPrice, handleExercise, handleExpire, currentRound } = props;
         if (option.expired) {
             return <b>Loss</b>;
         } else if (option.exercised) {
             return <b>Win</b>;
         } if (option.complete) {
             return <Button disabled outline={true} color={`rgb(${colors.black})`}>Completed</Button>;
-        } else if (option.timestamp + (3600 * 1000) < new Date().getTime()) {
+        } else if (option.exp  < currentRound) {
             // option ready to expire
             return <Button onClick={() => handleExpire(option.id)}>Expire</Button>;
-        } else if (option.type === false && option.strikePrice > currentPrice) {
+        } else if (option.type === false && option.strikePrice > currentPrice && option.purchaseRound < currentRound) {
             // put option ready to exercise
 
             // tslint:disable-next-line:no-console
             console.log(`${option.strikePrice} stik ${currentPrice} current`);
             return <Button onClick={() => handleExercise(option.id)}>Exercise</Button>;
-        } else if (option.type === true && option.strikePrice < currentPrice) {
+        } else if (option.type === true && option.strikePrice < currentPrice && option.purchaseRound < currentRound) {
             // call option ready to exercise
             // tslint:disable-next-line:no-console
             console.log(`${option.strikePrice} stik ${currentPrice} current`);

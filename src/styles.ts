@@ -100,7 +100,6 @@ export const globalStyle = `
     font-stretch: normal;
     font-weight: ${fonts.weight.normal};
     font-size: ${fonts.size.medium};
-    background-color: rgb(${colors.white});
     color: rgb(${colors.dark});
     overflow-y:auto;
     text-rendering: optimizeLegibility;

@@ -20,9 +20,10 @@ export function blockTimestamp(blockNumber: string, web3: any) {
   })
 }
 
-export function getPriceProviderContract(chainId: number, web3: any) {
+export function getPriceProviderContract(chainId: number, web3: any, address: any) {
   const pp = new web3.eth.Contract(
     PRICE_PROVIDER_CONTRACT[chainId].abi,
+    address != null ? address :
     PRICE_PROVIDER_CONTRACT[chainId].address
   )
   return pp;
@@ -32,7 +33,7 @@ export function getPriceProviderContract(chainId: number, web3: any) {
 
 export function getLatestPrice(chainId: number, web3: any) {
   return new Promise(async (resolve, reject) => {
-    const biop = getPriceProviderContract(chainId, web3)
+    const biop = getPriceProviderContract(chainId, web3, null)
     await biop.methods
       .latestRoundData()
       .call(
@@ -46,6 +47,27 @@ export function getLatestPrice(chainId: number, web3: any) {
           // tslint:disable-next-line:no-console
           console.log("^ data is here");
           resolve(data.answer);
+        }
+      )
+  })
+}
+
+export function callCurrentRoundID(chainId: number, web3: any, oracle: any) {
+  return new Promise(async (resolve, reject) => {
+    const biop = getPriceProviderContract(chainId, web3, oracle)
+    await biop.methods
+      .latestRoundData()
+      .call(
+        { from: zeroAddress },
+        (err: any, data: any) => {
+          if (err) {
+            reject(err)
+          }
+          // tslint:disable-next-line:no-console
+          console.log(data);
+          // tslint:disable-next-line:no-console
+          console.log("^ data is here");
+          resolve(data.roundId);
         }
       )
   })
@@ -799,11 +821,13 @@ export function getPoolLockedAmount(chainId: number, web3: any) {
 }
 
 
-export function getDefaultPriceProvider(chainId: number, web3: any) {
+
+
+export function callMaxRounds(chainId: number, web3: any) {
   return new Promise(async (resolve, reject) => {
     const bo = getBOContract(chainId, web3)
     await bo.methods
-      .defaultPriceProvider()
+      .maxT()
       .call(
         { from: zeroAddress },
         (err: any, data: any) => {
@@ -817,6 +841,38 @@ export function getDefaultPriceProvider(chainId: number, web3: any) {
   })
 }
 
+export function callMinRounds(chainId: number, web3: any) {
+  return new Promise(async (resolve, reject) => {
+    const bo = getBOContract(chainId, web3)
+    await bo.methods
+      .minT()
+      .call(
+        { from: zeroAddress },
+        (err: any, data: any) => {
+          if (err) {
+            reject(err)
+          }
+
+          resolve(data)
+        }
+      )
+  })
+}
+
+
+export function callMaxMin(chainId: number, web3: any) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const max = callMaxRounds(chainId, web3);
+      const min = callMinRounds(chainId, web3);
+      resolve({max, min});
+    } catch(e) {
+      // tslint:disable-next-line:no-console 
+      console.log(`error loading max min ${e}`);
+      reject({max: 3, min: 1});
+    }
+  })
+}
 
 
 

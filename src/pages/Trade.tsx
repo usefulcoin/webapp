@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { /*initiateSwapIfAvailable,*/ callBetFee, sendExercise, sendExpire, callPoolTotalSupply, getLatestPrice, callPoolStakedBalance, callPoolMaxAvailable, getDirectRate, blockTimestamp, getOptionCreation, getOptionCloses, getTotalInterchange, callOpenCalls, callOpenPuts } from "../helpers/web3";
+import { /*initiateSwapIfAvailable,*/ callCurrentRoundID, callBetFee, sendExercise, sendExpire, callPoolTotalSupply, getLatestPrice, callPoolStakedBalance, callPoolMaxAvailable, getDirectRate, getOptionCreation, getOptionCloses, getTotalInterchange, callOpenCalls, callOpenPuts } from "../helpers/web3";
 
 
 // import Right from "../assets/right.png";
@@ -139,6 +139,7 @@ interface IBetState {
     betDirection: boolean;
     openOptions: number;
     betFee: number;
+    currentRound: number;
 }
 
 const INITIAL_STATE: IBetState = {
@@ -161,7 +162,8 @@ const INITIAL_STATE: IBetState = {
     totalInterchange: 0,
     betDirection: true, // true means call
     openOptions: 2,
-    betFee: 0
+    betFee: 0,
+    currentRound: 0// current oracle round
 };
 class Trade extends React.Component<any, any> {
     // @ts-ignore
@@ -201,6 +203,7 @@ class Trade extends React.Component<any, any> {
         });
     }
 
+
     public async getTI() {
 
         const { chainId, web3 } = this.state;
@@ -233,11 +236,12 @@ class Trade extends React.Component<any, any> {
         const { chainId, web3, address } = this.state;
 
         const options: any = await getOptionCreation(chainId, web3);
+        // TODO replace with dynamic price provider
+        const cr: any = await callCurrentRoundID(chainId, web3, enabledPricePairs[0].address);
         const massagedOptions = {};
         for (let i = 0; i < options.length; i++) {
-            const timestamp: any = await blockTimestamp(options[i].blockNumber, web3);
             // tslint:disable-next-line:no-console
-            console.log(`loaded event ${options[i].returnValues.account} ${timestamp} ${address}`);
+            console.log(`loaded event ${options[i].returnValues.account} purchase round:${options[i].pR} ${address}`);
             // tslint:disable-next-line:no-console
             console.log(options[i]);
 
@@ -245,7 +249,8 @@ class Trade extends React.Component<any, any> {
                 if (options[i].returnValues.account === address) {
                     massagedOptions[options[i].returnValues.id] = {
                         blockNumber: options[i].blockNumber,
-                        timestamp,
+                        purchaseRound: options[i].pR,
+                        exp: options[i].exp,
                         id: options[i].returnValues.id,
                         creator: options[i].returnValues.account,
                         strikePrice: options[i].returnValues.sP,
@@ -294,7 +299,7 @@ class Trade extends React.Component<any, any> {
         });
 
         // tslint:disable-next-line:no-console
-        this.setState({ userOptions: sortedOptions });
+        this.setState({ userOptions: sortedOptions, currentRound: cr });
     }
 
     public async getStaked() {
@@ -545,7 +550,7 @@ class Trade extends React.Component<any, any> {
 
 
     public render() {
-        const { totalInterchange, web3, currentPrice, userOptions, pendingRequest, error, hasBet, lastBetCall } = this.state;
+        const { currentRound, totalInterchange, web3, currentPrice, userOptions, pendingRequest, error, hasBet, lastBetCall } = this.state;
         // const { openExercise } = this.props;
         return (
             <SBet>
@@ -588,6 +593,7 @@ class Trade extends React.Component<any, any> {
                     handleExpire={(optionId: any) => this.handleExpire(optionId)}
                     handleExercise={(optionId: any) => this.handleExercise(optionId)}
                     currentPrice={currentPrice}
+                    currentRound={currentRound}
                 />
 
             </SBet>
