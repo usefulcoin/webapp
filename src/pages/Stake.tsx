@@ -8,7 +8,7 @@ import Switch from 'src/components/Switch';
 import Button from 'src/components/Button';
 import Loading from 'src/components/Loading';
 import { colors } from 'src/styles';
-import {  convertAmountFromRawNumber } from 'src/helpers/bignumber';
+import {  convertAmountFromRawNumber, convertToDecimals } from 'src/helpers/bignumber';
 
 const SStake = styled.div`
     width:100%;
@@ -198,8 +198,8 @@ class Stake extends React.Component<any, any> {
                 <h1>Liquidity Providers</h1>
                 <h5>[ 17% Write APY / 293% Farm APY ]</h5>
                 <p>Use ETH to earn passive premiums on binary option bets.</p>
-                <p>Your stake: <b>{convertAmountFromRawNumber(staked, 18)} ETH</b></p>
-                <p><b>{((staked/totalStaked))*100}%</b> of total staked.</p> 
+                <p>Your stake: <b>{ convertAmountFromRawNumber(staked, 18)} ETH</b></p>
+                <p><b>{convertToDecimals(`${((staked/totalStaked))*100}`, 2)}%</b> of total staked.</p> 
                 <br/>
                 {this.renderStakeWithdrawSwitch()}
                 <SHelper style={{color: `rgb(${colors.red})`}}>{error}</SHelper>

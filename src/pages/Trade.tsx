@@ -15,7 +15,7 @@ import Button from 'src/components/Button';
 import Loading from 'src/components/Loading';
 import PriceChart from 'src/components/PriceChart';
 import { colors } from 'src/styles';
-import { convertAmountFromRawNumber, formatFixedDecimals, divide, greaterThan, multiply } from 'src/helpers/bignumber';
+import { convertAmountFromRawNumber, formatFixedDecimals, divide, greaterThan, multiply, convertToDecimals } from 'src/helpers/bignumber';
 
 const SBet = styled.div`
     width:100%;
@@ -247,10 +247,11 @@ class Trade extends React.Component<any, any> {
 
             if (options[i].returnValues) {
                 if (options[i].returnValues.account === address) {
+
                     massagedOptions[options[i].returnValues.id] = {
                         blockNumber: options[i].blockNumber,
-                        purchaseRound: options[i].pR,
-                        exp: options[i].exp,
+                        purchaseRound: options[i].returnValues.pR,
+                        exp: options[i].returnValues.exp,
                         id: options[i].returnValues.id,
                         creator: options[i].returnValues.account,
                         strikePrice: options[i].returnValues.sP,
@@ -262,6 +263,11 @@ class Trade extends React.Component<any, any> {
             }
 
         }
+
+        // tslint:disable-next-line:no-console
+        console.log("massaged options");
+        // tslint:disable-next-line:no-console
+        console.log(massagedOptions);
 
         // load exercise/expire events
         const completeEvents: any = await getOptionCloses(chainId, web3);
@@ -293,10 +299,15 @@ class Trade extends React.Component<any, any> {
         console.log(sorted);
         const sortedOptions: any = [];
         sorted.forEach((id: any) => {
-            if (massagedOptions[id].timestamp) {
-                sortedOptions.push(massagedOptions[id]);
+            if (massagedOptions[id].exp) {
+                sortedOptions.push(massagedOptions[parseInt(id, 10)]);
             }
         });
+
+        // tslint:disable-next-line:no-console
+        console.log(`sorted options`);
+        // tslint:disable-next-line:no-console
+        console.log(sortedOptions);
 
         // tslint:disable-next-line:no-console
         this.setState({ userOptions: sortedOptions, currentRound: cr });
@@ -421,7 +432,7 @@ class Trade extends React.Component<any, any> {
         if (maxBet === 0) {
             return <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>Pool Maxed Out</SHelper>
         } else {
-            return <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>Max Trade Size: {convertAmountFromRawNumber(maxBet, 18)} ETH</SHelper>
+            return <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>Max Trade Size: {convertToDecimals(`${convertAmountFromRawNumber(maxBet, 18)}`, 6)} ETH</SHelper>
         }
     }
 

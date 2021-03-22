@@ -3,6 +3,7 @@ import styled from "styled-components";
 import OptionDirection from "./OptionDirection";
 import Button from "./Button";
 import { colors } from 'src/styles';
+import {convertToDecimals, add} from "../helpers/bignumber";
 
 const STable = styled.table`
 border-collapse: collapse;
@@ -26,21 +27,24 @@ const OptionTable = (props: any) => {
 
     function renderExpireExercise(option: any) {
         const { currentPrice, handleExercise, handleExpire, currentRound } = props;
+
+            // tslint:disable-next-line:no-console
+            console.log(`${add(option.exp,option.purchaseRound)} exp round ${currentRound} current round`);
         if (option.expired) {
             return <b>Loss</b>;
         } else if (option.exercised) {
             return <b>Win</b>;
         } if (option.complete) {
             return <Button disabled outline={true} color={`rgb(${colors.black})`}>Completed</Button>;
-        } else if (option.exp  < currentRound) {
+        } else if (add(option.exp,option.purchaseRound)  < currentRound) {
             // option ready to expire
-            return <Button onClick={() => handleExpire(option.id)}>Expire</Button>;
+            return <Button onClick={() => handleExpire(option.id)}>Expire ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 2)}  ETH) {option.type ? "Call" : "Put"}</Button>;
         } else if (option.type === false && option.strikePrice > currentPrice && option.purchaseRound < currentRound) {
             // put option ready to exercise
 
             // tslint:disable-next-line:no-console
             console.log(`${option.strikePrice} stik ${currentPrice} current`);
-            return <Button onClick={() => handleExercise(option.id)}>Exercise</Button>;
+            return <Button onClick={() => handleExercise(option.id)}>Exercise ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 2)}  ETH) Put</Button>;
         } else if (option.type === true && option.strikePrice < currentPrice && option.purchaseRound < currentRound) {
             // call option ready to exercise
             // tslint:disable-next-line:no-console
@@ -57,7 +61,7 @@ const OptionTable = (props: any) => {
         if (showFee) {
             // tslint:disable-next-line:no-console
             console.log(`showing fee value ${web3.utils.fromWei(`${option.lockedValue*0.005}`, "ether")} ${web3.utils.fromWei(`${option.lockedValue}`, "ether")}`);
-            return <STh>{web3.utils.fromWei(`${option.lockedValue*0.005}`, "ether")}  ETH ({web3.utils.fromWei(`${option.purchaseValue}`, "ether")}  ETH)</STh>
+            return <STh>{web3.utils.fromWei(`${option.lockedValue*0.005}`, "ether")}  ETH </STh>
         } else {
 
             // tslint:disable-next-line:no-console
@@ -83,7 +87,7 @@ const OptionTable = (props: any) => {
                         <STh>ID</STh>
                         <STh>Direction</STh>
                         {showFee ?
-                        <STh>Fee (Purchase Price)</STh>
+                        <STh>Fee </STh>
                         : 
                         <>
                         <STh>Value (your bet + house)</STh>{/* 
