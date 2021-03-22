@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { getOptionsAndCloses, sendExpire, sendExercise, getLatestPrice, blockTimestamp, getOptionData } from "../helpers/web3";
+import { getOptionsAndCloses, sendExpire, sendExercise, getLatestPrice, getOptionData } from "../helpers/web3";
 import {add, floorDivide} from '../helpers/bignumber';
 
 import OptionVis from 'src/components/OptionVis';
@@ -115,7 +115,6 @@ class Exercise extends React.Component<any, any> {
         console.log(options);
         const optionsObjects = {};
         for (let i = 0; i < options.length; i++) {
-            const timestamp: any = await blockTimestamp(options[i].blockNumber, web3);
             // tslint:disable-next-line:no-console
             console.log(`loaded event ${options[i]}`);
             // tslint:disable-next-line:no-console
@@ -139,7 +138,8 @@ class Exercise extends React.Component<any, any> {
            console.log(optionData);
                         optionsObjects[options[i].returnValues.id] = {
                             blockNumber: options[i].blockNumber,
-                            timestamp,
+                            purchaseRound: options[i].returnValues.pR,
+                            exp: options[i].returnValues.exp,
                             id: options[i].returnValues.id,
                             creator: options[i].returnValues.account,
                             strikePrice: options[i].returnValues.sP,
