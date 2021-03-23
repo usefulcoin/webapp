@@ -67,6 +67,10 @@ export function callCurrentRoundID(chainId: number, web3: any, oracle: any) {
           console.log(data);
           // tslint:disable-next-line:no-console
           console.log("^ data is here");
+          // tslint:disable-next-line:no-console
+          console.log(data.roundId);
+          // tslint:disable-next-line:no-console
+          console.log("^ round id is here");
           resolve(data.roundId);
         }
       )

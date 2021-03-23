@@ -3,7 +3,7 @@ import styled from "styled-components";
 import OptionDirection from "./OptionDirection";
 import Button from "./Button";
 import { colors } from 'src/styles';
-import {convertToDecimals, add} from "../helpers/bignumber";
+import {convertToDecimals, add, smallerThan, greaterThan} from "../helpers/bignumber";
 
 const STable = styled.table`
 border-collapse: collapse;
@@ -29,7 +29,21 @@ const OptionTable = (props: any) => {
         const { currentPrice, handleExercise, handleExpire, currentRound } = props;
 
             // tslint:disable-next-line:no-console
-            console.log(`${add(option.exp,option.purchaseRound)} exp round ${currentRound} current round`);
+            console.log(`${add(option.exp,option.purchaseRound)} exp round ${currentRound} current round ${currentPrice} for option `);
+            // tslint:disable-next-line:no-console
+            console.log(option);
+            // tslint:disable-next-line:no-console
+            console.log(option.strikePrice > currentPrice);
+            // tslint:disable-next-line:no-console
+            console.log(`${typeof(option.strikePrice)} ${typeof(currentPrice)}`);
+            // tslint:disable-next-line:no-console
+            console.log(option.type === false);
+            // tslint:disable-next-line:no-console
+            console.log(`${typeof(option.type)} `);
+            // tslint:disable-next-line:no-console
+            console.log(smallerThan(option.purchaseRound,currentRound));
+            // tslint:disable-next-line:no-console
+            console.log(`${typeof(option.purchaseRound)} ${typeof(currentRound)}`);
         if (option.expired) {
             return <b>Loss</b>;
         } else if (option.exercised) {
@@ -38,18 +52,18 @@ const OptionTable = (props: any) => {
             return <Button disabled outline={true} color={`rgb(${colors.black})`}>Completed</Button>;
         } else if (add(option.exp,option.purchaseRound)  < currentRound) {
             // option ready to expire
-            return <Button onClick={() => handleExpire(option.id)}>Expire ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 2)}  ETH) {option.type ? "Call" : "Put"}</Button>;
-        } else if (option.type === false && option.strikePrice > currentPrice && option.purchaseRound < currentRound) {
+            return <Button onClick={() => handleExpire(option.id)}>Expire ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH) {option.type ? "Call" : "Put"}</Button>;
+        } else if (option.type === false && option.strikePrice > currentPrice && smallerThan(option.purchaseRound,currentRound)) {
             // put option ready to exercise
 
             // tslint:disable-next-line:no-console
             console.log(`${option.strikePrice} stik ${currentPrice} current`);
-            return <Button onClick={() => handleExercise(option.id)}>Exercise ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 2)}  ETH) Put</Button>;
-        } else if (option.type === true && option.strikePrice < currentPrice && option.purchaseRound < currentRound) {
+            return <Button onClick={() => handleExercise(option.id)}>Exercise ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH) Put</Button>;
+        } else if (option.type === true && option.strikePrice < currentPrice && greaterThan(option.purchaseRound, currentRound)) {
             // call option ready to exercise
             // tslint:disable-next-line:no-console
             console.log(`${option.strikePrice} stik ${currentPrice} current`);
-            return <Button onClick={() => handleExercise(option.id)}>Exercise</Button>;
+            return <Button onClick={() => handleExercise(option.id)}>Exercise ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH) {option.type ? "Call" : "Put"}</Button>;
         } else {
             // optionwith no action available
             return <Button disabled outline={true} color={`rgb(${colors.black})`}>None</Button>;
