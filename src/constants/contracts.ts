@@ -117,8 +117,7 @@ export const PRICE_PROVIDER_CONTRACT = {
     ]
   },
   42: {
-    // this is the fake pp the commented out one is the kovan eth/usd feed
-    address: '0xC17404a3d013fb28D841Bab740d52BB496b14d47',// '0x9326BFA02ADD2366b30bacB125260Af641031331',
+    address: '0x396c5E36DD0a0F5a5D33dae44368D4193f69a1F0',// '0x9326BFA02ADD2366b30bacB125260Af641031331',
     "abi": [
       {
         "inputs": [],
@@ -1617,7 +1616,7 @@ export const BO_CONTRACT = {
     ]
   },
   42: {
-    address: '0xe1a597Fe05ceab8fb5ea49670E317ae575E93598',
+    address: '0x5D32284E867BbAb55b760B4d2f48987236A7C04A',
     "abi": [
       {
         "inputs": [
@@ -5697,7 +5696,7 @@ export const BIOP_CONTRACT = {
     ]
   },
   42: {
-    address: '0xCDd66c899390cE41F904AB79De124893bd320b79',
+    address: '0xaD231D73950Cf38B4eED6C8a228aeA7fFE4c204a',
     "abi": [
       {
         "inputs": [
@@ -6150,7 +6149,7 @@ export const RATECALC_CONTRACT = {
     ]
   },
   42: {
-    address: '0x5cC1085184b55A38DB78c7C8Ea787a52857DAc7e',
+    address: '0x8D07F95080BC450868Dbfb2B9d0F0D0A3bccb103',
     "abi": [
       {
         "inputs": [
@@ -6204,7 +6203,7 @@ export const RATECALC_CONTRACT = {
 export const APP_CONTRACT = {
   1: {},
   42: {
-    address: "0x9096E5B5169dE5226B3070dC3a3B9146609b0C4B",
+    address: "0x76DDb94b65417D0410A25B11E844Ad8Ce4F66245",
     "abi": [
       {
         "inputs": [
@@ -6308,7 +6307,7 @@ export const APP_CONTRACT = {
 export const UTILIZATION_REWARDS_CONTRACT = {
   1: {},
   42: {
-    address: "0x4910988Ab9ECe5FE8fFE8260b5557e9572cDDab5",
+    address: "0x3628edbC365a92645D1BA60896bf06775e1a8357",
     "abi": [
       {
         "inputs": [
@@ -7107,7 +7106,7 @@ export const DGOV_CONTRACT = {
     ]
   },
   42: {
-    address: '0xF3eFc928410446919e2c164BC67DB89fAbf229b6',
+    address: '0x0953A1cB205AfcC8c8cFD0Dbdda514E52Ea09c12',
     "abi": [
       {
         "inputs": [

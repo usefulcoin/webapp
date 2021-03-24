@@ -18,10 +18,10 @@ export const MINUTE = "MINUTE";
 // price pairs
 export const enabledPricePairs = [
     {
-        symbol: "ETH",
-        name: "ethereum",
-        pair: "ETH/USD",
-        address: "0xC17404a3d013fb28D841Bab740d52BB496b14d47"// "0x9326BFA02ADD2366b30bacB125260Af641031331"// "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419"
+        symbol: "LINK",
+        name: "link",
+        pair: "LINK/USD",
+        address: "0x396c5E36DD0a0F5a5D33dae44368D4193f69a1F0"
     },
     /* {
         symbol: "BTC",
