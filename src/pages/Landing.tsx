@@ -38,8 +38,8 @@ class Landing extends React.Component<any, any> {
         return (
             <SLanding >
                 <SReasons >
-                    <h3>{`Play BIOPset`}</h3>
-                    <p style={{fontSize: 'small', color: `rgb(${colors.darkGrey})`}}>No KYC. No Token to use. Just Binary Options.</p>
+                    <h3>{`TRADE OR SETTLE BINARY OPTIONS`}</h3>
+                    <p style={{fontSize: 'small', color: `rgb(${colors.darkGrey})`}}>BIOPSET IS A NON-CUSTODIAL, CENSORSHIP-RESISTANT BINARY OPTIONS PROTOCOL.</p>
                     <ConnectButton onClick={() => {
                         // tslint:disable-next-line:no-console
                         console.log('connect clicked');
@@ -49,24 +49,24 @@ class Landing extends React.Component<any, any> {
                     <br/><br/><br/><br/>
                     <ScrollDownIndicator />
                 </SReasons>
-             
+
                 <SLanding>
                     <SReasons>
-                
+
                         <h4>3 Ways To Earn</h4>
                         <hr/>
                         <div >
-                            
-                            <h5>1. Exercise/Expire Options ✅</h5>
-                            <p>Earn fees at zero risk to you.</p>
+
+                            <h5>1. Settle Options</h5>
+                            <p>Earn fees for exercising in-the-money options or settling expired options.</p>
                         </div>
                         <div >
-                            <h5>2. Liquidity Providers 🌏</h5>
-                            <p>Hold the system on your shoulders and get paid to do it.</p>
+                            <h5>2. Provide Liquidity</h5>
+                            <p>Contribute funds to the pool that sells on-demand binary options to earn premiums.</p>
                         </div>
                         <div >
-                            <h5>3. Bet 📈📉</h5>
-                            <p>Win 188% betting on 1 hour binary options on the price of ETH.</p>
+                            <h5>3. Buy Options</h5>
+                            <p>Earn returns of up to 100% for correctly forecasting changes in price direction.</p>
                         </div>
                     </SReasons>
 
