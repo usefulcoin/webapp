@@ -247,8 +247,8 @@ class Exercise extends React.Component<any, any> {
             <SStake>
 
                 <h1>Settle</h1>
-                <p>Earn a settlement reward for exercising in-the-money options or unlocking expired options.</p>
-                <SHelper>Settlement rewards shown do not include gas/transaction fees.</SHelper>
+                <p>Earn a settlement fee for exercising in-the-money options or unlocking expired options.</p>
+                <SHelper>Settlement fees shown do not include gas/transaction fees.</SHelper>
                 <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
                 {
                     pendingRequest ?
