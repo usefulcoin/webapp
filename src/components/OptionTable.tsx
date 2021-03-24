@@ -135,7 +135,7 @@ const OptionTable = (props: any) => {
         )
     } else {
         return (
-            <p>A moment please, the current options are loading...:)</p>
+            <p>One moment please. Options are loading.</p>
         )
     }
 
