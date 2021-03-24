@@ -70,7 +70,7 @@ class Stake extends React.Component<any, any> {
 
     public async getStaked() {
         const {chainId, web3, address} = this.state;
-        
+
         const staked = await callPoolStakedBalance(address, chainId, web3);
         const nextWithdraw = await callPoolNextWithdraw(address, chainId, web3);
         const totalStaked = await callPoolTotalSupply(chainId, web3);
@@ -83,7 +83,7 @@ class Stake extends React.Component<any, any> {
         this.setState({totalStaked, staked, nextWithdraw})
     }
 
-    
+
 
     public async handleWithdraw() {
         this.setState({pendingRequest: true});
@@ -99,17 +99,17 @@ class Stake extends React.Component<any, any> {
             console.log(param2);
             this.getStaked();
             this.setState({pendingRequest: false, error: "", changeAmount: 0});
-            
+
 
         });
 
         } else {
             this.setState({pendingRequest: false, error: "Can't withdraw 0"});
         }
-    
+
     }
 
-    
+
 
     public async handleDeposit() {
         this.setState({pendingRequest: true});
@@ -126,11 +126,11 @@ class Stake extends React.Component<any, any> {
                 console.log(param2);
                 this.getStaked();
                 this.setState({pendingRequest: false, error: "", changeAmount: 0});
-                
-    
+
+
             });
-            
-        
+
+
     }
 
     public renderWithdrawAvailable() {
@@ -152,25 +152,25 @@ class Stake extends React.Component<any, any> {
                         <Button onClick={() => this.handleWithdraw()}>Withdraw</Button>
                     </div>
                     )
-               
+
         } else {
             return (<></>);
         }
-        
+
     }
 
     public renderStakeWithdrawSwitch() {
         const { staking } = this.state;
         return (
-            <Switch 
-                vertical={false} 
-                on={staking} 
+            <Switch
+                vertical={false}
+                on={staking}
                 onTap={() => { this.setState({ staking: true, changeAmount: "", error: "" })}}
                 onLabel="Stake"
                 offTap={() => { this.setState({ staking: false, changeAmount: "", error: "" }) }}
                 offLabel="Withdraw"
                 />
-            
+
         )
     }
 
@@ -179,7 +179,7 @@ class Stake extends React.Component<any, any> {
         if (changeAmount > 0) {
                 return (
                     <div>
-                        
+
                         <Button onClick={() => this.handleDeposit()}>Stake</Button>
                     </div>
                 )
@@ -195,11 +195,10 @@ class Stake extends React.Component<any, any> {
         return(
             <SStake>
 
-                <h1>Liquidity Providers</h1>
-                <h5>[ 17% Write APY / 293% Farm APY ]</h5>
-                <p>Use ETH to earn passive premiums on binary option bets.</p>
-                <p>Your stake: <b>{ convertAmountFromRawNumber(staked, 18)} ETH</b></p>
-                <p><b>{convertToDecimals(`${((staked/totalStaked))*100}`, 2)}%</b> of total staked.</p> 
+                <h1>Sell Options</h1>
+                <p>Contribute to the liquidity pool and passively earn premiums [ 17% Write APY / 293% Farm APY ].</p>
+                <p>Your contribution: <b>{ convertAmountFromRawNumber(staked, 18)} ETH</b></p>
+                <p><b>{convertToDecimals(`${((staked/totalStaked))*100}`, 2)}%</b> of total staked.</p>
                 <br/>
                 {this.renderStakeWithdrawSwitch()}
                 <SHelper style={{color: `rgb(${colors.red})`}}>{error}</SHelper>
@@ -210,7 +209,7 @@ class Stake extends React.Component<any, any> {
                     <>
                     <Input value={changeAmount} placeholder={`Amount To ${staking ? "Stake" : "Withdraw"}`} onChange={(e: any) => this.setState({ changeAmount: e.target.value })} id="amountStake" />
                     <SHelper>Amount In ETH</SHelper>
-                
+
                     <br/>
                     {staking ?
                     this.renderStake()
@@ -220,7 +219,7 @@ class Stake extends React.Component<any, any> {
                     </>
                 }
 
-               
+
             </SStake>
 
         )
