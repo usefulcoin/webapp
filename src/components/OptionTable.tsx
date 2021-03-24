@@ -101,7 +101,7 @@ const OptionTable = (props: any) => {
                         <STh>ID</STh>
                         <STh>Direction</STh>
                         {showFee ?
-                        <STh>Settlement Reward </STh>
+                        <STh>Settlement Fee</STh>
                         :
                         <>
                         <STh>Option Value</STh>{/*
