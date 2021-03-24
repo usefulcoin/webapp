@@ -59,7 +59,7 @@ const SInputBb = styled.input`
     font-weight: bold;
     font-size: 1.3rem;
     width: 100%;
-    display: block; 
+    display: block;
     margin-bottom:1px;
 `
 
@@ -337,7 +337,7 @@ class Trade extends React.Component<any, any> {
         } else {
             open = await callOpenPuts(chainId, web3);
         }
-        
+
         this.setState({betDirection: dir, openOptions: open >= 2 ? open : 2});
     }
 
@@ -518,10 +518,10 @@ class Trade extends React.Component<any, any> {
                             <span style={{ marginRight: "20px" }}>{divide(betFee, 1000)}%</span>
                             <span style={{ marginRight: "20px" }}>{greaterThan(multiply(divide(amountToWin,2), 100), 0) ? divide(multiply(divide(amountToWin, betAmount), 100), 2) : "100"}%</span>
                             <span style={{ marginRight: "20px" }}>-100%</span>
-                      
+
                         </SColumn>
                          </SRow>
-                            
+
                     </SInputBbContainer>
                     <br/>
 
@@ -534,7 +534,7 @@ class Trade extends React.Component<any, any> {
         )
     }
 
-   
+
 
 
 
@@ -550,7 +550,7 @@ class Trade extends React.Component<any, any> {
                 <PriceChart web3={web3} pair={pair} />
                 <br/>
                 <Button color={betDirection ? `blue` : `red`} onClick={() => {this.handleMakeBet(betDirection)}}>Buy {betDirection ? "Call📈 " : "Put📉 "}</Button>
-                
+
             </SBetter>
         )
 
@@ -566,8 +566,8 @@ class Trade extends React.Component<any, any> {
         return (
             <SBet>
 
-                <h1>Trade</h1>
-                <p>Dont risk more than you can afford to lose</p>
+                <h1>Buy Options</h1>
+                <p>Dont risk more than you can afford to lose.</p>
                 <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
 
                 {
@@ -584,18 +584,18 @@ class Trade extends React.Component<any, any> {
 
                 {
                     hasBet ?
-                        <SHelper>Share your option with the world:
+                        <SHelper>Share your price prediction with the world:
                         <a
                                 href={`https://twitter.com/share?ref_src=twsrc%5Etfw&text=I%20bought%20a%20binary%20${lastBetCall ? "Call📈" : "Put📉"}%20option%20on%20%40biopset!%20%0A%0AThink%20you%20can%20pick%20the%20price%20direction%3F%0Abiopset.com%20%0A%0AWanna%20make%20money%3F%20%0AHit%20the%20exercise%20tab%20and%20score%20some%20risk%20free%20%23ETH%0A%0A%23binaryoptions%20%23defi%20%23ethereum%20`}
                                 className="twitter-share-button" target="_" >
-                                <b>TWEET it🐧!</b></a>
+                                <b>TWEET IT!</b></a>
                         </SHelper>
 
                         : <>
                          </>
                 }
                 <br />
-                <h4>Your Options:</h4>
+                <h4>Options Purchased</h4>
                 <br />
                 <OptionTable
                     showFee={false}

@@ -67,7 +67,7 @@ class Stake extends React.Component<any, any> {
 
     public async getAvailableClaims() {
         const {chainId, web3, address} = this.state;
-        
+
         const biopBalance = await callBIOPBalance(address, chainId, web3);
 
 
@@ -80,7 +80,7 @@ class Stake extends React.Component<any, any> {
 
     public async getCurrentBalance() {
         const {chainId, web3, address} = this.state;
-        
+
         const biopPendingBalance = await callBIOPPendingBalance(address, chainId, web3);
 
 
@@ -103,7 +103,7 @@ class Stake extends React.Component<any, any> {
 
     }
 
-    
+
 
     public showClaimButton() {
         const {biopPendingBalance} = this.state;
@@ -115,8 +115,8 @@ class Stake extends React.Component<any, any> {
     }
 
 
-  
-   
+
+
 
 
     public render() {
@@ -125,7 +125,7 @@ class Stake extends React.Component<any, any> {
             <SRewards>
 
                 <h1>Rewards</h1>
-                <p>BIOP governance tokens you've earned for utilizing the protocol</p>
+                <p>BIOP governance tokens earned for utilizing the protocol.</p>
                 {loading ?
                 <Loading/>
                 :
@@ -140,16 +140,16 @@ class Stake extends React.Component<any, any> {
 
                 <div style={{opacity: "0%"}}>
                 <div style={{border: "1px solid black"}}>
-                    
+
                     <StakeBIOP web3={web3} chainId={chainId} address={address}/>
                 </div>
 
                 <div style={{border: "1px solid black"}}>
-                    
+
                     <ClaimETHRewards web3={web3} chainId={chainId} address={address}/>
                 </div>
 
-              
+
                <div style={{border: "1px solid black"}}>
                     <Delegate web3={web3} chainId={chainId} address={address}/>
                </div>
@@ -157,7 +157,7 @@ class Stake extends React.Component<any, any> {
                <div style={{border: "1px solid black"}}>
                     <h3>Governance🏦</h3>
                     <SHelper>Governance actions will be available here soon.</SHelper>
-                   
+
                     <h4>Tier 1: 50%</h4>
                     <Button disabled>Update Max Option Time</Button>
                     <Button disabled>Update Min Option Time</Button>
@@ -173,7 +173,7 @@ class Stake extends React.Component<any, any> {
                     <Button disabled>Close Pool From New Deposits</Button>
                </div>
                </div>
-               
+
             </SRewards>
 
         )

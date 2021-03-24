@@ -186,7 +186,7 @@ class Exercise extends React.Component<any, any> {
         // tslint:disable-next-line:no-console
         console.log(`avgValue after ${avgValue}. purchase value of option = ${optionsObjects[id].purchaseValue}`);
             sortedOptions.push(optionsObjects[id]);
-            
+
         });
 
         // tslint:disable-next-line:no-console
@@ -242,13 +242,13 @@ class Exercise extends React.Component<any, any> {
 
     public render() {
         const { avgValue, calls, puts, exercised, expired, pendingRequest, error, web3, options, currentPrice } = this.state;
-        
+
         return (
             <SStake>
 
-                <h1>Exercise</h1>
-                <p>Earn a fee for exercising options ITM or unlocking expired options.</p>
-                <SHelper>Fees shown do not include your Tx cost!</SHelper>
+                <h1>Settle</h1>
+                <p>Earn a settlement fee for exercising in-the-money options or unlocking expired options.</p>
+                <SHelper>Settlement fees shown do not include gas/transaction fees.</SHelper>
                 <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
                 {
                     pendingRequest ?
@@ -263,7 +263,7 @@ class Exercise extends React.Component<any, any> {
                             handleExercise={(optionId: any) => this.handleExercise(optionId)}
                             currentPrice={currentPrice}
                         />
-                        
+
                         </>
                 }
                 <OptionVis
