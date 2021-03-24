@@ -81,7 +81,7 @@ const OptionTable = (props: any) => {
             // tslint:disable-next-line:no-console
             console.log(`showing locked value`);
             return <>
-                <STh>{web3.utils.fromWei(`${option.lockedValue}`, "ether")}  ETH</STh>{/* 
+                <STh>{web3.utils.fromWei(`${option.lockedValue}`, "ether")}  ETH</STh>{/*
                 <STh>{web3.utils.fromWei(`${option.strikePrice}`, "ether")}  ETH</STh> */}
             </>
 
@@ -96,15 +96,15 @@ const OptionTable = (props: any) => {
         console.log(options);
         return (
             <STable>
-                <thead> 
+                <thead>
                     <tr>
                         <STh>ID</STh>
                         <STh>Direction</STh>
                         {showFee ?
-                        <STh>Fee </STh>
-                        : 
+                        <STh>Settlement Reward </STh>
+                        :
                         <>
-                        <STh>Value (your bet + house)</STh>{/* 
+                        <STh>Option Value</STh>{/*
                         <STh>Strike</STh> */}
                         </>
                         }
@@ -128,7 +128,7 @@ const OptionTable = (props: any) => {
                              <STh>{renderExpireExercise(option)}</STh>
                         </STrOdd>;
                     }
-                   
+
                   })}
                   </tbody>
             </STable>
@@ -138,7 +138,7 @@ const OptionTable = (props: any) => {
             <p>A moment please, the current options are loading...:)</p>
         )
     }
-   
+
 }
 
 
