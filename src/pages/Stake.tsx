@@ -183,7 +183,7 @@ class Stake extends React.Component<any, any> {
                         <Button onClick={() => this.handleDeposit()}>Stake</Button>
                     </div>
                 )
-            
+
         } else {
             return (<></>)
         }
@@ -196,7 +196,7 @@ class Stake extends React.Component<any, any> {
             <SStake>
 
                 <h1>Sell Options</h1>
-                <p>Contribute to the liquidity pool and passively earn premiums [ 17% Write APY / 293% Farm APY ].</p>
+                <p>Contribute to the liquidity pool and passively earn premiums.</p>
                 <p>Your contribution: <b>{ convertAmountFromRawNumber(staked, 18)} ETH</b></p>
                 <p><b>{convertToDecimals(`${((staked/totalStaked))*100}`, 2)}%</b> of total staked.</p>
                 <br/>
