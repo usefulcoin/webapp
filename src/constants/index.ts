@@ -5,7 +5,7 @@ export * from './functions'
 // pages
 export const HOME_PAGE = "Home";
 export const BUY_SELL = "Exchange";
-export const STAKE = "Sell (293% APY)";
+export const STAKE = "Write";
 export const BET = "Trade";
 export const EXERCISE_EXPIRE = "Exercise/Expire";
 export const REWARDS = "Rewards";

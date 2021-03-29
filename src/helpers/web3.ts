@@ -1,6 +1,6 @@
 
 import { BO_CONTRACT, PRICE_PROVIDER_CONTRACT, BIOP_CONTRACT, RATECALC_CONTRACT, DGOV_CONTRACT, V2BIOP_CONTRACT } from '../constants'
-import { bigNumberStringToInt, greaterThan } from "./bignumber";
+import { bigNumberStringToInt, greaterThan, floorDivide, multiply } from "./bignumber";
 
 
 const zeroAddress = "0x0000000000000000000000000000000000000000";
@@ -789,21 +789,29 @@ export function sendWithdraw(address: string, amount: string, chainId: number, w
     console.log(amount);
     // tslint:disable-next-line:no-console
     console.log(bigNumberStringToInt(amount));
-    await pool.methods
-      .withdraw(amount)
-      .send(
-        { from: address },
-        (err: any, data: any) => {
-          if (err) {
-            reject(err)
-          }
 
-          resolve(data)
-        }
-      )
-      .on('confirmation', onComplete)
-      .on('error', onComplete)
-  })
+    const poolBalance: any = await callPoolTotalSupply(chainId, web3);
+    if ( greaterThan(amount, multiply(floorDivide(poolBalance, 10), 9)) ) {
+      alert("Invalid withdraw. Try withdrawing a little less. A portion of the funds you are trying to withdraw are currently locked in open options.");
+      resolve("Invalid withdraw. Try withdrawing a little less. A portion of the funds you are trying to withdraw are currently locked in open options.");
+    } else {
+          await pool.methods
+          .withdraw(amount)
+          .send(
+            { from: address },
+            (err: any, data: any) => {
+              if (err) {
+                reject(err)
+              }
+
+              resolve(data)
+            }
+          )
+          .on('confirmation', onComplete)
+          .on('error', onComplete)
+    }
+  });
+   
 }
 
 export function getPoolLockedAmount(chainId: number, web3: any) {
