@@ -3,7 +3,7 @@ import styled from "styled-components";
 import OptionDirection from "./OptionDirection";
 import Button from "./Button";
 import { colors } from 'src/styles';
-import {convertToDecimals, add, smallerThan, greaterThan} from "../helpers/bignumber";
+import {convertToDecimals, add, smallerThan} from "../helpers/bignumber";
 
 const STable = styled.table`
 border-collapse: collapse;
@@ -48,8 +48,6 @@ const OptionTable = (props: any) => {
             return <b>Loss</b>;
         } else if (option.exercised) {
             return <b>Win</b>;
-        } if (option.complete) {
-            return <Button disabled outline={true} color={`rgb(${colors.black})`}>Completed</Button>;
         } else if (add(option.exp,option.purchaseRound)  < currentRound) {
             // option ready to expire
             return <Button onClick={() => handleExpire(option.id)}>Expire ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH) {option.type ? "Call" : "Put"}</Button>;
@@ -59,7 +57,7 @@ const OptionTable = (props: any) => {
             // tslint:disable-next-line:no-console
             console.log(`${option.strikePrice} stik ${currentPrice} current`);
             return <Button onClick={() => handleExercise(option.id)}>Exercise ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH) Put</Button>;
-        } else if (option.type === true && option.strikePrice < currentPrice && greaterThan(option.purchaseRound, currentRound)) {
+        } else if (option.type === true && option.strikePrice < currentPrice && smallerThan(option.purchaseRound, currentRound)) {
             // call option ready to exercise
             // tslint:disable-next-line:no-console
             console.log(`${option.strikePrice} stik ${currentPrice} current`);

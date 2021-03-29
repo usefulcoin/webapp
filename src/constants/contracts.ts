@@ -1616,7 +1616,7 @@ export const BO_CONTRACT = {
     ]
   },
   42: {
-    address: '0x5D32284E867BbAb55b760B4d2f48987236A7C04A',
+    address: '0x47601d0A7E7fd519C43b881D78C22D8395f1AD74',
     "abi": [
       {
         "inputs": [
@@ -5696,7 +5696,7 @@ export const BIOP_CONTRACT = {
     ]
   },
   42: {
-    address: '0xaD231D73950Cf38B4eED6C8a228aeA7fFE4c204a',
+    address: '0xEB77E2De28c0d1f3204c5a94c5334f6c2dE0A3eC',
     "abi": [
       {
         "inputs": [
@@ -6149,7 +6149,7 @@ export const RATECALC_CONTRACT = {
     ]
   },
   42: {
-    address: '0x8D07F95080BC450868Dbfb2B9d0F0D0A3bccb103',
+    address: '0x3B9b633dE1C1C4819fa416d5545975933A3D687D',
     "abi": [
       {
         "inputs": [
@@ -6203,7 +6203,7 @@ export const RATECALC_CONTRACT = {
 export const APP_CONTRACT = {
   1: {},
   42: {
-    address: "0x76DDb94b65417D0410A25B11E844Ad8Ce4F66245",
+    address: "0xab11aCCa4153e594BCa03f6E000B2dD4428257c2",
     "abi": [
       {
         "inputs": [
@@ -6307,7 +6307,7 @@ export const APP_CONTRACT = {
 export const UTILIZATION_REWARDS_CONTRACT = {
   1: {},
   42: {
-    address: "0x3628edbC365a92645D1BA60896bf06775e1a8357",
+    address: "0xfdc6BA78CCaF0A9b0199e825FF2E5c8cA16b918d",
     "abi": [
       {
         "inputs": [
@@ -7106,7 +7106,7 @@ export const DGOV_CONTRACT = {
     ]
   },
   42: {
-    address: '0x0953A1cB205AfcC8c8cFD0Dbdda514E52Ea09c12',
+    address: '0xbA835e642653ED0Ea770BC5a698680F85A9cc278',
     "abi": [
       {
         "inputs": [
