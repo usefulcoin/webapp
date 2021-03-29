@@ -1,6 +1,7 @@
 export * from './actions'
 export * from './contracts'
 export * from './functions'
+export * from './tooltips'
 
 // pages
 export const HOME_PAGE = "Home";
@@ -30,3 +31,5 @@ export const enabledPricePairs = [
         address: "0xF4030086522a5bEEa4988F8cA5B36dbC97BeE88c"
     }, */
 ]
+
+

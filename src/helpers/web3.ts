@@ -794,6 +794,7 @@ export function sendWithdraw(address: string, amount: string, chainId: number, w
     if ( greaterThan(amount, multiply(floorDivide(poolBalance, 10), 9)) ) {
       alert("Invalid withdraw. Try withdrawing a little less. A portion of the funds you are trying to withdraw are currently locked in open options.");
       resolve("Invalid withdraw. Try withdrawing a little less. A portion of the funds you are trying to withdraw are currently locked in open options.");
+      onComplete();
     } else {
           await pool.methods
           .withdraw(amount)

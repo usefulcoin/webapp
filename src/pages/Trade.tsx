@@ -1,12 +1,14 @@
 import * as React from "react";
 import styled from "styled-components";
+
 import { /*initiateSwapIfAvailable,*/ callCurrentRoundID, callBetFee, sendExercise, sendExpire, callPoolTotalSupply, getLatestPrice, callPoolStakedBalance, callPoolMaxAvailable, getDirectRate, getOptionCreation, getOptionCloses, getTotalInterchange, callOpenCalls, callOpenPuts } from "../helpers/web3";
 
 
+import ReactTooltip from 'react-tooltip';
 // import Right from "../assets/right.png";
 import { makeBet } from "../helpers/web3";
 
-import { enabledPricePairs } from "../constants";
+import { enabledPricePairs, MaxYieldToolTip } from "../constants";
 
 import Column from 'src/components/Column';
 import OptionTable from 'src/components/OptionTable';
@@ -479,13 +481,15 @@ class Trade extends React.Component<any, any> {
     };
 
     public openBettingAlert() {
-        alert("You are taking a risk!\nBy using BIOPset to make any bet you are risking 100% of the capital you deposit.\nThe rate shown in the win total is the maximum potential value you can win. It is also shown as a percentage in 'Potential Yield'. This is the amount you can win. If it's not enough for you, don't make the bet.");
+        alert("You are taking a risk!\nBy using BIOPset to make any trade you are risking 100% of the capital you deposit.\nThe rate shown in the win total is the maximum potential value you can win. It is also shown as a percentage in 'Potential Yield'. This is the amount you can win. If it's not enough for you, don't make the bet.");
     }
 
 
 
     public renderInput() {
         const { betAmount, amountToWin, /*currentPrice, web3,*/ betDirection, betFee } = this.state;
+
+
         // <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>STRIKE PRICE: {formatFixedDecimals(web3.utils.fromWei(floorDivide(currentPrice, 100), "lovelace"), 8)} USD</SHelper>
         return (
             <Column>
@@ -503,22 +507,22 @@ class Trade extends React.Component<any, any> {
                     <BetButton up={true} onClick={() => { this.updateBetDirection(true) }} active={betDirection}/>
                     <BetButton up={false} onClick={() => { this.updateBetDirection(false) }} active={!betDirection}/>
                 </SBetButtonContainer>
-
+                    <ReactTooltip effect="solid"/>
                     <SInputBbContainer style={{ backgroundColor: `rgb(${colors.fadedBlue})`, color: `rgb(${colors.white})` }}>
                         <SRow>
                         <SColumn style={{textAlign: "left"}}>
                             <span style={{ marginLeft: "20px" }}>Win Total <span style={{cursor: "pointer"}} onClick={() => this.openBettingAlert()}>ⓘ</span>:</span>
                             <span style={{ marginLeft: "20px" }}>Trading Fee:</span>
-                            <span style={{ marginLeft: "20px" }}>Maxium Yield:</span>
+                            <span data-tip={MaxYieldToolTip} style={{ marginLeft: "20px" }}>Maxmium Yield:</span>
                             <span style={{ marginLeft: "20px" }}>Minimum Yield:</span>
 
                         </SColumn>
                         <SColumn style={{textAlign: "right"}}>
                             <span style={{ marginRight: "20px" }} >{amountToWin}</span>
-                            <span style={{ marginRight: "20px" }}>{divide(betFee, 1000)}%</span>
-                            <span style={{ marginRight: "20px" }}>{greaterThan(multiply(divide(amountToWin,2), 100), 0) ? divide(multiply(divide(amountToWin, betAmount), 100), 2) : "100"}%</span>
+                            <span style={{ marginRight: "20px"}}>{divide(betFee, 1000)}%</span>
+                            <span data-tip={MaxYieldToolTip} style={{ marginRight: "20px" , color: greaterThan(divide(multiply(divide(amountToWin, betAmount), 100), 2), 5) ? `rgb(${colors.white})` : `rgb(${colors.red})`}}>{greaterThan(multiply(divide(amountToWin,2), 100), 0) ? divide(multiply(divide(amountToWin, betAmount), 100), 2) : "100"}%</span>
                             <span style={{ marginRight: "20px" }}>-100%</span>
-
+                            
                         </SColumn>
                          </SRow>
 

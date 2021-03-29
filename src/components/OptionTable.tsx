@@ -5,6 +5,7 @@ import Button from "./Button";
 import { colors } from 'src/styles';
 import {convertToDecimals, add, smallerThan} from "../helpers/bignumber";
 
+
 const STable = styled.table`
 border-collapse: collapse;
 width: 100%;
@@ -111,16 +112,20 @@ const OptionTable = (props: any) => {
                 </thead>
                 <tbody>
                 {options.map((option: any, index: number)=>{
+                    function details() {
+                        alert(`Created: Oracle Round ${option.purchaseRound}. Expire: Oracle Round ${add(option.exp, option.purchaseRound)}`);
+                    }
+
                     if (index % 2 === 0) {
-                        return <STrEven key={ index }>
-                            <STh>{option.id}</STh>
-                            <STh><OptionDirection optionType={option.type}/></STh>
-                            {renderFeeOrCost(option)}
-                            <STh>{renderExpireExercise(option)}</STh>
-                        </STrEven>;
+                        return <STrEven key={ index } >
+                                <STh >{option.id} <span style={{cursor: "pointer"}} onClick={() => details()}>ⓘ</span></STh>
+                                <STh><OptionDirection optionType={option.type}/></STh>
+                                {renderFeeOrCost(option)}
+                                <STh>{renderExpireExercise(option)}</STh>
+                            </STrEven>;
                     } else {
                         return <STrOdd key={ index }>
-                            <STh>{option.id}</STh>
+                            <STh >{option.id} <span style={{cursor: "pointer"}} onClick={() => details()}>ⓘ</span></STh>
                             <STh><OptionDirection optionType={option.type}/></STh>
                             {renderFeeOrCost(option)}
                              <STh>{renderExpireExercise(option)}</STh>
