@@ -10,6 +10,7 @@ export const STAKE = "Write";
 export const BET = "Trade";
 export const EXERCISE_EXPIRE = "Exercise/Expire";
 export const REWARDS = "Rewards";
+export const BUY_BIOP = "Buy BIOP";
 
 
 // time frames

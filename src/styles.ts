@@ -1,15 +1,23 @@
+import background from "./assets/background.png";
+import backgroundDark from "./assets/background-dark.png";
+const darkMode = localStorage.getItem('darkMode');
+const isDarkMode = darkMode === 'true' ? true : false;
+// tslint:disable-next-line:no-console
+console.log(`darkMode: ${isDarkMode} type ${typeof(isDarkMode)}`);
+
 export const colors = {
-  white: '255, 255, 255',
-  black: '0, 0, 0',
+  white: isDarkMode ? '0, 0, 0' : '255, 255, 255',
+  black: isDarkMode ? '255, 255, 255' : '0, 0, 0',
   dark: '12, 12, 13',
   grey: '169, 169, 188',
-  darkGrey: '113, 119, 138',
-  lightGrey: '212, 212, 212',
+  brandGrey: '112,112,112',
+  darkGrey: isDarkMode ? '113, 119, 138' : '212, 212, 212',
+  lightGrey: isDarkMode ? '212, 212, 212' : '113, 119, 138',
   blue: '0, 103, 206',
   lightBlue: '64, 153, 255',
   fadedBlue: '0,89,163',
   yellow: '250, 188, 45',
-  orange: '246, 133, 27',
+  orange: '255, 119, 0',
   green: '84, 209, 146',
   pink: '255, 51, 102',
   red: '214, 0, 0',
@@ -24,6 +32,7 @@ export const fonts = {
     small: '14px',
     medium: '16px',
     large: '18px',
+    h0: '80px',
     h1: '60px',
     h2: '50px',
     h3: '40px',
@@ -87,6 +96,14 @@ export const responsive = {
 export const globalStyle = `
   @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,800');
 
+  html {
+    background: url(${isDarkMode ? backgroundDark : background}) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+
   html, body, #root {
     height: 100%;
     width: 100%;
@@ -136,21 +153,27 @@ export const globalStyle = `
 
   h1 {
     font-size: ${fonts.size.h1}
+    color: rgb(${isDarkMode ? colors.white : colors.black})
   }
   h2 {
     font-size: ${fonts.size.h2}
+    color: rgb(${isDarkMode ? colors.white : colors.black})
   }
   h3 {
     font-size: ${fonts.size.h3}
+    color: rgb(${isDarkMode ? colors.white : colors.black})
   }
   h4 {
     font-size: ${fonts.size.h4}
+    color: rgb(${isDarkMode ? colors.white : colors.black})
   }
   h5 {
     font-size: ${fonts.size.h5}
+    color: rgb(${isDarkMode ? colors.white : colors.black})
   }
   h6 {
     font-size: ${fonts.size.h6}
+    color: rgb(${isDarkMode ? colors.white : colors.black})
   }
 
   a {

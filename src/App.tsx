@@ -30,7 +30,8 @@ import {
   BET,
   EXERCISE_EXPIRE,
   STAKE,
-  REWARDS
+  REWARDS,
+  BUY_BIOP
 } from "./constants";
 
 // Pages
@@ -39,6 +40,7 @@ import Stake from './pages/Stake';
 import Trade from './pages/Trade';
 import Exercise from './pages/Exercise';
 import Landing from './pages/Landing';
+import ITCO from './pages/ITCO';
 
 const SLayout = styled.div`
   position: relative;
@@ -302,6 +304,12 @@ class App extends React.Component<any, any> {
       address
     } = this.state;
     switch (page) {
+      case BUY_BIOP:
+        return (<ITCO
+          address={address}
+          chainId={chainId}
+          web3={web3}
+        />);
       case BET:
         return (<Trade
           address={address}
@@ -354,8 +362,7 @@ class App extends React.Component<any, any> {
     } = this.state;
     return (
       <SLayout>
-        <Column spanHeight>
-          <Header
+        <Header
             connected={connected}
             address={address}
             chainId={chainId}
@@ -365,6 +372,8 @@ class App extends React.Component<any, any> {
             }}
             currentPage={page}
           />
+        <Column spanHeight >
+          
           <SContent>
             {fetching ? (
               <Column center spanHeight>

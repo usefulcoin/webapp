@@ -18,10 +18,12 @@ padding: 8px;
 
 const STrEven = styled.tr`
 background-color: rgb(${colors.lightGrey});
+color: rgb(${colors.white});
 `
 
 const STrOdd = styled.tr`
 background-color: rgb(${colors.white});
+color: rgb(${colors.black});
 `
 
 const OptionTable = (props: any) => {

@@ -1,5 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
+import {colors} from "../styles";
 
 const SConnectButtonContainer = styled.div`
   position: relative;
@@ -16,6 +17,7 @@ const SConnectButtonContainer = styled.div`
 interface IConnectButtonStyleProps {
   disabled: boolean
   icon?: any
+  primary: boolean
 }
 
 interface IConnectButtonProps extends IConnectButtonStyleProps {
@@ -27,7 +29,7 @@ const SHoverLayer = styled.div`
   position: absolute;
   height: 100%;
   width: 100%;
-  background-color: rgb(255, 255, 255, 0.1);
+  background-color: rgb(${colors.orange});
   top: 0;
   bottom: 0;
   right: 0;
@@ -53,12 +55,11 @@ const SConnectButton = styled.button<IConnectButtonStyleProps>`
   outline: none;
   overflow: hidden;
   box-shadow: none;
-  border: none;
   border-style: none;
   box-sizing: border-box;
-  background-color: rgb(64, 153, 255);
-  border: none;
-  color: rgb(255, 255, 255);
+  background-color: rgb(${({ primary }) => (primary ? colors.orange : colors.white )});
+  border: ${({ primary }) => (primary ? 'none' : `1px solid rgb(${colors.orange})`)};
+  color: rgb(${({ primary }) => (primary ?  colors.white : colors.orange)});
   box-shadow: 0 4px 6px 0 rgba(50, 50, 93, 0.11),
     0 1px 3px 0 rgba(0, 0, 0, 0.08), inset 0 0 1px 0 rgba(0, 0, 0, 0.06);
   border-radius: 32px;
@@ -122,7 +123,7 @@ const ConnectButton = (props: IConnectButtonProps) => (
     >
       <SHoverLayer />
       <SIcon />
-      {'Connect'}
+      {props.primary ? 'Launch' : 'Read More'}
     </SConnectButton>
   </SConnectButtonContainer>
 )

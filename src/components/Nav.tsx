@@ -1,11 +1,13 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import * as PropTypes from 'prop-types'
+import {colors} from "../styles";
 import {
     BET,
     EXERCISE_EXPIRE,
     STAKE,
-    REWARDS
+    REWARDS,
+    BUY_BIOP
 } from "../constants";
 
 const SNav = styled.div`
@@ -31,7 +33,8 @@ const Nav = (props: INavProps) => {
         return (
             <div onClick={() => setPage(page)} style={{
                 cursor: "pointer",
-                fontWeight: page === currentPage ? "bold" : "normal"
+                fontWeight: page === currentPage ? "bold" : "normal",
+                color: `rgb(${colors.black})`
             }}>
                 {page}
             </div>
@@ -41,6 +44,7 @@ const Nav = (props: INavProps) => {
     const { currentPage, setPage } = props;
     return (
         <SNav>
+            {navLink(BUY_BIOP, currentPage)}
             {navLink(BET, currentPage)}
             {navLink(STAKE, currentPage)}
             {navLink(EXERCISE_EXPIRE, currentPage)}

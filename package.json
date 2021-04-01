@@ -19,6 +19,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-chartjs-2": "^2.11.1",
+    "react-dark-mode-toggle": "^0.2.0",
     "react-dom": "^16.8.6",
     "react-highcharts": "^16.1.0",
     "react-landing-page": "^2.0.2",

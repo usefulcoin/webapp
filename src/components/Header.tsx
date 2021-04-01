@@ -4,9 +4,8 @@ import * as PropTypes from 'prop-types'
 import Blockie from './Blockie'
 import Banner from './Banner'
 import { getChainData, ellipseAddress } from '../helpers/utilities'
-import { transitions } from '../styles'
+import { transitions, colors } from '../styles'
 import Nav from './Nav'
-import logo from "../assets/logo.png";
 
 const SBanner = styled.div`
   top: 0;
@@ -24,8 +23,11 @@ const SHeader = styled.div`
   height: 100px;
   display: flex;
   align-items: center;
+  opacity: 100%;
+  background-color: rgb(${colors.white});
   justify-content: space-between;
   padding: 0 16px;
+  box-shadow: 0px 3px 6px #00000029;
 `
 
 const SActiveAccount = styled.div`
@@ -53,13 +55,7 @@ display: flex;
   }
 `
 
-const SLogo = styled.div`
-  width: 45px;
-  height: 45px;
-  background: url(${logo}) no-repeat;
-  background-size: cover;
-  background-position: center;
-`;
+
 
 const SBlockie = styled(Blockie)`
   margin-right: 10px;
@@ -111,11 +107,11 @@ const Header = (props: IHeaderProps) => {
     <SHeader {...props}>
       {connected && chainData ? (
         <SActiveChain>
-          <SLogo/>
+          <Banner />
          
         </SActiveChain>
       ) : (
-        <Banner />
+        <></>
       )}
       {connected ? (
          <Nav setPage={setPage} currentPage={currentPage}/>

@@ -7,17 +7,17 @@ const SBannerWrapper = styled.div`
   display: flex;
   align-items: center;
   position: relative;
+  padding-top: 5px;
   & span {
-    color: rgb(${colors.blue});
-    font-weight: ${fonts.weight.bold};
-    font-size: ${fonts.size.h5};
-    margin-left: 12px;
+    font-family: "octarine";
+    color: rgb(${colors.brandGrey});
+    font-size: ${fonts.size.h3};
   }
 `;
 
-const SBanner = styled.div`
-  width: 45px;
-  height: 45px;
+const SLogo = styled.div`
+  width: 60px;
+  height: 60px;
   background: url(${logo}) no-repeat;
   background-size: cover;
   background-position: center;
@@ -25,8 +25,8 @@ const SBanner = styled.div`
 
 const Banner = () => (
   <SBannerWrapper>
-    <SBanner />
-    <span>{`BIOPset`}</span>
+    <SLogo />
+    <span style={{}}>{`biop`}</span>
   </SBannerWrapper>
 );
 
