@@ -4,6 +4,8 @@ import { coinPriceDataInUsd } from 'src/helpers/coingecko';
 import { colors } from 'src/styles';
 import styled from 'styled-components'
 import {HOUR, MINUTE} from "src/constants";
+import {formatFixedDecimals, divide,} from 'src/helpers/bignumber';
+
 
 const SPriceChart = styled.div`
   width: 100%;
@@ -28,6 +30,7 @@ interface IPriceChartState {
   error: string;
   priceInterval: any;
   timeFrame: string;
+  currentPrice: any;
 }
 
 const INITIAL_STATE: IPriceChartState = {
@@ -35,7 +38,8 @@ const INITIAL_STATE: IPriceChartState = {
   error: "",
   data: {},
   priceInterval: null,
-  timeFrame: HOUR
+  timeFrame: HOUR,
+  currentPrice: ""
 };
 
 class PriceChart extends React.Component<any, any> {
@@ -65,9 +69,11 @@ class PriceChart extends React.Component<any, any> {
 
     public componentDidUpdate(prevProps: any) {
       if (this.props !== prevProps) {
+      
         clearInterval(this.state.priceInterval);
         this.getInitialData();
         this.setState({
+          currentPrice: this.props.currentPrice,
           priceInterval : setInterval(() => {
             this.getInitialData()
         }, 5000)
@@ -90,7 +96,7 @@ class PriceChart extends React.Component<any, any> {
           const label = new Date(data[i][0]);
           formattedLabels.push(label.toISOString().split(":")[0]);
 
-          formattedPrices.push(data[i][1]);
+          formattedPrices.push(data[i][1]/10);
         }
 
 
@@ -149,7 +155,7 @@ public setTimeFrame(setting: string) {
  }
 
   public render() {
-    const {data, error} = this.state;
+    const {data, error, currentPrice} = this.state;
     return (
       <SPriceChart>
         {
@@ -157,7 +163,9 @@ public setTimeFrame(setting: string) {
           <SHelper style={{color: `rgb(${colors.red})`}}>{error}</SHelper>
           :
           <>
+
           <SHelper style={{color: `rgb(${colors.black})`}}>{this.renderTimeFrame()}</SHelper>
+          <SHelper style={{color: `rgb(${colors.black})`}}>Current Price: {formatFixedDecimals(divide(currentPrice, 100000000), 3)} USD</SHelper>
           <div style={{width:"100%", height: "300px"}}>
           <Line data={data} />
           </div>

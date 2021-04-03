@@ -543,15 +543,15 @@ class Trade extends React.Component<any, any> {
 
 
     public renderBetApprove() {
-        const { web3, pair, betDirection } = this.state;
+        const { web3, pair, betDirection, currentPrice } = this.state;
 
                 // tslint:disable-next-line:no-console
-                console.log(`rerender chart with pair ${pair}`);
+                console.log(`rerender chart with pair ${pair} currentPrice ${currentPrice}`);
                 // tslint:disable-next-line:no-console
                 console.log(pair);
         return (
             <SBetter>
-                <PriceChart web3={web3} pair={pair} />
+                <PriceChart web3={web3} pair={pair} currentPrice={currentPrice}/>
                 <br/>
                 <Button color={betDirection ? `blue` : `red`} onClick={() => {this.handleMakeBet(betDirection)}}>Buy {betDirection ? "Call📈 " : "Put📉 "}</Button>
 
