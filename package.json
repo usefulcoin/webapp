@@ -21,6 +21,7 @@
     "react-chartjs-2": "^2.11.1",
     "react-dark-mode-toggle": "^0.2.0",
     "react-dom": "^16.8.6",
+    "react-google-charts": "^3.0.15",
     "react-highcharts": "^16.1.0",
     "react-landing-page": "^2.0.2",
     "react-scripts-ts": "^4.0.8",

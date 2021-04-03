@@ -1,5 +1,5 @@
 
-import { BO_CONTRACT, PRICE_PROVIDER_CONTRACT, BIOP_CONTRACT, RATECALC_CONTRACT, DGOV_CONTRACT, V2BIOP_CONTRACT } from '../constants'
+import { BO_CONTRACT, PRICE_PROVIDER_CONTRACT, BIOP_CONTRACT, RATECALC_CONTRACT, DGOV_CONTRACT, V2BIOP_CONTRACT, ITCO_CONTRACT } from '../constants'
 import { bigNumberStringToInt, greaterThan, floorDivide, multiply } from "./bignumber";
 
 
@@ -17,6 +17,20 @@ export function blockTimestamp(blockNumber: string, web3: any) {
     } catch (e) {
       reject(e);
     }
+  })
+}
+
+
+export function getETHBalance(address: string, web3: any) {
+  return new Promise(async (resolve, reject) => {
+    await web3.eth.getBalance(address, (err: any, result: any) => {
+      if (err) {
+        reject(err)
+      }
+
+      resolve(result)
+    })
+   
   })
 }
 
@@ -548,6 +562,67 @@ export function initiateSwapIfAvailable(address: string, chainId: number, web3: 
 
     }
   });
+}
+
+export function getITCOContract(chainId: number, web3: any) {
+  const itco = new web3.eth.Contract(
+    ITCO_CONTRACT[chainId].abi,
+    ITCO_CONTRACT[chainId].address
+  );
+  return itco;
+}
+
+
+export function buyFromITCO(amount: number, address: string, chainId: number, web3: any) {
+
+          // tslint:disable-next-line:no-console
+          console.log(`buying itco with amount eth ${amount}`);
+  return new Promise(async (resolve, reject) => {
+  await web3.eth.sendTransaction({
+    from: address,
+    to: ITCO_CONTRACT[chainId].address,
+    value: amount 
+  }).then((res: any) => {
+    resolve(res);
+  });
+});
+}
+
+export function callITCOAmountSold(chainId: number, web3: any) {
+  return new Promise(async (resolve, reject) => {
+    const itco = getITCOContract(chainId, web3);
+    await itco.methods
+      .currentTier()
+      .call(
+        { from: zeroAddress },
+        (err: any, data: any) => {
+          if (err) {
+            reject(err)
+          }
+
+          resolve(data);
+        }
+      )
+  })
+}
+
+
+export function postBuyBIOP(amount: string, address: string, chainId: number, web3: any) {
+  return new Promise(async (resolve, reject) => {
+    const itco = getITCOContract(chainId, web3);
+    await itco.methods
+      .getPendingClaims(address)
+      .send(
+        { from: zeroAddress, value: amount },
+        (err: any, data: any) => {
+          if (err) {
+            reject(err)
+          }
+
+          resolve(data);
+        }
+      )
+  })
 }
 
 

@@ -125,7 +125,7 @@ const INITIAL_STATE: IAppState = {
   showModal: false,
   pendingRequest: false,
   result: null,
-  page: BET
+  page: BUY_BIOP
 };
 
 function initWeb3(provider: any) {

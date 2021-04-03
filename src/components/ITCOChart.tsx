@@ -1,8 +1,8 @@
 import * as React from 'react'
-import {Line} from 'react-chartjs-2'
 import { colors } from 'src/styles';
 import styled from 'styled-components'
-import {HOUR, MINUTE} from "src/constants";
+import { Chart } from "react-google-charts";
+import {greaterThanOrEqual, divide} from "../helpers/bignumber";
 
 const SPriceChart = styled.div`
   width: 100%;
@@ -17,24 +17,17 @@ const SHelper = styled.div`
     font-size: x-small;
 `
 
-const SInActiveTimeFrame = styled.span`
-  cursor: pointer;
-`
 
 interface IPriceChartState {
   pendingRequest: boolean;
   data: any;
   error: string;
-  priceInterval: any;
-  timeFrame: string;
 }
 
 const INITIAL_STATE: IPriceChartState = {
   pendingRequest: false,
   error: "",
   data: {},
-  priceInterval: null,
-  timeFrame: HOUR
 };
 
 class ITCOChart extends React.Component<any, any> {
@@ -50,64 +43,34 @@ class ITCOChart extends React.Component<any, any> {
 
     public componentDidMount() {
         this.getInitialData();
-        this.setState({
-          priceInterval : setInterval(() => {
-            this.getInitialData()
-        }, 5000)
-        });
     }
 
 
-    public componentWillUnmount() {
-      clearInterval(this.state.priceInterval);
-    }
-
-    public componentDidUpdate(prevProps: any) {
-      if (this.props !== prevProps) {
-        clearInterval(this.state.priceInterval);
-        this.getInitialData();
-        this.setState({
-          priceInterval : setInterval(() => {
-            this.getInitialData()
-        }, 5000)
-        });
-      }
-    }
 
     public async getInitialData() {
       
       try {
         this.setState({pendingRequest: true, error: ""});
-     
 
-        this.setState({pendingRequest: false,
-          
-            data: {
-          labels: ["Tier 1","Tier 2","Tier 3","Tier 4","Tier 5","Tier 6",],
-          datasets: [
-            {
-              label: ``,
-              fill: false,
-              lineTension: 0.1,
-              backgroundColor: `rgb(${colors.blue},1)`,
-              borderColor: `rgb(${colors.blue},0.4)`,
-              borderCapStyle: 'butt',
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: `rgb(${colors.blue},1)`,
-              pointBackgroundColor: '#fff',
-              pointBorderWidth: 1,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: `rgb(${colors.blue},1)`,
-              pointHoverBorderColor: 'rgba(220,220,220,1)',
-              pointHoverBorderWidth: 2,
-              pointRadius: 1,
-              pointHitRadius: 10,
-              data: [100, 200, 300, 400, 500, 600]
-            }
-          ]
-        }}); 
+        const {tier} = this.props;
+        const prices = [80000000000000, 90000000000000, 100000000000000, 110000000000000, 120000000000000, 130000000000000];
+     
+        const x: any = [ ['Tier Number', '', ''],];
+        for (let i = 1; i < 7; i++) {
+          x.push([i, greaterThanOrEqual(tier, i) ? parseFloat(divide(prices[i-1], 1000000000000000000)) : parseFloat("0"), greaterThanOrEqual(tier, i) ? parseFloat("0") : parseFloat(divide(prices[i-1], 1000000000000000000))])
+        }
+
+            // tslint:disable-next-line:no-console
+            console.log("set graph data to:");
+            // tslint:disable-next-line:no-console
+            console.log(x);
+
+            // tslint:disable-next-line:no-console
+            console.log(`tier is : ${tier} type ${typeof(tier)}`);
+        this.setState({ 
+            pendingRequest: false,
+            data: x,
+          }); 
       } catch(e) {
             // tslint:disable-next-line:no-console
             console.log(e);
@@ -116,26 +79,9 @@ class ITCOChart extends React.Component<any, any> {
       }
     }
 
-public setTimeFrame(setting: string) {
-
-  this.setState({
-    timeFrame: setting
-  });
-}
-
- public renderTimeFrame() {
-   const {timeFrame} = this.state;
-   switch(timeFrame) {
-     case MINUTE:
-      return <><SInActiveTimeFrame onClick={() => this.setTimeFrame(HOUR)}>HOUR</SInActiveTimeFrame> <b>MINUTE</b></>
-     default:
-       // Hour
-       return <><b>HOUR</b> <SInActiveTimeFrame onClick={() => this.setTimeFrame(MINUTE)}>MINUTE</SInActiveTimeFrame></>
-   }
- }
 
   public render() {
-    const {data, error} = this.state;
+    const {error, data} = this.state;
     return (
       <SPriceChart>
         {
@@ -143,9 +89,21 @@ public setTimeFrame(setting: string) {
           <SHelper style={{color: `rgb(${colors.red})`}}>{error}</SHelper>
           :
           <>
-          <SHelper style={{color: `rgb(${colors.black})`}}>{this.renderTimeFrame()}</SHelper>
           <div style={{width:"100%", height: "300px"}}>
-          <Line data={data} />
+          
+          <Chart
+            width={this.props.width}
+            height={(this.props.width/5)*3}
+            chartType="SteppedAreaChart"
+            loader={<div>Loading Chart</div>}
+            data={data}
+            options={{
+              title: "IBCO Tiers",
+              vAxis: { title: 'ETH/BIOP' },
+              isStacked: true,
+            }}
+            rootProps={{ 'data-testid': '1' }}
+          />
           </div>
           </>
         }
