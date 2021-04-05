@@ -29,7 +29,7 @@ color: rgb(${colors.black});
 const OptionTable = (props: any) => {
 
     function renderExpireExercise(option: any) {
-        const { currentPrice, handleExercise, handleExpire, currentRound } = props;
+        const { currentPrice, handleComplete, currentRound } = props;
 
             // tslint:disable-next-line:no-console
             console.log(`${add(option.exp,option.purchaseRound)} exp round ${currentRound} current round ${currentPrice} for option `);
@@ -51,10 +51,10 @@ const OptionTable = (props: any) => {
             return <b>Loss</b>;
         } else if (option.exercised) {
             return <b>Win</b>;
-        } else if (add(option.exp,option.purchaseRound)  < currentRound) {
+        } else if (add(option.exp,option.purchaseRound)  <= currentRound) {
             // option ready to expire
-            return <Button onClick={() => handleExpire(option.id)}>Expire ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH) {option.type ? "Call" : "Put"}</Button>;
-        } else if (option.type === false && option.strikePrice > currentPrice && smallerThan(option.purchaseRound,currentRound)) {
+            return <Button onClick={() => handleComplete(option.id)}>Complete ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH) {option.type ? "Call" : "Put"}</Button>;
+        } /* else if (option.type === false && option.strikePrice > currentPrice && smallerThan(option.purchaseRound,currentRound)) {
             // put option ready to exercise
 
             // tslint:disable-next-line:no-console
@@ -65,7 +65,7 @@ const OptionTable = (props: any) => {
             // tslint:disable-next-line:no-console
             console.log(`${option.strikePrice} stik ${currentPrice} current`);
             return <Button onClick={() => handleExercise(option.id)}>Exercise ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH) {option.type ? "Call" : "Put"}</Button>;
-        } else {
+        } */ else {
             // optionwith no action available
             return <Button disabled outline={true} color={`rgb(${colors.black})`}>None</Button>;
         }

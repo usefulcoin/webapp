@@ -1066,35 +1066,14 @@ export function getOptionData(optionId: any, web3: any, chainId: number) {
   })
 }
 
-export function sendExpire(address: string, optionId: any, chainId: number, web3: any, onComplete: any) {
+
+export function sendComplete(address: string, optionId: any, chainId: number, web3: any, onComplete: any) {
   return new Promise(async (resolve, reject) => {
     const bin = getBOContract(chainId, web3);
     // tslint:disable-next-line:no-console
     console.log(`expiring option #${optionId}`);
     await bin.methods
-      .expire(optionId)
-      .send(
-        { from: address },
-        (err: any, data: any) => {
-          if (err) {
-            reject(err)
-          }
-
-          resolve(data)
-        }
-      )
-      .on('confirmation', onComplete)
-      .on('error', onComplete)
-  })
-}
-
-export function sendExercise(address: string, optionId: any, chainId: number, web3: any, onComplete: any) {
-  return new Promise(async (resolve, reject) => {
-    const bin = getBOContract(chainId, web3);
-    // tslint:disable-next-line:no-console
-    console.log(`expiring option #${optionId}`);
-    await bin.methods
-      .exercise(optionId)
+      .complete(optionId)
       .send(
         { from: address },
         (err: any, data: any) => {

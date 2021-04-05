@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { /*initiateSwapIfAvailable,*/ callCurrentRoundID, callBetFee, sendExercise, sendExpire, callPoolTotalSupply, getLatestPrice, callPoolStakedBalance, callPoolMaxAvailable, getDirectRate, getOptionCreation, getOptionCloses, getTotalInterchange, callOpenCalls, callOpenPuts } from "../helpers/web3";
+import { /*initiateSwapIfAvailable,*/ callCurrentRoundID, callBetFee, sendComplete, callPoolTotalSupply, getLatestPrice, callPoolStakedBalance, callPoolMaxAvailable, getDirectRate, getOptionCreation, getOptionCloses, getTotalInterchange, callOpenCalls, callOpenPuts } from "../helpers/web3";
 
 
 import ReactTooltip from 'react-tooltip';
@@ -391,31 +391,16 @@ class Trade extends React.Component<any, any> {
         }
     }
 
-    public async handleExpire(optionId: any) {
-        this.setState({ pendingRequest: true });
-        const { address, chainId, web3 } = this.state
-        try {
-            await sendExpire(address, optionId, chainId, web3, (p1: any, p2: any) => {
+ 
 
-                // tslint:disable-next-line:no-console
-                console.log(p1, p2);
-                this.loadUserOptions();
-                this.setState({ error: "", pendingRequest: false });
-
-            });
-        } catch (e) {
-            this.setState({ error: "Expire Failed", pendingRequest: false });
-        }
-    }
-
-    public async handleExercise(optionId: any) {
+    public async handleComplete(optionId: any) {
         this.setState({ pendingRequest: true });
         const { address, chainId, web3 } = this.state
         try {
 
             // tslint:disable-next-line:no-console
             console.log(`sending exercise for opton ${optionId}`);
-            await sendExercise(address, optionId, chainId, web3, (p1: any, p2: any) => {
+            await sendComplete(address, optionId, chainId, web3, (p1: any, p2: any) => {
 
                 // tslint:disable-next-line:no-console
                 console.log(p1, p2);
@@ -605,8 +590,7 @@ class Trade extends React.Component<any, any> {
                     showFee={false}
                     web3={web3}
                     options={userOptions}
-                    handleExpire={(optionId: any) => this.handleExpire(optionId)}
-                    handleExercise={(optionId: any) => this.handleExercise(optionId)}
+                    handleComplete={(optionId: any) => this.handleComplete(optionId)}
                     currentPrice={currentPrice}
                     currentRound={currentRound}
                 />

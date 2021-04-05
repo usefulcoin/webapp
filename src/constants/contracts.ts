@@ -1616,7 +1616,7 @@ export const BO_CONTRACT = {
     ]
   },
   42: {
-    address: '0x47601d0A7E7fd519C43b881D78C22D8395f1AD74',
+    address: '0x0b5048a7fc6Eb63441565e0E8875a66EA7d3dB6A',
     "abi": [
       {
         "inputs": [
@@ -2770,20 +2770,7 @@ export const BO_CONTRACT = {
             "type": "uint256"
           }
         ],
-        "name": "exercise",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "uint256",
-            "name": "oID",
-            "type": "uint256"
-          }
-        ],
-        "name": "expire",
+        "name": "complete",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -5696,7 +5683,7 @@ export const BIOP_CONTRACT = {
     ]
   },
   42: {
-    address: '0x67601B4Bd1bcDB809Ef32415C0A1e2AbF67156Bf',
+    address: '0xF1386c6ca20816Ec22d0f1d5fDf474770D943D7D',
     "abi": [
       {
         "inputs": [
@@ -6218,7 +6205,7 @@ export const ITCO_CONTRACT = {
     ]
   },
   42: {
-    address: '0x54F15cC9429b692E2712040dBf386F8C47dac1A5',
+    address: '0x03Cfd7F737a457fA268CA04e0aF2b18C3eaaD2e2',
     "abi": [
       {
         "inputs": [
@@ -6382,7 +6369,7 @@ export const RATECALC_CONTRACT = {
     ]
   },
   42: {
-    address: '0x3B9b633dE1C1C4819fa416d5545975933A3D687D',
+    address: '0xb7c4d530d4e015289bf5eC853df926Eb6EFB4D9b',
     "abi": [
       {
         "inputs": [
@@ -6436,7 +6423,7 @@ export const RATECALC_CONTRACT = {
 export const APP_CONTRACT = {
   1: {},
   42: {
-    address: "0xab11aCCa4153e594BCa03f6E000B2dD4428257c2",
+    address: "0xb19C925EA0571Da2639E18A9E25918B96d5CAe88",
     "abi": [
       {
         "inputs": [
@@ -6540,7 +6527,7 @@ export const APP_CONTRACT = {
 export const UTILIZATION_REWARDS_CONTRACT = {
   1: {},
   42: {
-    address: "0xfdc6BA78CCaF0A9b0199e825FF2E5c8cA16b918d",
+    address: "0xB28039BF1b4D69980deE76Da9c0cd583a1251F15",
     "abi": [
       {
         "inputs": [
@@ -7339,7 +7326,7 @@ export const DGOV_CONTRACT = {
     ]
   },
   42: {
-    address: '0xbA835e642653ED0Ea770BC5a698680F85A9cc278',
+    address: '0x60C9d47c50F6937c52163a22Ff5273C32bc31AA8',
     "abi": [
       {
         "inputs": [

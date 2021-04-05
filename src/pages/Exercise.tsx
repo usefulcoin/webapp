@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { getOptionsAndCloses, sendExpire, sendExercise, getLatestPrice, getOptionData } from "../helpers/web3";
+import { getOptionsAndCloses, sendComplete, getLatestPrice, getOptionData } from "../helpers/web3";
 import {add, floorDivide} from '../helpers/bignumber';
 
 import OptionVis from 'src/components/OptionVis';
@@ -202,31 +202,16 @@ class Exercise extends React.Component<any, any> {
 
 
 
-    public async handleExpire(optionId: any) {
-        this.setState({ pendingRequest: true });
-        const { address, chainId, web3 } = this.state
-        try {
-            await sendExpire(address, optionId, chainId, web3, (p1: any, p2: any) => {
+   
 
-                // tslint:disable-next-line:no-console
-                console.log(p1, p2);
-                this.loadOpenOptions();
-                this.setState({ error: "", pendingRequest: false });
-
-            });
-        } catch (e) {
-            this.setState({ error: "Expire Failed", pendingRequest: false });
-        }
-    }
-
-    public async handleExercise(optionId: any) {
+    public async handleComplete(optionId: any) {
         this.setState({ pendingRequest: true });
         const { address, chainId, web3 } = this.state
         try {
 
             // tslint:disable-next-line:no-console
             console.log(`sending exercise for opton ${optionId}`);
-            await sendExercise(address, optionId, chainId, web3, (p1: any, p2: any) => {
+            await sendComplete(address, optionId, chainId, web3, (p1: any, p2: any) => {
 
                 // tslint:disable-next-line:no-console
                 console.log(p1, p2);
@@ -259,8 +244,7 @@ class Exercise extends React.Component<any, any> {
                             showFee={true}
                             web3={web3}
                             options={options}
-                            handleExpire={(optionId: any) => this.handleExpire(optionId)}
-                            handleExercise={(optionId: any) => this.handleExercise(optionId)}
+                            handleComplete={(optionId: any) => this.handleComplete(optionId)}
                             currentPrice={currentPrice}
                         />
 

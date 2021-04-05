@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { /*initiateSwapIfAvailable,*/ getETHBalance, callITCOAmountSold, buyFromITCO } from "../helpers/web3";
+import { /*initiateSwapIfAvailable,*/ getETHBalance, callITCOAmountSold, buyFromITCO, callBIOPBalance } from "../helpers/web3";
 
 
 import ReactTooltip from 'react-tooltip';
@@ -122,7 +122,8 @@ interface IBetState {
     priceInterval: any;
     optionsInterval: any;
     lastBetCall: boolean;
-    balance: any;
+    balance: any;// in WEI
+    biopBalance: any;
     betDirection: boolean;
     openOptions: number;
     betFee: number;
@@ -148,6 +149,7 @@ const INITIAL_STATE: IBetState = {
     optionsInterval: null,
     lastBetCall: false,
     balance: 0,
+    biopBalance: 0,
     betDirection: true, // true means call
     openOptions: 2,
     betFee: 0,
@@ -178,10 +180,11 @@ class Trade extends React.Component<any, any> {
 
     public async getBalance() {
 
-        const { address, web3 } = this.state;
+        const { address, web3, chainId } = this.state;
         const ba = await getETHBalance(address, web3);
+        const biba = await callBIOPBalance(address, chainId, web3);
 
-        this.setState({ balance: ba });
+        this.setState({ balance: ba, biopBalance: biba });
     }
   
 
@@ -251,7 +254,7 @@ class Trade extends React.Component<any, any> {
 
 
     public renderInput() {
-        const { spendAmount, toReceive, /*currentPrice, */web3,balance, address, chainId } = this.state;
+        const { spendAmount, toReceive, /*currentPrice, */web3,balance, biopBalance, address, chainId } = this.state;
 
 
         // <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>STRIKE PRICE: {formatFixedDecimals(web3.utils.fromWei(floorDivide(currentPrice, 100), "lovelace"), 8)} USD</SHelper>
@@ -278,6 +281,10 @@ class Trade extends React.Component<any, any> {
                         </SInputRow>
                         <SRow style={{margin: "10px"}}>
                             <span>BUY</span>
+                            <span style={{fontSize: fonts.size.tiny, paddingTop: "5px", cursor: "pointer"}}>
+                                Available: {formatFixedDecimals(web3.utils.fromWei(`${biopBalance}`, "ether"), 6)}
+                                </span>
+                        
                         </SRow>
                         <SInputRow >
                         <SInput 
@@ -289,6 +296,7 @@ class Trade extends React.Component<any, any> {
                             this.setState({loading: true})
                             await buyFromITCO(web3.utils.toWei(`${spendAmount}`), address, chainId, web3);
                             this.setState({loading: false})
+                            await this.getBalance();
                         }}><div style={{color: `white`}}>Buy</div></Button>
                         <br/><br/>
                        
