@@ -8,7 +8,7 @@ export const HOME_PAGE = "Home";
 export const BUY_SELL = "Exchange";
 export const STAKE = "Write";
 export const BET = "Trade";
-export const EXERCISE_EXPIRE = "Exercise/Expire";
+export const EXERCISE_EXPIRE = "Settle";
 export const REWARDS = "Rewards";
 export const BUY_BIOP = "Buy BIOP";
 

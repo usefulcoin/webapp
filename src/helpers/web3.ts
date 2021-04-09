@@ -1,6 +1,6 @@
 
 import { BO_CONTRACT, PRICE_PROVIDER_CONTRACT, BIOP_CONTRACT, RATECALC_CONTRACT, DGOV_CONTRACT, V2BIOP_CONTRACT, ITCO_CONTRACT } from '../constants'
-import { bigNumberStringToInt, greaterThan, floorDivide, multiply } from "./bignumber";
+import { bigNumberStringToInt, greaterThan, subtract } from "./bignumber";
 
 
 const zeroAddress = "0x0000000000000000000000000000000000000000";
@@ -855,22 +855,33 @@ export function sendDeposit(address: string, amount: string, chainId: number, we
   })
 }
 
-export function sendWithdraw(address: string, amount: string, chainId: number, web3: any, onComplete: any) {
+export function sendWithdrawGuarded(address: string, amount: string, chainId: number, web3: any, onComplete: any) {
   return new Promise(async (resolve, reject) => {
-    const pool = getBOContract(chainId, web3);
     // tslint:disable-next-line:no-console
     console.log(`depoyts`);
     // tslint:disable-next-line:no-console
     console.log(amount);
     // tslint:disable-next-line:no-console
     console.log(bigNumberStringToInt(amount));
+    const lockedAmount: any = await getPoolLockedAmount(chainId, web3);
 
     const poolBalance: any = await callPoolTotalSupply(chainId, web3);
-    if ( greaterThan(amount, multiply(floorDivide(poolBalance, 10), 9)) ) {
+    if ( greaterThan(amount, subtract(poolBalance, lockedAmount)) ) {
       alert("Invalid withdraw. Try withdrawing a little less. A portion of the funds you are trying to withdraw are currently locked in open options.");
       resolve("Invalid withdraw. Try withdrawing a little less. A portion of the funds you are trying to withdraw are currently locked in open options.");
       onComplete();
     } else {
+      resolve(sendWithdraw(address, amount, chainId, web3, onComplete));
+     
+    }
+  });
+   
+}
+
+export function sendWithdraw(address: string, amount: string, chainId: number, web3: any, onComplete: any) {
+  return new Promise(async (resolve, reject) => {
+    const pool = getBOContract(chainId, web3);
+
           await pool.methods
           .withdraw(amount)
           .send(
@@ -885,7 +896,7 @@ export function sendWithdraw(address: string, amount: string, chainId: number, w
           )
           .on('confirmation', onComplete)
           .on('error', onComplete)
-    }
+  
   });
    
 }

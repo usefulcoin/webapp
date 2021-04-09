@@ -1,14 +1,14 @@
 import * as React from "react";
 import styled from "styled-components";
-import { callPoolTotalSupply, callPoolStakedBalance, callPoolNextWithdraw, sendWithdraw, sendDeposit} from "../helpers/web3";
-
+import { callPoolTotalSupply, callPoolStakedBalance, callPoolNextWithdraw, sendDeposit, sendWithdrawGuarded, getPoolLockedAmount, getETHBalance} from "../helpers/web3";
+import {BO_CONTRACT} from "../constants/contracts";
 
 import Input from 'src/components/Input';
 import Switch from 'src/components/Switch';
 import Button from 'src/components/Button';
 import Loading from 'src/components/Loading';
 import { colors } from 'src/styles';
-import {  convertAmountFromRawNumber, convertToDecimals } from 'src/helpers/bignumber';
+import {  convertAmountFromRawNumber, convertToDecimals, formatFixedDecimals, subtract } from 'src/helpers/bignumber';
 
 const SStake = styled.div`
     width:100%;
@@ -36,6 +36,8 @@ interface IExchangeState {
     changeAmount: any;// amount to stake or unstake
     staking: boolean;
     nextWithdraw: number;
+    locktotalLocked: number;// amount of eth in the contract
+    poolBalance: number; 
 }
 
 const INITIAL_STATE: IExchangeState = {
@@ -48,7 +50,9 @@ const INITIAL_STATE: IExchangeState = {
     totalStaked: 0,
     changeAmount: 0,
     staking: true,
-    nextWithdraw: 0
+    nextWithdraw: 0,
+    locktotalLocked: 0,
+    poolBalance: 0
 };
 class Stake extends React.Component<any, any> {
     // @ts-ignore
@@ -74,13 +78,15 @@ class Stake extends React.Component<any, any> {
         const staked = await callPoolStakedBalance(address, chainId, web3);
         const nextWithdraw = await callPoolNextWithdraw(address, chainId, web3);
         const totalStaked = await callPoolTotalSupply(chainId, web3);
+        const locktotalLocked = await getPoolLockedAmount(chainId, web3);
+        const poolBalance = await getETHBalance(BO_CONTRACT[chainId].address, web3);
 
 
             // tslint:disable-next-line:no-console
             console.log("presend");
             // tslint:disable-next-line:no-console
             console.log(nextWithdraw);
-        this.setState({totalStaked, staked, nextWithdraw})
+        this.setState({totalStaked, staked, nextWithdraw, locktotalLocked, poolBalance})
     }
 
 
@@ -90,7 +96,7 @@ class Stake extends React.Component<any, any> {
         const {changeAmount, web3, address, chainId} = this.state;
         if (changeAmount > 0) {
 
-        await sendWithdraw(address, web3.utils.toWei(changeAmount, "ether"), chainId, web3, (param1: any, param2: any) => {
+        await sendWithdrawGuarded(address, web3.utils.toWei(changeAmount, "ether"), chainId, web3, (param1: any, param2: any) => {
             // tslint:disable-next-line:no-console
             console.log("confirmed");
             // tslint:disable-next-line:no-console
@@ -191,12 +197,13 @@ class Stake extends React.Component<any, any> {
 
 
     public render() {
-        const {totalStaked, staked, changeAmount, staking, pendingRequest, error} = this.state;
+        const {web3, totalStaked, staked, changeAmount, staking, pendingRequest, error, poolBalance, locktotalLocked} = this.state;
         return(
             <SStake>
 
                 <h1>Sell Options</h1>
                 <p>Contribute to the liquidity pool and passively earn premiums.</p>
+                <p>{convertToDecimals(`${formatFixedDecimals(`${web3.utils.fromWei(`${poolBalance}`, "ether")}`, 5)}`, 2)} ETH Total Staked ({formatFixedDecimals(`${web3.utils.fromWei(`${subtract(poolBalance, locktotalLocked)}`, "ether")}`, 5)} Available)</p>
                 <p>Your contribution: <b>{ convertAmountFromRawNumber(staked, 18)} ETH</b></p>
                 <p><b>{convertToDecimals(`${((staked/totalStaked))*100}`, 2)}%</b> of total staked.</p>
                 <br/>

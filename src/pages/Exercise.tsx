@@ -1,12 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
-import { getOptionsAndCloses, sendComplete, getLatestPrice, getOptionData } from "../helpers/web3";
+import { getOptionsAndCloses, sendComplete, getLatestPrice, getOptionData, callCurrentRoundID } from "../helpers/web3";
 import {add, floorDivide} from '../helpers/bignumber';
 
 import OptionVis from 'src/components/OptionVis';
 import OptionTable from 'src/components/OptionTable';
 import Loading from 'src/components/Loading';
 import { colors } from 'src/styles';
+import {enabledPricePairs} from "../constants";
 
 const SStake = styled.div`
     width:100%;
@@ -38,6 +39,7 @@ interface IExerciseState {
     exercised: number;
     expired: number;
     avgValue: number;
+    currentRound: any;
 }
 
 const INITIAL_STATE: IExerciseState = {
@@ -50,6 +52,7 @@ const INITIAL_STATE: IExerciseState = {
     currentPrice: 0,
     priceInterval: null,
     optionsInterval: null,
+    currentRound: 0,// current oracle round
 
     // used for snapshot visualization
     calls: 0,
@@ -107,6 +110,8 @@ class Exercise extends React.Component<any, any> {
         const { chainId, web3 } = this.state;
 
         const options: any = await getOptionsAndCloses(chainId, web3);
+
+        const cr: any = await callCurrentRoundID(chainId, web3, enabledPricePairs[0].address);
 
 
         // tslint:disable-next-line:no-console
@@ -197,7 +202,7 @@ class Exercise extends React.Component<any, any> {
 
         // tslint:disable-next-line:no-console
         console.log(sortedOptions);
-        this.setState({ options: sortedOptions, calls, puts, exercised, expired, avgValue })
+        this.setState({ options: sortedOptions, calls, puts, exercised, expired, avgValue, currentRound: cr  })
     }
 
 
@@ -226,7 +231,7 @@ class Exercise extends React.Component<any, any> {
 
 
     public render() {
-        const { avgValue, calls, puts, exercised, expired, pendingRequest, error, web3, options, currentPrice } = this.state;
+        const { currentRound, avgValue, calls, puts, exercised, expired, pendingRequest, error, web3, options, currentPrice } = this.state;
 
         return (
             <SStake>
@@ -246,6 +251,7 @@ class Exercise extends React.Component<any, any> {
                             options={options}
                             handleComplete={(optionId: any) => this.handleComplete(optionId)}
                             currentPrice={currentPrice}
+                            currentRound={currentRound}
                         />
 
                         </>

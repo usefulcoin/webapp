@@ -3,7 +3,7 @@ import styled from "styled-components";
 import OptionDirection from "./OptionDirection";
 import Button from "./Button";
 import { colors } from 'src/styles';
-import {convertToDecimals, add, smallerThan} from "../helpers/bignumber";
+import {convertToDecimals, add, smallerThan, greaterThan} from "../helpers/bignumber";
 
 
 const STable = styled.table`
@@ -48,12 +48,12 @@ const OptionTable = (props: any) => {
             // tslint:disable-next-line:no-console
             console.log(`${typeof(option.purchaseRound)} ${typeof(currentRound)}`);
         if (option.expired) {
-            return <b>Loss</b>;
+            return <b>OTM</b>;
         } else if (option.exercised) {
-            return <b>Win</b>;
-        } else if (add(option.exp,option.purchaseRound)  <= currentRound) {
+            return <b>ITM</b>;
+        } else if (greaterThan(currentRound, add(option.exp,option.purchaseRound))) {
             // option ready to expire
-            return <Button onClick={() => handleComplete(option.id)}>Complete ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH) {option.type ? "Call" : "Put"}</Button>;
+            return <Button onClick={() => handleComplete(option.id)}>Settle ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH) {option.type ? "Call" : "Put"}</Button>;
         } /* else if (option.type === false && option.strikePrice > currentPrice && smallerThan(option.purchaseRound,currentRound)) {
             // put option ready to exercise
 
@@ -89,7 +89,7 @@ const OptionTable = (props: any) => {
         }
     }
 
-    const {options, web3, showFee} = props;
+    const {options, web3, showFee, currentRound} = props;
     if (options.length > 0) {
         // tslint:disable-next-line:no-console
         console.log("showing options!!!");
@@ -115,7 +115,7 @@ const OptionTable = (props: any) => {
                 <tbody>
                 {options.map((option: any, index: number)=>{
                     function details() {
-                        alert(`Created: Oracle Round ${option.purchaseRound}. Expire: Oracle Round ${add(option.exp, option.purchaseRound)}`);
+                        alert(`Created: Oracle Round ${option.purchaseRound}. Expire: Oracle Round ${add(option.exp, option.purchaseRound)}. current: Oracle Round ${currentRound}`);
                     }
 
                     if (index % 2 === 0) {
