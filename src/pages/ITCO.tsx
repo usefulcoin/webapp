@@ -225,7 +225,7 @@ class Trade extends React.Component<any, any> {
             console.log(`setting toReceive with spend ${spend} and price ${price}`);
             // tslint:disable-next-line:no-console
             console.log(`toReceive becomes: ${divide(web3.utils.toWei(`${spend}`), price)}`);
-            this.setState({ toReceive: divide(web3.utils.toWei(`${spend}`), price) });
+            this.setState({ toReceive: divide(web3.utils.toWei(`${spend}`), price), error: "" });
 
         } catch (e) {
             this.setState({ error: "Invalid Input"});
@@ -254,7 +254,7 @@ class Trade extends React.Component<any, any> {
 
 
     public renderInput() {
-        const { spendAmount, toReceive, /*currentPrice, */web3,balance, biopBalance, address, chainId } = this.state;
+        const { spendAmount, toReceive, /*currentPrice, */web3,balance, biopBalance, address, chainId, error } = this.state;
 
 
         // <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>STRIKE PRICE: {formatFixedDecimals(web3.utils.fromWei(floorDivide(currentPrice, 100), "lovelace"), 8)} USD</SHelper>
@@ -277,8 +277,10 @@ class Trade extends React.Component<any, any> {
                             this.updateToReceive(e.target.value);
                         }}
                         />
-                        <span>|</span> <span>ETH</span>
+                        <span style={{color: `white` }}>|</span> <span style={{color: `white` }}>ETH</span>
                         </SInputRow>
+                        <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
+                        
                         <SRow style={{margin: "10px"}}>
                             <span>BUY</span>
                             <span style={{fontSize: fonts.size.tiny, paddingTop: "5px", cursor: "pointer"}}>
@@ -290,7 +292,7 @@ class Trade extends React.Component<any, any> {
                         <SInput 
                         value={toReceive}
                         />
-                        <span>|</span> <span>BIOP</span>
+                        <span style={{color: `white` }}>|</span> <span style={{color: `white` }}>BIOP</span>
                         </SInputRow>
                         <Button onClick={async () => {
                             this.setState({loading: true})
@@ -319,14 +321,14 @@ class Trade extends React.Component<any, any> {
 
 
     public render() {
-        const {  pendingRequest, error, chainId, web3, tier } = this.state;
+        const {  pendingRequest, chainId, web3, tier } = this.state;
         // const { openExercise } = this.props;
-        const width = window.screen.width;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
         return (
             <SBet>
-                <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
                 <br/><br/>
-                <SRow style={{flexDirection: width > 900 ? "row" : "column"}}>
+                <SRow style={{flexDirection: width > height ? "row" : "column"}}>
                     <ITCOChart web3={web3} chainId={chainId} tier={tier} width={width > 900 ? 500 : 300}/>
                     {
                     pendingRequest ?

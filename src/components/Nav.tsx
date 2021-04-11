@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import * as PropTypes from 'prop-types'
-import {colors} from "../styles";
+import { colors } from "../styles";
 import {
     BET,
     EXERCISE_EXPIRE,
@@ -9,6 +9,7 @@ import {
     REWARDS,
     BUY_BIOP
 } from "../constants";
+import Button from './Button';
 
 const SNav = styled.div`
   margin-top: -1px;
@@ -22,12 +23,31 @@ const SNav = styled.div`
   flex-direction: row;
 `
 
+const SMobileContainer = styled.div`
+    background-color: rgb(${colors.white});
+    z-index: 10;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    padding-top: 10%;
+    margin-top: 0%;
+    font-size: x-large;
+    cursor: pointer;
+`
+
+const SMobileNavItem = styled.li`
+    color: rgb(${colors.black});
+`
+
 interface INavProps {
     currentPage: string
     setPage: (page: string) => void
 }
 
 const Nav = (props: INavProps) => {
+    const [showPanel, setShowPanel] = React.useState(false);
+
 
     function navLink(page: string, currentPage: string) {
         return (
@@ -35,22 +55,65 @@ const Nav = (props: INavProps) => {
                 cursor: "pointer",
                 fontWeight: page === currentPage ? "bold" : "normal",
                 color: `rgb(${colors.black})`
-            }}>
+            }} 
+            key={page}>
                 {page}
             </div>
         );
     }
 
     const { currentPage, setPage } = props;
-    return (
-        <SNav>
-            {navLink(BUY_BIOP, currentPage)}
-            {navLink(BET, currentPage)}
-            {navLink(STAKE, currentPage)}
-            {navLink(EXERCISE_EXPIRE, currentPage)}
-            {navLink(REWARDS, currentPage)}
-        </SNav>
-    )
+
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    
+    const pages = [
+        BUY_BIOP,
+        BET,
+        STAKE,
+        EXERCISE_EXPIRE,
+        REWARDS
+    ]
+    if (width > height) {
+        return (
+
+            <SNav>
+                {pages.map(page => navLink(page, currentPage))}
+            </SNav>
+        )
+    } else {
+        return ( <div>
+              
+                {showPanel ?
+                <SMobileContainer > 
+                <ul>
+                    
+                {pages.map(page => {
+                    return <SMobileNavItem 
+                            key={page}
+                            onClick={() => {
+                                setPage(page);
+                                setShowPanel(false);
+                            }}
+                            style={{fontWeight: page === currentPage ? "bold":"normal"}}
+                            >
+                                {page}
+                            </SMobileNavItem>
+                    })}
+                </ul>
+                
+                
+                </SMobileContainer>
+                :  <Button
+                onClick={()=>setShowPanel(!showPanel)}
+                >Menu</Button>
+            }
+            </div>
+      )}
+
+  
 }
 
 

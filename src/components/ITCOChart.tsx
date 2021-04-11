@@ -89,11 +89,13 @@ class ITCOChart extends React.Component<any, any> {
           <SHelper style={{color: `rgb(${colors.red})`}}>{error}</SHelper>
           :
           <>
-          <div style={{width:"100%", height: "300px"}}>
+          <div style={{}}>
           
           <Chart
-            width={this.props.width}
-            height={(this.props.width/5)*3}
+            width={
+              "60vh"
+            }
+            height={"30vh"}
             chartType="SteppedAreaChart"
             loader={<div>Loading Chart</div>}
             data={data}
