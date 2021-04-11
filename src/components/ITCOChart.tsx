@@ -5,13 +5,15 @@ import { Chart } from "react-google-charts";
 import {greaterThanOrEqual, divide} from "../helpers/bignumber";
 
 const SPriceChart = styled.div`
-  width: 100%;
   
+  display: flex;
+  justify-content: center;
   padding: 20px;
   color: white;
   border: 1px solid rgb(${colors.grey});
   border-radius: 8px;
   background-color: rgb(${colors.white});
+  margin: 5px;
 `
 const SHelper = styled.div`
     font-size: x-small;
@@ -93,7 +95,7 @@ class ITCOChart extends React.Component<any, any> {
           
           <Chart
             width={
-              "60vh"
+              "50vh"
             }
             height={"30vh"}
             chartType="SteppedAreaChart"

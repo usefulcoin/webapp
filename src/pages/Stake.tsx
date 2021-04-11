@@ -201,11 +201,11 @@ class Stake extends React.Component<any, any> {
         return(
             <SStake>
 
-                <h1>Sell Options</h1>
-                <p>Contribute to the liquidity pool and passively earn premiums.</p>
-                <p>{convertToDecimals(`${formatFixedDecimals(`${web3.utils.fromWei(`${poolBalance}`, "ether")}`, 5)}`, 2)} ETH Total Staked ({formatFixedDecimals(`${web3.utils.fromWei(`${subtract(poolBalance, locktotalLocked)}`, "ether")}`, 5)} Available)</p>
-                <p>Your contribution: <b>{ convertAmountFromRawNumber(staked, 18)} ETH</b></p>
-                <p><b>{convertToDecimals(`${((staked/totalStaked))*100}`, 2)}%</b> of total staked.</p>
+                <h1 style={{color: `rgb(${colors.black})`}}>Sell Options</h1>
+                <p style={{color: `rgb(${colors.black})`}}>Contribute to the liquidity pool and passively earn premiums.</p>
+                <p style={{color: `rgb(${colors.black})`}}>{convertToDecimals(`${formatFixedDecimals(`${web3.utils.fromWei(`${poolBalance}`, "ether")}`, 5)}`, 2)} ETH Total Staked ({formatFixedDecimals(`${web3.utils.fromWei(`${subtract(poolBalance, locktotalLocked)}`, "ether")}`, 5)} Available)</p>
+                <p style={{color: `rgb(${colors.black})`}}>Your contribution: <b>{ convertAmountFromRawNumber(staked, 18)} ETH</b></p>
+                <p style={{color: `rgb(${colors.black})`}}><b>{convertToDecimals(`${((staked/totalStaked))*100}`, 2)}%</b> of total staked.</p>
                 <br/>
                 {this.renderStakeWithdrawSwitch()}
                 <SHelper style={{color: `rgb(${colors.red})`}}>{error}</SHelper>
@@ -215,7 +215,7 @@ class Stake extends React.Component<any, any> {
                     :
                     <>
                     <Input value={changeAmount} placeholder={`Amount To ${staking ? "Stake" : "Withdraw"}`} onChange={(e: any) => this.setState({ changeAmount: e.target.value })} id="amountStake" />
-                    <SHelper>Amount In ETH</SHelper>
+                    <SHelper style={{color: `rgb(${colors.black})`}}>Amount In ETH</SHelper>
 
                     <br/>
                     {staking ?

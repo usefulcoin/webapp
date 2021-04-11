@@ -28,7 +28,6 @@ const SInputContainer = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
-    margin: 0 auto;
     align-items: stretch;
     padding-bottom: 10px;
 `
@@ -328,8 +327,8 @@ class Trade extends React.Component<any, any> {
         return (
             <SBet>
                 <br/><br/>
-                <SRow style={{flexDirection: width > height ? "row" : "column"}}>
-                    <ITCOChart web3={web3} chainId={chainId} tier={tier} width={width > 900 ? 500 : 300}/>
+                <SRow style={{flexDirection: width > height ? "row" : "column", marginLeft: width > height ? "-25%" : "0%"}}>
+                    <ITCOChart web3={web3} chainId={chainId} tier={tier} />
                     {
                     pendingRequest ?
                         <Loading />

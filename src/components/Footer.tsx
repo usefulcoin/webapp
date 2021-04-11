@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import DarkModeToggle from './DarkModeToggle';
+import {colors} from "../styles";
 
 const SFooter = styled.div`
   margin-top: 100px;
@@ -19,6 +20,7 @@ const SLinks = styled.div`
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    color: rgb(${colors.black})
 `
 
 const SLink = styled.a`
@@ -39,7 +41,7 @@ const Footer = (props: any) => (
          <SLink href="https://t.me/BIOPset" target="_">Telegram</SLink>
      </SLinks>
      <DarkModeToggle/>
-     <p>BIOPset © 2021. Do not use 🙅‍♀️ in countries where binary options are regulated.</p>
+     <p style={{color: `rgb(${colors.black})`}}>BIOPset © 2021. Do not use 🙅‍♀️ in countries where binary options are regulated.</p>
     
    
   </SFooter>

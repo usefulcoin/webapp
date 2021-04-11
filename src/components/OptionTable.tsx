@@ -14,6 +14,7 @@ const STh = styled.th`
 border: 1px solid rgb(${colors.lightGrey});
 text-align: left;
 padding: 8px;
+color: rgb(${colors.black});
 `
 
 const STrEven = styled.tr`
@@ -73,16 +74,15 @@ const OptionTable = (props: any) => {
 
     function renderFeeOrCost(option: any) {
         const {showFee} = props;
+        const value = option.lockedValue.split(".")[0];
         if (showFee) {
-            // tslint:disable-next-line:no-console
-            console.log(`showing fee value ${web3.utils.fromWei(`${option.lockedValue*0.005}`, "ether")} ${web3.utils.fromWei(`${option.lockedValue}`, "ether")}`);
-            return <STh>{web3.utils.fromWei(`${option.lockedValue*0.005}`, "ether")}  ETH </STh>
+            return <STh>{web3.utils.fromWei(`${value*0.005}`.split(".")[0], "ether")}  ETH </STh>
         } else {
 
             // tslint:disable-next-line:no-console
             console.log(`showing locked value`);
             return <>
-                <STh>{web3.utils.fromWei(`${option.lockedValue}`, "ether")}  ETH</STh>{/*
+                <STh>{web3.utils.fromWei(`${value}`, "ether")}  ETH</STh>{/*
                 <STh>{web3.utils.fromWei(`${option.strikePrice}`, "ether")}  ETH</STh> */}
             </>
 
@@ -140,7 +140,7 @@ const OptionTable = (props: any) => {
         )
     } else {
         return (
-            <p>One moment please. Options are loading.</p>
+            <p style={{color: `rgb(${colors.black})`}}>One moment please. Options are loading.</p>
         )
     }
 

@@ -25,6 +25,7 @@ const SBet = styled.div`
 `
 const SHelper = styled.div`
     font-size: x-small;
+    color: rgb(${colors.black});
 `
 
 const SBetter = styled.div`
@@ -496,10 +497,10 @@ class Trade extends React.Component<any, any> {
                     <SInputBbContainer style={{ backgroundColor: `rgb(${colors.fadedBlue})`, color: `rgb(${colors.white})` }}>
                         <SRow>
                         <SColumn style={{textAlign: "left"}}>
-                            <span style={{ marginLeft: "20px" }}>Win Total <span style={{cursor: "pointer"}} onClick={() => this.openBettingAlert()}>ⓘ</span>:</span>
-                            <span style={{ marginLeft: "20px" }}>Trading Fee:</span>
-                            <span  style={{ marginLeft: "20px" }}>Maxmium Yield:</span>
-                            <span style={{ marginLeft: "20px" }}>Minimum Yield:</span>
+                            <span style={{ marginLeft: "20px", color: `rgb(${colors.black})` }}>Win Total <span style={{cursor: "pointer"}} onClick={() => this.openBettingAlert()}>ⓘ</span>:</span>
+                            <span style={{ marginLeft: "20px", color: `rgb(${colors.black})` }}>Trading Fee:</span>
+                            <span  style={{ marginLeft: "20px", color: `rgb(${colors.black})` }}>Maxmium Yield:</span>
+                            <span style={{ marginLeft: "20px",  color: `rgb(${colors.black})` }}>Minimum Yield:</span>
 
                         </SColumn>
                         <SColumn style={{textAlign: "right"}}>
@@ -538,7 +539,7 @@ class Trade extends React.Component<any, any> {
             <SBetter>
                 <PriceChart web3={web3} pair={pair} currentPrice={currentPrice}/>
                 <br/>
-                <Button color={betDirection ? `blue` : `red`} onClick={() => {this.handleMakeBet(betDirection)}}>Buy {betDirection ? "Call📈 " : "Put📉 "}</Button>
+                <Button color={betDirection ? `blue` : `red`} onClick={() => {this.handleMakeBet(betDirection)}}><span style={{color: `white`}}>Buy {betDirection ? "Call📈 " : "Put📉 "}</span></Button>
 
             </SBetter>
         )
@@ -555,8 +556,8 @@ class Trade extends React.Component<any, any> {
         return (
             <SBet>
 
-                <h1>Buy Options</h1>
-                <p>Dont risk more than you can afford to lose.</p>
+                <h1 style={{color: `rgb(${colors.black})`}}>Buy Options</h1>
+                <p style={{color: `rgb(${colors.black})`}}>Dont risk more than you can afford to lose.</p>
                 <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
 
                 {
@@ -569,7 +570,7 @@ class Trade extends React.Component<any, any> {
                             {this.renderBetApprove()}
                         </SInterface>
                 }
-                <SHelper>Trading Volume: {formatFixedDecimals(web3.utils.fromWei(`${totalInterchange}`, "ether"), 8)} ETH</SHelper>
+                <SHelper >Trading Volume: {formatFixedDecimals(web3.utils.fromWei(`${totalInterchange}`, "ether"), 8)} ETH</SHelper>
 
                 {
                     hasBet ?
@@ -584,7 +585,7 @@ class Trade extends React.Component<any, any> {
                          </>
                 }
                 <br />
-                <h4>Options Purchased</h4>
+                <h4 style={{color: `rgb(${colors.black})`}}>Options Purchased</h4>
                 <br />
                 <OptionTable
                     showFee={false}
