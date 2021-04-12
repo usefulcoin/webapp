@@ -3,6 +3,8 @@ import { colors } from 'src/styles';
 import styled from 'styled-components'
 import { Chart } from "react-google-charts";
 import {greaterThanOrEqual, divide} from "../helpers/bignumber";
+import { DEFAULT_LANG } from 'src/constants';
+import i18n from "../i18n";
 
 const SPriceChart = styled.div`
   
@@ -24,12 +26,14 @@ interface IPriceChartState {
   pendingRequest: boolean;
   data: any;
   error: string;
+  locale: string;
 }
 
 const INITIAL_STATE: IPriceChartState = {
   pendingRequest: false,
   error: "",
   data: {},
+  locale: DEFAULT_LANG
 };
 
 class ITCOChart extends React.Component<any, any> {
@@ -45,6 +49,8 @@ class ITCOChart extends React.Component<any, any> {
 
     public componentDidMount() {
         this.getInitialData();
+        const locale = localStorage.getItem('locale');
+        this.setState({locale: locale !== null ? locale : DEFAULT_LANG})
     }
 
 
@@ -83,7 +89,7 @@ class ITCOChart extends React.Component<any, any> {
 
 
   public render() {
-    const {error, data} = this.state;
+    const {error, data, locale} = this.state;
     return (
       <SPriceChart>
         {
@@ -99,10 +105,10 @@ class ITCOChart extends React.Component<any, any> {
             }
             height={"30vh"}
             chartType="SteppedAreaChart"
-            loader={<div>Loading Chart</div>}
+            loader={<div>{i18n[locale].LOADINGCHART}</div>}
             data={data}
             options={{
-              title: "IBCO Tiers",
+              title: `IBCO ${i18n[locale].TIERS}`,
               vAxis: { title: 'ETH/BIOP' },
               isStacked: true,
             }}

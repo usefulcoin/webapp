@@ -1,13 +1,15 @@
 import * as React from "react";
 import styled from "styled-components";
 
+import i18n from "../i18n";
+
 import { /*initiateSwapIfAvailable,*/ getETHBalance, callITCOAmountSold, buyFromITCO, callBIOPBalance } from "../helpers/web3";
 
 
 import ReactTooltip from 'react-tooltip';
 // import Right from "../assets/right.png";
 
-import { enabledPricePairs } from "../constants";
+import { DEFAULT_LANG, enabledPricePairs } from "../constants";
 
 import Column from 'src/components/Column';
 import Button from 'src/components/Button';
@@ -127,6 +129,7 @@ interface IBetState {
     openOptions: number;
     betFee: number;
     currentRound: number;
+    locale: string;
 }
 
 const INITIAL_STATE: IBetState = {
@@ -152,7 +155,8 @@ const INITIAL_STATE: IBetState = {
     betDirection: true, // true means call
     openOptions: 2,
     betFee: 0,
-    currentRound: 0// current oracle round
+    currentRound: 0,// current oracle round
+    locale: DEFAULT_LANG
 };
 class Trade extends React.Component<any, any> {
     // @ts-ignore
@@ -172,6 +176,9 @@ class Trade extends React.Component<any, any> {
         // initiateSwapIfAvailable(address, chainId, web3);
         await this.getAmountSold();
         this.getBalance();
+
+        const locale = localStorage.getItem('locale');
+        this.setState({locale: locale !== null ? locale : DEFAULT_LANG});
 
        
     }
@@ -253,7 +260,7 @@ class Trade extends React.Component<any, any> {
 
 
     public renderInput() {
-        const { spendAmount, toReceive, /*currentPrice, */web3,balance, biopBalance, address, chainId, error } = this.state;
+        const { locale, spendAmount, toReceive, /*currentPrice, */web3,balance, biopBalance, address, chainId, error } = this.state;
 
 
         // <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>STRIKE PRICE: {formatFixedDecimals(web3.utils.fromWei(floorDivide(currentPrice, 100), "lovelace"), 8)} USD</SHelper>
@@ -262,11 +269,11 @@ class Trade extends React.Component<any, any> {
                 <Column>
                     <SInputBbContainer style={{ backgroundColor: `rgb(${colors.darkGrey})`, color: `rgb(${colors.black})` }}>
                         <SRow style={{margin: "10px"}}>
-                            <span >Sell</span>
+                            <span >{i18n[locale].SELL}</span>
                             <span style={{fontSize: fonts.size.tiny, paddingTop: "5px", cursor: "pointer"}} onClick={() => {
                                 this.setState({spendAmount: web3.utils.fromWei(`${balance}`, "ether")})
                                 this.updateToReceive(web3.utils.fromWei(`${balance}`, "ether"));
-                            }}>Available: {formatFixedDecimals(web3.utils.fromWei(`${balance}`, "ether"), 6)}</span>
+                            }}>{i18n[locale].AVAILABLE}: {formatFixedDecimals(web3.utils.fromWei(`${balance}`, "ether"), 6)}</span>
                         </SRow>
                         <SInputRow >
                         <SInput 
@@ -281,9 +288,9 @@ class Trade extends React.Component<any, any> {
                         <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
                         
                         <SRow style={{margin: "10px"}}>
-                            <span>BUY</span>
+                            <span>{i18n[locale].BUY}</span>
                             <span style={{fontSize: fonts.size.tiny, paddingTop: "5px", cursor: "pointer"}}>
-                                Available: {formatFixedDecimals(web3.utils.fromWei(`${biopBalance}`, "ether"), 6)}
+                            {i18n[locale].AVAILABLE}: {formatFixedDecimals(web3.utils.fromWei(`${biopBalance}`, "ether"), 6)}
                                 </span>
                         
                         </SRow>
@@ -298,7 +305,7 @@ class Trade extends React.Component<any, any> {
                             await buyFromITCO(web3.utils.toWei(`${spendAmount}`), address, chainId, web3);
                             this.setState({loading: false})
                             await this.getBalance();
-                        }}><div style={{color: `white`}}>Buy</div></Button>
+                        }}><div style={{color: `white`}}>{i18n[locale].BUY}</div></Button>
                         <br/><br/>
                        
                     </SInputBbContainer>

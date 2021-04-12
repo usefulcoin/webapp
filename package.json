@@ -24,6 +24,7 @@
     "react-dom": "^16.8.6",
     "react-google-charts": "^3.0.15",
     "react-highcharts": "^16.1.0",
+    "react-icons": "^4.2.0",
     "react-intl": "^2.9.0",
     "react-landing-page": "^2.0.2",
     "react-scripts-ts": "^4.0.8",

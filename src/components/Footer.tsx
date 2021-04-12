@@ -1,7 +1,11 @@
 import * as React from 'react'
 import styled from 'styled-components'
+import { BiBookAlt } from 'react-icons/bi';
+import { RiTwitterLine, RiTelegramLine, RiDiscordLine } from 'react-icons/ri';
 import DarkModeToggle from './DarkModeToggle';
+import LocaleToggle from './LocaleToggle';
 import {colors} from "../styles";
+import i18n from "../i18n";
 
 const SFooter = styled.div`
   margin-top: 100px;
@@ -25,6 +29,7 @@ const SLinks = styled.div`
 
 const SLink = styled.a`
     margin: 10px;
+    font-size: xx-large;
 `
 
 
@@ -35,13 +40,14 @@ const Footer = (props: any) => (
     {...props}
   >
     <SLinks>
-         <SLink href="https://docs.biopset.com/" target="_">Docs</SLink>
-         <SLink href="https://twitter.com/biopset" target="_">Twitter</SLink>
-         <SLink href="https://discord.gg/4SRYBNdE3r" target="_">Discord</SLink>
-         <SLink href="https://t.me/BIOPset" target="_">Telegram</SLink>
+         <SLink href="https://docs.biopset.com/" target="_"><BiBookAlt/></SLink>
+         <SLink href="https://twitter.com/biopset" target="_"><RiTwitterLine/></SLink>
+         <SLink href="https://discord.gg/4SRYBNdE3r" target="_"><RiDiscordLine/></SLink>
+         <SLink href="https://t.me/BIOPset" target="_"><RiTelegramLine/></SLink>
      </SLinks>
      <DarkModeToggle/>
-     <p style={{color: `rgb(${colors.black})`}}>BIOPset © 2021. Do not use 🙅‍♀️ in countries where binary options are regulated.</p>
+     <LocaleToggle/>
+     <p style={{color: `rgb(${colors.black})`}}>BIOPset © 2021. { i18n[props.locale].FOOTERDISCLAIMER }</p>
     
    
   </SFooter>

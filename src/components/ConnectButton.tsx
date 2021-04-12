@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import {colors} from "../styles";
+import i18n from "../i18n";
 
 const SConnectButtonContainer = styled.div`
   position: relative;
@@ -17,7 +18,8 @@ const SConnectButtonContainer = styled.div`
 interface IConnectButtonStyleProps {
   disabled: boolean
   icon?: any
-  primary: boolean
+  primary: boolean,
+  locale: string
 }
 
 interface IConnectButtonProps extends IConnectButtonStyleProps {
@@ -123,7 +125,7 @@ const ConnectButton = (props: IConnectButtonProps) => (
     >
       <SHoverLayer />
       <SIcon />
-      {props.primary ? 'Launch' : 'Read More'}
+      {props.primary ? i18n[props.locale].LAUNCH : i18n[props.locale].READMORE }
     </SConnectButton>
   </SConnectButtonContainer>
 )

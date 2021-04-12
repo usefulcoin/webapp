@@ -6,6 +6,7 @@ import Banner from './Banner'
 import { getChainData, ellipseAddress } from '../helpers/utilities'
 import { transitions, colors } from '../styles'
 import Nav from './Nav'
+import i18n from "../i18n";
 
 const SBanner = styled.div`
   top: 0;
@@ -94,15 +95,16 @@ interface IHeaderProps {
   address: string
   chainId: number
   setPage: (page: string) => void,
-  currentPage: string
+  currentPage: string,
+  locale: string
 }
 
 const Header = (props: IHeaderProps) => {
-  const { connected, address, chainId, killSession, setPage, currentPage } = props
+  const { connected, address, chainId, killSession, setPage, currentPage, locale } = props
   const chainData = chainId ? getChainData(chainId) : null
   return (
     <>
-    <SBanner>V4 Test Edition </SBanner>
+    <SBanner>V4 {i18n[locale].TESTEDITION} </SBanner>
    
     <SHeader {...props}>
       {connected && chainData ? (

@@ -8,13 +8,15 @@ import ConnectButton from "../components/ConnectButton";
 import { ScrollDownIndicator} from 'react-landing-page';
 import { colors, fonts } from 'src/styles';
 import logo from "../assets/logo.png";
+import i18n from "../i18n";
+import { DEFAULT_LANG } from "src/constants";
 
 const SBrand = styled.div`
   display: flex;
   align-items: center;
   position: relative;
   & span {
-    color: rgb(${colors.brandGrey});
+    color: rgb(${colors.lightGrey});
     font-size: ${fonts.size.h0};
     
   }
@@ -43,29 +45,47 @@ interface IBetProps {
 }
 
 
+interface ILandingState {
+  locale: string;
+}
+
+const INITIAL_STATE: ILandingState = {
+  locale: DEFAULT_LANG
+};
+
 class Landing extends React.Component<any, any> {
+
     // @ts-ignore
     public state: ILandingState;
 
     constructor(props: IBetProps) {
         super(props);
+        this.state = {
+          ...INITIAL_STATE
+      };
     }
 
 
+    public async componentDidMount() {
+      const locale = localStorage.getItem('locale');
+      this.setState({locale: locale !== null ? locale : DEFAULT_LANG});
+  }
 
 
     public render() {
-        const { onConnect } = this.props;
+      const { onConnect } = this.props;
+      const { locale } = this.state;
         return (
             <SLanding >
                 <SReasons >
                     <SBrand>
                         <SLogo/><span>biopset</span>
                     </SBrand>
-                    <h3 style={{color: `rgb(${colors.black})`}}>{`No KYC. No Token to use. Just Binary Options.`}</h3>
-                    <p style={{fontSize: 'small', color: `rgb(${colors.darkGrey})`}}>On-demand, censorship-resistant, peer-to-pool decentralized binary options.</p>
+                    <h3 style={{color: `rgb(${colors.black})`}}>{i18n[locale].LANDING1}</h3>
+                    <p style={{fontSize: 'small', color: `rgb(${colors.lightGrey})`}}>{i18n[locale].LANDING2}</p>
                     <ConnectButton 
                     primary={true}
+                    locale={locale}
                     onClick={() => {
                         // tslint:disable-next-line:no-console
                         console.log('connect clicked');
@@ -75,6 +95,7 @@ class Landing extends React.Component<any, any> {
 
                     <ConnectButton 
                     primary={false}
+                    locale={locale}
                     onClick={() => {
                         // tslint:disable-next-line:no-console
                         window.open('https://docs.biopset.com', '_blank');

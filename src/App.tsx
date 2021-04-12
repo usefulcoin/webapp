@@ -11,7 +11,6 @@ import Torus from "@toruslabs/torus-embed";
 import Authereum from "authereum";
 // import { Bitski } from "bitski";
 
-import { TargemProvider, T } from 'react-targem'
 
 import Column from "./components/Column";
 import Wrapper from "./components/Wrapper";
@@ -32,7 +31,8 @@ import {
   EXERCISE_EXPIRE,
   STAKE,
   REWARDS,
-  BUY_BIOP
+  BUY_BIOP,
+  DEFAULT_LANG
 } from "./constants";
 
 // Pages
@@ -110,6 +110,7 @@ interface IAppState {
   pendingRequest: boolean;
   result: any | null;
   page: string;
+  locale: string;
 }
 
 
@@ -126,7 +127,8 @@ const INITIAL_STATE: IAppState = {
   showModal: false,
   pendingRequest: false,
   result: null,
-  page: BUY_BIOP
+  page: BUY_BIOP,
+  locale: DEFAULT_LANG
 };
 
 function initWeb3(provider: any) {
@@ -167,6 +169,9 @@ class App extends React.Component<any, any> {
     if (this.web3Modal.cachedProvider) {
       this.onConnect();
     }
+
+    const locale = localStorage.getItem('locale');
+    this.setState({locale: locale !== null ? locale : DEFAULT_LANG});
   }
 
   public setPage(page: string) {
@@ -359,11 +364,13 @@ class App extends React.Component<any, any> {
       showModal,
       pendingRequest,
       result,
-      page
+      page,
+      locale
     } = this.state;
     return (
       <SLayout>
         <Header
+            locale={locale}
             connected={connected}
             address={address}
             chainId={chainId}
@@ -390,7 +397,7 @@ class App extends React.Component<any, any> {
                 )}
           </SContent>
         </Column>
-        <Footer/>
+        <Footer locale={locale}/>
         <Modal show={showModal} toggleModal={this.toggleModal}>
           {pendingRequest ? (
             <SModalContainer>

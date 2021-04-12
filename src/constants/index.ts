@@ -3,6 +3,8 @@ export * from './contracts'
 export * from './functions'
 export * from './tooltips'
 
+export const DEFAULT_LANG = "EN🇨🇦";
+
 // pages
 export const HOME_PAGE = "Home";
 export const BUY_SELL = "Exchange";
