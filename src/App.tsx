@@ -11,7 +11,7 @@ import Torus from "@toruslabs/torus-embed";
 import Authereum from "authereum";
 // import { Bitski } from "bitski";
 
-
+import { TargemProvider, T } from 'react-targem'
 
 import Column from "./components/Column";
 import Wrapper from "./components/Wrapper";
