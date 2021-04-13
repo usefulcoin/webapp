@@ -101,7 +101,12 @@ interface IHeaderProps {
 
 const Header = (props: IHeaderProps) => {
   const { connected, address, chainId, killSession, setPage, currentPage, locale } = props
-  const chainData = chainId ? getChainData(chainId) : null
+  const chainData = chainId ? getChainData(chainId) : null;
+
+
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
   return (
     <>
     <SBanner>V4 {i18n[locale].TESTEDITION} </SBanner>
@@ -116,13 +121,13 @@ const Header = (props: IHeaderProps) => {
         <></>
       )}
       {connected ? (
-         <Nav setPage={setPage} currentPage={currentPage}/>
+         <Nav setPage={setPage} currentPage={currentPage} locale={locale}/>
       ) : <></>}
       {address && (
         <SActiveAccount>
           <SBlockie address={address} />
           <SDisconnect connected={connected} onClick={killSession}>
-          {ellipseAddress(address)}
+          {width > height ? ellipseAddress(address) : ""}
           </SDisconnect>
         </SActiveAccount>
       )}

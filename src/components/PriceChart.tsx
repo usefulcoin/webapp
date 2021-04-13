@@ -166,7 +166,7 @@ public setTimeFrame(setting: string) {
 
           <SHelper style={{color: `rgb(${colors.black})`}}>{this.renderTimeFrame()}</SHelper>
           <SHelper style={{color: `rgb(${colors.black})`}}>Current Price: {formatFixedDecimals(divide(currentPrice, 100000000), 3)} USD</SHelper>
-          <div style={{width:"100%", height: "300px"}}>
+          <div style={{width:"100%"}}>
           <Line data={data} />
           </div>
           </>

@@ -6,7 +6,7 @@ import Column from 'src/components/Column';
 import ConnectButton from "../components/ConnectButton";
 // @ts-ignore
 import { ScrollDownIndicator} from 'react-landing-page';
-import { colors, fonts } from 'src/styles';
+import { colors } from 'src/styles';
 import logo from "../assets/logo.png";
 import i18n from "../i18n";
 import { DEFAULT_LANG } from "src/constants";
@@ -17,14 +17,14 @@ const SBrand = styled.div`
   position: relative;
   & span {
     color: rgb(${colors.lightGrey});
-    font-size: ${fonts.size.h0};
+    font-size: 10vh;
     
   }
 `;
 
 const SLogo = styled.div`
-  width: 90px;
-  height: 90px;
+  width: 15vh;
+  height: 15vh;
   background: url(${logo}) no-repeat;
   background-size: cover;
   background-position: center;

@@ -10,6 +10,7 @@ import {
     BUY_BIOP
 } from "../constants";
 import Button from './Button';
+import i18n from "../i18n";
 
 const SNav = styled.div`
   margin-top: -1px;
@@ -43,6 +44,7 @@ const SMobileNavItem = styled.li`
 interface INavProps {
     currentPage: string
     setPage: (page: string) => void
+    locale: string
 }
 
 const Nav = (props: INavProps) => {
@@ -62,7 +64,7 @@ const Nav = (props: INavProps) => {
         );
     }
 
-    const { currentPage, setPage } = props;
+    const { currentPage, setPage, locale } = props;
 
 
     const width = window.innerWidth;
@@ -106,9 +108,10 @@ const Nav = (props: INavProps) => {
                 
                 
                 </SMobileContainer>
-                :  <Button
+                :  <Button 
                 onClick={()=>setShowPanel(!showPanel)}
-                >Menu</Button>
+                ><span 
+                style={{color: `white`}}>{i18n[locale].MENU}</span></Button>
             }
             </div>
       )}

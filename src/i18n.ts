@@ -10,7 +10,8 @@ const i18n = {
         "LANDING1": "No Token to use. Just Binary Options.",
         "LANDING2": "On-demand, censorship-resistant, peer-to-pool decentralized binary options.",
         "FOOTERDISCLAIMER": "Do not use 🙅‍♀️ in countries where binary options are regulated.",
-        "TESTEDITION": "Test Edition"
+        "TESTEDITION": "Test Edition",
+        "MENU": "Menu"
     },
     "KO🇰🇷": {
         "BUY": "구입",
@@ -23,7 +24,8 @@ const i18n = {
         "LANDING1": "사용할 토큰이 없습니다. 바이너리 옵션 만 있습니다.",
         "LANDING2": "온 디맨드, 검열 방지, 피어 투 풀 분산 바이너리 옵션.",
         "FOOTERDISCLAIMER": "바이너리 옵션이 규제되는 국가에서는 🙅‍♀️을 사용하지 마십시오.",
-        "TESTEDITION": "테스트 에디션"
+        "TESTEDITION": "테스트 에디션",
+        "MENU": "메뉴"
 
     }
 }

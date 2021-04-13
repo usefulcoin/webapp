@@ -2,6 +2,7 @@ import * as React from 'react'
 import styled from "styled-components";
 import OptionDirection from "./OptionDirection";
 import Button from "./Button";
+import Loading from "./Loading";
 import { colors } from 'src/styles';
 import {convertToDecimals, add, smallerThan, greaterThan} from "../helpers/bignumber";
 
@@ -90,6 +91,9 @@ const OptionTable = (props: any) => {
     }
 
     const {options, web3, showFee, currentRound} = props;
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
     if (options.length > 0) {
         // tslint:disable-next-line:no-console
         console.log("showing options!!!");
@@ -101,14 +105,11 @@ const OptionTable = (props: any) => {
                     <tr>
                         <STh>ID</STh>
                         <STh>Direction</STh>
-                        {showFee ?
+                        {width > height ?  (showFee ?
                         <STh>Settlement Fee</STh>
                         :
-                        <>
-                        <STh>Option Value</STh>{/*
-                        <STh>Strike</STh> */}
-                        </>
-                        }
+                        <STh>Option Value</STh>) : <></>}
+                       
                         <STh>Action</STh>
                     </tr>
                 </thead>
@@ -122,14 +123,14 @@ const OptionTable = (props: any) => {
                         return <STrEven key={ index } >
                                 <STh >{option.id} <span style={{cursor: "pointer"}} onClick={() => details()}>ⓘ</span></STh>
                                 <STh><OptionDirection optionType={option.type}/></STh>
-                                {renderFeeOrCost(option)}
+                                { width > height ?  renderFeeOrCost(option) : <></>}
                                 <STh>{renderExpireExercise(option)}</STh>
                             </STrEven>;
                     } else {
                         return <STrOdd key={ index }>
                             <STh >{option.id} <span style={{cursor: "pointer"}} onClick={() => details()}>ⓘ</span></STh>
                             <STh><OptionDirection optionType={option.type}/></STh>
-                            {renderFeeOrCost(option)}
+                                { width > height ?  renderFeeOrCost(option) : <></>}
                              <STh>{renderExpireExercise(option)}</STh>
                         </STrOdd>;
                     }
@@ -140,7 +141,10 @@ const OptionTable = (props: any) => {
         )
     } else {
         return (
+            <>
             <p style={{color: `rgb(${colors.black})`}}>One moment please. Options are loading.</p>
+            <Loading/>
+            </>
         )
     }
 

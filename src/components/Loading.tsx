@@ -9,8 +9,8 @@ const SLoading = styled.div`
     background: url(${loading}) no-repeat;
     background-size: cover;
     background-position: center;
-    width:433px;
-    height:333px;
+    width:60vh;
+    height:40vh;
     margin: 0 auto;
 `
 
