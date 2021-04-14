@@ -92,11 +92,16 @@ class PriceChart extends React.Component<any, any> {
         const formattedLabels = [];
         // tslint:disable-next-line
         const formattedPrices = [];
+
+        // tslint:disable-next-line
+        console.log(`loaded price data:`);
+        // tslint:disable-next-line
+        console.log(data);
         for (let i = 0; i < data.length; i++) {
           const label = new Date(data[i][0]);
           formattedLabels.push(label.toISOString().split(":")[0]);
 
-          formattedPrices.push(data[i][1]/10);
+          formattedPrices.push(data[i][1]);
         }
 
 
