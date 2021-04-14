@@ -1,23 +1,29 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import loading from "../assets/loading.gif";
+import logo from "../assets/logo.png";
 
 
 
 
 const SLoading = styled.div`
-    background: url(${loading}) no-repeat;
+    background: url(${logo}) no-repeat;
     background-size: cover;
     background-position: center;
-    width:60vh;
-    height:40vh;
+    height:60vh;
+    width:40vh;
     margin: 0 auto;
+    -webkit-animation: spin 4s infinite linear;
 `
+
+
 
 const Loading = () => {
   return (
+    <div>
     <SLoading
     />
+   
+    </div>
   )
 }
 

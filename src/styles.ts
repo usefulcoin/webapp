@@ -109,6 +109,11 @@ export const globalStyle = `
     padding: 0;
   }
 
+  @-webkit-keyframes spin {
+    0%  {-webkit-transform: rotate(0deg);}
+    100% {-webkit-transform: rotate(360deg);}   
+}
+
   body {
     font-family: ${fonts.family.OpenSans};
     font-style: normal;

@@ -20,12 +20,12 @@ color: rgb(${colors.black});
 
 const STrEven = styled.tr`
 background-color: rgb(${colors.lightGrey});
-color: black;
+color: white;
 `
 
 const STrOdd = styled.tr`
 background-color: rgb(${colors.grey});
-color: black;
+color: white;
 `
 
 const OptionTable = (props: any) => {

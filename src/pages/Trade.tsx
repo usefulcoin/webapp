@@ -153,7 +153,7 @@ const INITIAL_STATE: IBetState = {
     error: "",
     betAmount: 0.1,
     maxBet: 1,
-    amountToWin: 0, 
+    amountToWin: 0,
     hasBet: false,
     pair: enabledPricePairs[0],
     rounds: 1,// 30 mins
@@ -332,8 +332,8 @@ class Trade extends React.Component<any, any> {
         this.setState({ totalStaked, staked, maxBet });
     }
 
-     public async updateBetDirection(dir: boolean) {
-        const {chainId, web3} = this.state;
+    public async updateBetDirection(dir: boolean) {
+        const { chainId, web3 } = this.state;
         let open: any;
         if (dir) {
             open = await callOpenCalls(chainId, web3);
@@ -341,7 +341,7 @@ class Trade extends React.Component<any, any> {
             open = await callOpenPuts(chainId, web3);
         }
 
-        this.setState({betDirection: dir, openOptions: open >= 2 ? open : 2});
+        this.setState({ betDirection: dir, openOptions: open >= 2 ? open : 2 });
     }
 
     public async handleBetAmountUpdate(e: any) {
@@ -392,7 +392,7 @@ class Trade extends React.Component<any, any> {
         }
     }
 
- 
+
 
     public async handleComplete(optionId: any) {
         this.setState({ pendingRequest: true });
@@ -482,7 +482,7 @@ class Trade extends React.Component<any, any> {
         // <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>STRIKE PRICE: {formatFixedDecimals(web3.utils.fromWei(floorDivide(currentPrice, 100), "lovelace"), 8)} USD</SHelper>
         return (
             <Column>
-                <SInputContainer style={{flexDirection: wideGirl ? "row" : "column"}}>
+                <SInputContainer style={{ flexDirection: wideGirl ? "row" : "column" }}>
                     <SInputBbContainer style={{ backgroundColor: `rgb(${colors.white})`, color: `rgb(${colors.black})` }}>
                         <span style={{ marginLeft: "0px" }}>PRICE</span><br />
                         <SInputBox>
@@ -492,31 +492,31 @@ class Trade extends React.Component<any, any> {
                         </SInputBox>
                     </SInputBbContainer>
 
-                <SBetButtonContainer style={{flexDirection: wideGirl ? "column" : "row"}}>
-                    <BetButton up={true} onClick={() => { this.updateBetDirection(true) }} active={betDirection}/>
-                    <BetButton up={false} onClick={() => { this.updateBetDirection(false) }} active={!betDirection}/>
-                </SBetButtonContainer>
-                    <ReactTooltip effect="solid"/>{/* data-tip={MaxYieldToolTip} on the element to show it with */}
+                    <SBetButtonContainer style={{ flexDirection: wideGirl ? "column" : "row" }}>
+                        <BetButton up={true} onClick={() => { this.updateBetDirection(true) }} active={betDirection} />
+                        <BetButton up={false} onClick={() => { this.updateBetDirection(false) }} active={!betDirection} />
+                    </SBetButtonContainer>
+                    <ReactTooltip effect="solid" />{/* data-tip={MaxYieldToolTip} on the element to show it with */}
                     <SInputBbContainer style={{ backgroundColor: `rgb(${colors.fadedBlue})`, color: `rgb(${colors.white})` }}>
                         <SRow>
-                        <SColumn style={{textAlign: "left"}}>
-                            <span style={{ marginLeft: "20px", color: `white` }}>Win Total <span style={{cursor: "pointer"}} onClick={() => this.openBettingAlert()}>ⓘ</span>:</span>
-                            <span style={{ marginLeft: "20px", color: `white` }}>Trading Fee:</span>
-                            <span  style={{ marginLeft: "20px", color: `white` }}>Maxmium Yield:</span>
-                            <span style={{ marginLeft: "20px",  color: `white` }}>Minimum Yield:</span>
+                            <SColumn style={{ textAlign: "left" }}>
+                                <span style={{ marginLeft: "20px", color: `white` }}>Win Total <span style={{ cursor: "pointer" }} onClick={() => this.openBettingAlert()}>ⓘ</span>:</span>
+                                <span style={{ marginLeft: "20px", color: `white` }}>Trading Fee:</span>
+                                <span style={{ marginLeft: "20px", color: `white` }}>Maxmium Yield:</span>
+                                <span style={{ marginLeft: "20px", color: `white` }}>Minimum Yield:</span>
 
-                        </SColumn>
-                        <SColumn style={{textAlign: "right"}}>
-                            <span style={{ marginRight: "20px", color: `white` }} >{amountToWin}</span>
-                            <span style={{ marginRight: "20px", color: `white`}}>{divide(betFee, 1000)}%</span>
-                            <span  style={{ marginRight: "20px" , color: greaterThan(divide(multiply(divide(amountToWin, betAmount), 100), 2), 5) ? `rgb(${colors.white})` : `rgb(${colors.red})`}}>{greaterThan(multiply(divide(amountToWin,2), 100), 0) ? divide(multiply(divide(amountToWin, betAmount), 100), 2) : "100"}%</span>
-                            <span style={{ marginRight: "20px", color: `white` }}>-100%</span>
-                            
-                        </SColumn>
-                         </SRow>
+                            </SColumn>
+                            <SColumn style={{ textAlign: "right" }}>
+                                <span style={{ marginRight: "20px", color: `white` }} >{amountToWin}</span>
+                                <span style={{ marginRight: "20px", color: `white` }}>{divide(betFee, 1000)}%</span>
+                                <span style={{ marginRight: "20px", color: greaterThan(divide(multiply(divide(amountToWin, betAmount), 100), 2), 5) ? `rgb(${colors.white})` : `rgb(${colors.red})` }}>{greaterThan(multiply(divide(amountToWin, 2), 100), 0) ? divide(multiply(divide(amountToWin, betAmount), 100), 2) : "100"}%</span>
+                                <span style={{ marginRight: "20px", color: `white` }}>-100%</span>
+
+                            </SColumn>
+                        </SRow>
 
                     </SInputBbContainer>
-                    <br/>
+                    <br />
 
                 </SInputContainer>
                 <SInputContainer>
@@ -534,15 +534,15 @@ class Trade extends React.Component<any, any> {
     public renderBetApprove() {
         const { web3, pair, betDirection, currentPrice } = this.state;
 
-                // tslint:disable-next-line:no-console
-                console.log(`rerender chart with pair ${pair} currentPrice ${currentPrice}`);
-                // tslint:disable-next-line:no-console
-                console.log(pair);
+        // tslint:disable-next-line:no-console
+        console.log(`rerender chart with pair ${pair} currentPrice ${currentPrice}`);
+        // tslint:disable-next-line:no-console
+        console.log(pair);
         return (
             <SBetter>
-                <PriceChart web3={web3} pair={pair} currentPrice={currentPrice}/>
-                <br/>
-                <Button color={betDirection ? `blue` : `red`} onClick={() => {this.handleMakeBet(betDirection)}}><span style={{color: `white`}}>Buy {betDirection ? "Call📈 " : "Put📉 "}</span></Button>
+                <PriceChart web3={web3} pair={pair} currentPrice={currentPrice} />
+                <br />
+                <Button color={betDirection ? `blue` : `red`} onClick={() => { this.handleMakeBet(betDirection) }}><span style={{ color: `white` }}>Buy {betDirection ? "Call📈 " : "Put📉 "}</span></Button>
 
             </SBetter>
         )
@@ -556,11 +556,13 @@ class Trade extends React.Component<any, any> {
     public render() {
         const { currentRound, totalInterchange, web3, currentPrice, userOptions, pendingRequest, error, hasBet, lastBetCall } = this.state;
         // const { openExercise } = this.props;
+        // tslint:disable-next-line:no-console
+        console.log(`userOptions here ${userOptions}`);
         return (
             <SBet>
 
-                <h1 style={{color: `rgb(${colors.black})`}}>Buy Options</h1>
-                <p style={{color: `rgb(${colors.black})`}}>Dont risk more than you can afford to lose.</p>
+                <h1 style={{ color: `rgb(${colors.black})` }}>Buy Options</h1>
+                <p style={{ color: `rgb(${colors.black})` }}>Dont risk more than you can afford to lose.</p>
                 <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
 
                 {
@@ -585,19 +587,26 @@ class Trade extends React.Component<any, any> {
                         </SHelper>
 
                         : <>
-                         </>
+                        </>
                 }
                 <br />
-                <h4 style={{color: `rgb(${colors.black})`}}>Options Purchased</h4>
-                <br />
-                <OptionTable
-                    showFee={false}
-                    web3={web3}
-                    options={userOptions}
-                    handleComplete={(optionId: any) => this.handleComplete(optionId)}
-                    currentPrice={currentPrice}
-                    currentRound={currentRound}
-                />
+                {userOptions.length > 0 ?
+                    <>
+                        <h4 style={{ color: `rgb(${colors.black})` }}>Options Purchased</h4>
+                        <br />
+                        <OptionTable
+                            showFee={false}
+                            web3={web3}
+                            options={userOptions}
+                            handleComplete={(optionId: any) => this.handleComplete(optionId)}
+                            currentPrice={currentPrice}
+                            currentRound={currentRound}
+                        />
+                    </>
+                    : 
+                    <></>
+                }
+
 
             </SBet>
 
