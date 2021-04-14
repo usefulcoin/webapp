@@ -5,7 +5,6 @@ import { RiTwitterLine, RiTelegramLine, RiDiscordLine } from 'react-icons/ri';
 import DarkModeToggle from './DarkModeToggle';
 import LocaleToggle from './LocaleToggle';
 import {colors} from "../styles";
-import i18n from "../i18n";
 
 const SFooter = styled.div`
   margin-top: 100px;
@@ -47,7 +46,7 @@ const Footer = (props: any) => (
      </SLinks>
      <DarkModeToggle/>
      <LocaleToggle/>
-     <p style={{color: `rgb(${colors.black})`}}>BIOPset © 2021. { i18n[props.locale].FOOTERDISCLAIMER }</p>
+     <p style={{color: `rgb(${colors.black})`}}>BIOPset © 2021. </p>
     
    
   </SFooter>
