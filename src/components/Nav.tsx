@@ -1,6 +1,8 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import * as PropTypes from 'prop-types'
+import DarkModeToggle from './DarkModeToggle';
+import LocaleToggle from './LocaleToggle';
 import { colors } from "../styles";
 import {
     BET,
@@ -13,13 +15,10 @@ import Button from './Button';
 import i18n from "../i18n";
 
 const SNav = styled.div`
-  margin-top: -1px;
-  margin-bottom: 1px;
   width: 100%;
   height: 100px;
   display: flex;
   align-items: center;
-  justify-content: space-around;
   padding: 0 16px;
   flex-direction: row;
 `
@@ -39,6 +38,12 @@ const SMobileContainer = styled.div`
 
 const SMobileNavItem = styled.li`
     color: rgb(${colors.black});
+    padding: 5px;
+`
+
+const STogglie = styled.li` 
+    padding: 5px;
+    background-color: rgb(${colors.darkGrey});
 `
 
 interface INavProps {
@@ -54,11 +59,16 @@ const Nav = (props: INavProps) => {
     function navLink(page: string, currentPage: string) {
         return (
             <div onClick={() => setPage(page)} style={{
+                border: `6px solid rgb(${colors.darkGrey})`,
+                borderTop: "0px",
                 cursor: "pointer",
                 fontWeight: page === currentPage ? "bold" : "normal",
-                color: `rgb(${colors.black})`
-            }} 
-            key={page}>
+                color: `white`,
+                padding: "6px",
+                fontSize: "1.10rem",
+                backgroundColor: `rgb(${page === currentPage ? colors.grey : colors.darkGrey})`
+            }}
+                key={page}>
                 {page}
             </div>
         );
@@ -70,7 +80,7 @@ const Nav = (props: INavProps) => {
     const width = window.innerWidth;
     const height = window.innerHeight;
 
-    
+
     const pages = [
         BUY_BIOP,
         BET,
@@ -83,40 +93,47 @@ const Nav = (props: INavProps) => {
 
             <SNav>
                 {pages.map(page => navLink(page, currentPage))}
+
+                <STogglie><LocaleToggle /></STogglie>
+                <DarkModeToggle />
             </SNav>
         )
     } else {
-        return ( <div>
-              
-                {showPanel ?
-                <SMobileContainer > 
-                <ul>
-                    
-                {pages.map(page => {
-                    return <SMobileNavItem 
-                            key={page}
-                            onClick={() => {
-                                setPage(page);
-                                setShowPanel(false);
-                            }}
-                            style={{fontWeight: page === currentPage ? "bold":"normal"}}
+        return (<div>
+
+            {showPanel ?
+                <SMobileContainer >
+                    <ul>
+
+                        {pages.map(page => {
+                            return <SMobileNavItem
+                                key={page}
+                                onClick={() => {
+                                    setPage(page);
+                                    setShowPanel(false);
+                                }}
+                                style={{ fontWeight: page === currentPage ? "bold" : "normal" }}
                             >
                                 {page}
                             </SMobileNavItem>
-                    })}
-                </ul>
-                
-                
-                </SMobileContainer>
-                :  <Button 
-                onClick={()=>setShowPanel(!showPanel)}
-                ><span 
-                style={{color: `white`}}>{i18n[locale].MENU}</span></Button>
-            }
-            </div>
-      )}
+                        })}
 
-  
+                        <LocaleToggle />
+                        <DarkModeToggle />
+                    </ul>
+
+
+                </SMobileContainer>
+                : <Button
+                    onClick={() => setShowPanel(!showPanel)}
+                ><span
+                    style={{ color: `white` }}>{i18n[locale].MENU}</span></Button>
+            }
+        </div>
+        )
+    }
+
+
 }
 
 

@@ -500,17 +500,17 @@ class Trade extends React.Component<any, any> {
                     <SInputBbContainer style={{ backgroundColor: `rgb(${colors.fadedBlue})`, color: `rgb(${colors.white})` }}>
                         <SRow>
                         <SColumn style={{textAlign: "left"}}>
-                            <span style={{ marginLeft: "20px", color: `rgb(${colors.black})` }}>Win Total <span style={{cursor: "pointer"}} onClick={() => this.openBettingAlert()}>ⓘ</span>:</span>
-                            <span style={{ marginLeft: "20px", color: `rgb(${colors.black})` }}>Trading Fee:</span>
-                            <span  style={{ marginLeft: "20px", color: `rgb(${colors.black})` }}>Maxmium Yield:</span>
-                            <span style={{ marginLeft: "20px",  color: `rgb(${colors.black})` }}>Minimum Yield:</span>
+                            <span style={{ marginLeft: "20px", color: `white` }}>Win Total <span style={{cursor: "pointer"}} onClick={() => this.openBettingAlert()}>ⓘ</span>:</span>
+                            <span style={{ marginLeft: "20px", color: `white` }}>Trading Fee:</span>
+                            <span  style={{ marginLeft: "20px", color: `white` }}>Maxmium Yield:</span>
+                            <span style={{ marginLeft: "20px",  color: `white` }}>Minimum Yield:</span>
 
                         </SColumn>
                         <SColumn style={{textAlign: "right"}}>
-                            <span style={{ marginRight: "20px", color: `rgb(${colors.black})` }} >{amountToWin}</span>
-                            <span style={{ marginRight: "20px", color: `rgb(${colors.black})`}}>{divide(betFee, 1000)}%</span>
+                            <span style={{ marginRight: "20px", color: `white` }} >{amountToWin}</span>
+                            <span style={{ marginRight: "20px", color: `white`}}>{divide(betFee, 1000)}%</span>
                             <span  style={{ marginRight: "20px" , color: greaterThan(divide(multiply(divide(amountToWin, betAmount), 100), 2), 5) ? `rgb(${colors.white})` : `rgb(${colors.red})`}}>{greaterThan(multiply(divide(amountToWin,2), 100), 0) ? divide(multiply(divide(amountToWin, betAmount), 100), 2) : "100"}%</span>
-                            <span style={{ marginRight: "20px", color: `rgb(${colors.black})` }}>-100%</span>
+                            <span style={{ marginRight: "20px", color: `white` }}>-100%</span>
                             
                         </SColumn>
                          </SRow>

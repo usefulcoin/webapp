@@ -17,7 +17,7 @@ export default () => {
   }
 
   return (
-      <div style={{alignSelf: "center"}}>
+      <div style={{alignSelf: "center", paddingTop: "45px"}}>
     <DarkModeToggle
       onChange={handleChange}
       checked={isDarkMode}

@@ -2,8 +2,6 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { BiBookAlt } from 'react-icons/bi';
 import { RiTwitterLine, RiTelegramLine, RiDiscordLine } from 'react-icons/ri';
-import DarkModeToggle from './DarkModeToggle';
-import LocaleToggle from './LocaleToggle';
 import {colors} from "../styles";
 
 const SFooter = styled.div`
@@ -44,8 +42,6 @@ const Footer = (props: any) => (
          <SLink href="https://discord.gg/4SRYBNdE3r" target="_"><RiDiscordLine/></SLink>
          <SLink href="https://t.me/BIOPset" target="_"><RiTelegramLine/></SLink>
      </SLinks>
-     <DarkModeToggle/>
-     <LocaleToggle/>
      <p style={{color: `rgb(${colors.black})`}}>BIOPset © 2021. </p>
     
    
