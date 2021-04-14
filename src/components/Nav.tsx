@@ -19,7 +19,7 @@ const SNav = styled.div`
   height: 100px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 0 16px;
   flex-direction: row;
 `
