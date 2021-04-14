@@ -1,13 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
 import { getOptionsAndCloses, sendComplete, getLatestPrice, getOptionData, callCurrentRoundID } from "../helpers/web3";
-import {add, floorDivide} from '../helpers/bignumber';
+import { add, floorDivide } from '../helpers/bignumber';
 
 import OptionVis from 'src/components/OptionVis';
 import OptionTable from 'src/components/OptionTable';
 import Loading from 'src/components/Loading';
 import { colors } from 'src/styles';
-import {enabledPricePairs} from "../constants";
+import { enabledPricePairs } from "../constants";
 
 const SStake = styled.div`
     width:100%;
@@ -138,9 +138,9 @@ class Exercise extends React.Component<any, any> {
                     } else {
                         const optionData: any = await getOptionData(options[i].returnValues.id, web3, chainId);
                         // tslint:disable-next-line:no-console
-            console.log("loaded option data");
-           // tslint:disable-next-line:no-console
-           console.log(optionData);
+                        console.log("loaded option data");
+                        // tslint:disable-next-line:no-console
+                        console.log(optionData);
                         optionsObjects[options[i].returnValues.id] = {
                             blockNumber: options[i].blockNumber,
                             purchaseRound: options[i].returnValues.pR,
@@ -184,12 +184,12 @@ class Exercise extends React.Component<any, any> {
                 expired += 1;
             }
 
-        // tslint:disable-next-line:no-console
-        console.log(`avgValue ${avgValue}`);
+            // tslint:disable-next-line:no-console
+            console.log(`avgValue ${avgValue}`);
             avgValue = add(avgValue, optionsObjects[id].lockedValue);
 
-        // tslint:disable-next-line:no-console
-        console.log(`avgValue after ${avgValue}. purchase value of option = ${optionsObjects[id].purchaseValue}`);
+            // tslint:disable-next-line:no-console
+            console.log(`avgValue after ${avgValue}. purchase value of option = ${optionsObjects[id].purchaseValue}`);
             sortedOptions.push(optionsObjects[id]);
 
         });
@@ -202,12 +202,12 @@ class Exercise extends React.Component<any, any> {
 
         // tslint:disable-next-line:no-console
         console.log(sortedOptions);
-        this.setState({ options: sortedOptions, calls, puts, exercised, expired, avgValue, currentRound: cr  })
+        this.setState({ options: sortedOptions, calls, puts, exercised, expired, avgValue, currentRound: cr })
     }
 
 
 
-   
+
 
     public async handleComplete(optionId: any) {
         this.setState({ pendingRequest: true });
@@ -236,33 +236,33 @@ class Exercise extends React.Component<any, any> {
         return (
             <SStake>
 
-                <h1 style={{color: `rgb(${colors.black})`}}>Settle</h1>
-                <p style={{color: `rgb(${colors.black})`}}>Earn a settlement fee for exercising in-the-money options or unlocking expired options.</p>
-                <SHelper style={{color: `rgb(${colors.black})`}}>Settlement fees shown do not include gas/transaction fees.</SHelper>
+                <h1 style={{ color: `rgb(${colors.black})` }}>Settle</h1>
+                <p style={{ color: `rgb(${colors.black})` }}>Earn a settlement fee for exercising in-the-money options or unlocking expired options.</p>
+                <SHelper style={{ color: `rgb(${colors.black})` }}>Settlement fees shown do not include gas/transaction fees.</SHelper>
                 <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
                 {
                     pendingRequest ?
                         <Loading />
                         :
                         <>
-                        <OptionTable
-                            showFee={true}
-                            web3={web3}
-                            options={options}
-                            handleComplete={(optionId: any) => this.handleComplete(optionId)}
-                            currentPrice={currentPrice}
-                            currentRound={currentRound}
-                        />
+                            <OptionTable
+                                showFee={true}
+                                web3={web3}
+                                options={options}
+                                handleComplete={(optionId: any) => this.handleComplete(optionId)}
+                                currentPrice={currentPrice}
+                                currentRound={currentRound}
+                            />
 
                         </>
                 }
                 <OptionVis
-                            calls={calls}
-                            puts={puts}
-                            exercised={exercised}
-                            expired={expired}
-                            avgValue={web3.utils.fromWei(`${avgValue}`, "ether")}
-                        />
+                    calls={calls}
+                    puts={puts}
+                    exercised={exercised}
+                    expired={expired}
+                    avgValue={web3.utils.fromWei(`${avgValue}`, "ether")}
+                />
 
 
             </SStake>

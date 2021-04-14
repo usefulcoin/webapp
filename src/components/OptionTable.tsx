@@ -20,12 +20,12 @@ color: rgb(${colors.black});
 
 const STrEven = styled.tr`
 background-color: rgb(${colors.lightGrey});
-color: rgb(${colors.white});
+color: black;
 `
 
 const STrOdd = styled.tr`
-background-color: rgb(${colors.white});
-color: rgb(${colors.black});
+background-color: rgb(${colors.grey});
+color: black;
 `
 
 const OptionTable = (props: any) => {
@@ -49,13 +49,13 @@ const OptionTable = (props: any) => {
             console.log(smallerThan(option.purchaseRound,currentRound));
             // tslint:disable-next-line:no-console
             console.log(`${typeof(option.purchaseRound)} ${typeof(currentRound)}`);
-        if (option.expired) {
-            return <b>OTM</b>;
+        if (option.expired) { 
+            return <Button disabled outline={true} color={`rgb(${colors.black})`}>Settled for {convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH</Button>;
         } else if (option.exercised) {
-            return <b>ITM</b>;
+            return <Button disabled outline={true} color={`rgb(${colors.black})`}>Settled for {convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH</Button>;
         } else if (greaterThan(currentRound, add(option.exp,option.purchaseRound))) {
             // option ready to expire
-            return <Button onClick={() => handleComplete(option.id)}>Settle ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH) {option.type ? "Call" : "Put"}</Button>;
+            return <Button  onClick={() => handleComplete(option.id)}><span style={{color: "white"}}>Settle for {convertToDecimals(web3.utils.fromWei(`${option.lockedValue*0.005}`.split(".")[0], "ether"), 3)}  ETH </span></Button>;
         } /* else if (option.type === false && option.strikePrice > currentPrice && smallerThan(option.purchaseRound,currentRound)) {
             // put option ready to exercise
 
@@ -73,24 +73,8 @@ const OptionTable = (props: any) => {
         }
     }
 
-    function renderFeeOrCost(option: any) {
-        const {showFee} = props;
-        const value = option.lockedValue.split(".")[0];
-        if (showFee) {
-            return <STh>{web3.utils.fromWei(`${value*0.005}`.split(".")[0], "ether")}  ETH </STh>
-        } else {
-
-            // tslint:disable-next-line:no-console
-            console.log(`showing locked value`);
-            return <>
-                <STh>{web3.utils.fromWei(`${value}`, "ether")}  ETH</STh>{/*
-                <STh>{web3.utils.fromWei(`${option.strikePrice}`, "ether")}  ETH</STh> */}
-            </>
-
-        }
-    }
-
-    const {options, web3, showFee, currentRound} = props;
+  
+    const {options, web3, currentRound} = props;
 
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -104,13 +88,10 @@ const OptionTable = (props: any) => {
                 <thead>
                     <tr>
                         <STh>ID</STh>
-                        <STh>Direction</STh>
-                        {width > height ?  (showFee ?
-                        <STh>Settlement Fee</STh>
-                        :
-                        <STh>Option Value</STh>) : <></>}
-                       
-                        <STh>Action</STh>
+                        <STh>Moneyness</STh>
+                        {width > height ?  
+                        <STh>Value(ETH)</STh> : <></>}
+                        <STh>Settlement</STh>
                     </tr>
                 </thead>
                 <tbody>
@@ -122,15 +103,15 @@ const OptionTable = (props: any) => {
                     if (index % 2 === 0) {
                         return <STrEven key={ index } >
                                 <STh >{option.id} <span style={{cursor: "pointer"}} onClick={() => details()}>ⓘ</span></STh>
-                                <STh><OptionDirection optionType={option.type}/></STh>
-                                { width > height ?  renderFeeOrCost(option) : <></>}
+                                <STh><OptionDirection optionType={option.type}/> {option.complete ? (option.exercised ? "ITM" : "OTM") : "Pending"}</STh>
+                                { width > height ?  <STh>{web3.utils.fromWei(`${option.lockedValue}`, "ether")}</STh> : <></>}
                                 <STh>{renderExpireExercise(option)}</STh>
                             </STrEven>;
                     } else {
                         return <STrOdd key={ index }>
                             <STh >{option.id} <span style={{cursor: "pointer"}} onClick={() => details()}>ⓘ</span></STh>
-                            <STh><OptionDirection optionType={option.type}/></STh>
-                                { width > height ?  renderFeeOrCost(option) : <></>}
+                                <STh><OptionDirection optionType={option.type}/> {option.complete ? (option.exercised ? "ITM" : "OTM") : "Pending"}</STh>
+                                { width > height ?  <STh>{web3.utils.fromWei(`${option.lockedValue}`, "ether")}</STh> : <></>}
                              <STh>{renderExpireExercise(option)}</STh>
                         </STrOdd>;
                     }
