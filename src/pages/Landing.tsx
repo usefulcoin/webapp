@@ -13,6 +13,7 @@ import { DEFAULT_LANG } from "src/constants";
 
 const SBrand = styled.div`
   display: flex;
+  width: 100%;
   align-items: center;
   position: relative;
   & span {

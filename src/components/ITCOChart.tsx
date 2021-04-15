@@ -101,9 +101,9 @@ class ITCOChart extends React.Component<any, any> {
           
           <Chart
             width={
-              "50vh"
+              "100%"
             }
-            height={"30vh"}
+            height={"25vh"}
             chartType="SteppedAreaChart"
             loader={<div>{i18n[locale].LOADINGCHART}</div>}
             data={data}

@@ -20,7 +20,6 @@ const SBanner = styled.div`
 const SHeader = styled.div`
   margin-top: -1px;
   margin-bottom: 1px;
-  width: 100%;
   height: 100px;
   display: flex;
   align-items: center;

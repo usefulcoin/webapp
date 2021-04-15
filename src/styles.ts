@@ -102,12 +102,16 @@ export const globalStyle = `
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    overflow-x: hidden;
   }
 
   html, body, #root {
-    margin: 0;
+    margin: auto;
     padding: 0;
+    width: 100%;
   }
+
+
 
   @-webkit-keyframes spin {
     0%  {-webkit-transform: rotate(0deg);}
@@ -130,6 +134,7 @@ export const globalStyle = `
     -webkit-overflow-scrolling: touch;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;  
+    position: relative;
   }
 
   button {
@@ -200,7 +205,7 @@ export const globalStyle = `
   }
 
   * {
-    box-sizing: border-box !important;
+   # box-sizing: border-box !important;
   }
 
 
