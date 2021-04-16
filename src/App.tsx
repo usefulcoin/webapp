@@ -397,7 +397,8 @@ class App extends React.Component<any, any> {
                 )}
           </SContent>
         </Column>
-        <Footer locale={locale}/>
+        <Footer locale={locale} 
+            connected={connected}/>
         <Modal show={showModal} toggleModal={this.toggleModal}>
           {pendingRequest ? (
             <SModalContainer>

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { BiBookAlt } from 'react-icons/bi';
 import { RiTwitterLine, RiTelegramLine, RiDiscordLine } from 'react-icons/ri';
 import {colors} from "../styles";
+import LocaleToggle from './LocaleToggle';
 
 const SFooter = styled.div`
   margin-top: 100px;
@@ -42,6 +43,7 @@ const Footer = (props: any) => (
          <SLink href="https://discord.gg/4SRYBNdE3r" target="_"><RiDiscordLine/></SLink>
          <SLink href="https://t.me/BIOPset" target="_"><RiTelegramLine/></SLink>
      </SLinks>
+     {props.connected ? <></>:<LocaleToggle/>}
      <p style={{color: `rgb(${colors.black})`}}>BIOPset © 2021 </p>
     
    
