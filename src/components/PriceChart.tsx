@@ -59,6 +59,7 @@ class PriceChart extends React.Component<any, any> {
       const {error} = this.state;
       const {pair,currentPrice} = this.props;
       const wide = window.innerWidth > window.innerHeight;
+      const chartWidth = wide ? "576" : window.innerWidth-24;
       const darkMode = localStorage.getItem('darkMode');
       return (
         <SPriceChart>
@@ -80,7 +81,7 @@ class PriceChart extends React.Component<any, any> {
                       theme={"Dark"} 
                       range='12m'
                       height="250"
-                      width={wide ? "576" : window.innerWidth-24}
+                      width={chartWidth}
                   />
                   :
 
@@ -88,7 +89,7 @@ class PriceChart extends React.Component<any, any> {
                       symbol={pair}
                       range='12m'
                       theme="Light"
-                      width={wide ? "584" : window.innerWidth-16}
+                      width={chartWidth}
                   />
                   }
             </div>
