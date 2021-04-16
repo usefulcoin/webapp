@@ -488,7 +488,7 @@ class Trade extends React.Component<any, any> {
             <Column>
                 <SInputContainer style={{ flexDirection: wideGirl ? "row" : "column" }}>
                     <SInputBbContainer style={{ backgroundColor: `rgb(${colors.white})`, color: `rgb(${colors.black})` }}>
-                        <span style={{ marginLeft: "0px" }}>PRICE</span><br />
+                        <span style={{ marginLeft: "0px" }}>QUANTITY</span><br />
                         <SInputBox>
                             <SInputBb style={{ backgroundColor: `rgb(${colors.white})`, color: `rgb(${colors.black})` }} value={betAmount} placeholder={`Amount To Bet`} onChange={(e) => this.handleBetAmountUpdate(e)} id="amountStake" />
 
