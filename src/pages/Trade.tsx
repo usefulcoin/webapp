@@ -69,6 +69,11 @@ const SInputBox = styled.div`
 position: relative;
 `
 
+const SOutlined = styled.span`
+-webkit-text-stroke-width: 0.5px;
+-webkit-text-stroke-color: white;
+`
+
 const SBetButtonContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -501,14 +506,20 @@ class Trade extends React.Component<any, any> {
                             <SColumn style={{ textAlign: "left" }}>
                                 <span style={{ marginLeft: "20px", color: `white` }}>Win Total <span style={{ cursor: "pointer" }} onClick={() => this.openBettingAlert()}>ⓘ</span>:</span>
                                 <span style={{ marginLeft: "20px", color: `white` }}>Trading Fee:</span>
-                                <span style={{ marginLeft: "20px", color: `white` }}>Maxmium Yield:</span>
+                                <span style={{ marginLeft: "20px", color: `white` }}>Maximium Yield:</span>
                                 <span style={{ marginLeft: "20px", color: `white` }}>Minimum Yield:</span>
 
                             </SColumn>
                             <SColumn style={{ textAlign: "right" }}>
                                 <span style={{ marginRight: "20px", color: `white` }} >{amountToWin}</span>
                                 <span style={{ marginRight: "20px", color: `white` }}>{divide(betFee, 1000)}%</span>
-                                <span style={{ marginRight: "20px", color: greaterThan(divide(multiply(divide(amountToWin, betAmount), 100), 2), 5) ? `rgb(${colors.white})` : `rgb(${colors.red})` }}>{greaterThan(multiply(divide(amountToWin, 2), 100), 0) ? divide(multiply(divide(amountToWin, betAmount), 100), 2) : "100"}%</span>
+                                {
+                                    greaterThan(divide(multiply(divide(amountToWin, betAmount), 100), 2), 5) ?
+                                    <span style={{ marginRight: "20px", color: `rgb(${colors.white})`}}>{greaterThan(multiply(divide(amountToWin, 2), 100), 0) ? divide(multiply(divide(amountToWin, betAmount), 100), 2) : "100"}%</span>
+                                    :
+                                    <SOutlined style={{ marginRight: "20px", color: greaterThan(divide(multiply(divide(amountToWin, betAmount), 100), 2), 5) ? `rgb(${colors.white})` : `rgb(${colors.red})` }}>{greaterThan(multiply(divide(amountToWin, 2), 100), 0) ? divide(multiply(divide(amountToWin, betAmount), 100), 2) : "100"}%</SOutlined>
+                                
+                                }
                                 <span style={{ marginRight: "20px", color: `white` }}>-100%</span>
 
                             </SColumn>

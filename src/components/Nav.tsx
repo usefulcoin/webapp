@@ -84,11 +84,11 @@ const Nav = (props: INavProps) => {
 
 
     const pages = [
-        BUY_BIOP,
         BET,
         STAKE,
         EXERCISE_EXPIRE,
-        REWARDS
+        REWARDS,
+        BUY_BIOP,
     ]
     if (width > height) {
         return (
