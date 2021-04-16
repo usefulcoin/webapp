@@ -90,6 +90,8 @@ class ITCOChart extends React.Component<any, any> {
 
   public render() {
     const {error, data, locale} = this.state;
+
+    const wide = window.innerWidth > window.innerHeight;
     return (
       <SPriceChart>
         {
@@ -100,8 +102,8 @@ class ITCOChart extends React.Component<any, any> {
           <div style={{}}>
           
           <Chart
-            width={
-              "100%"
+            width={wide ?
+              "100%" : window.innerWidth-20
             }
             height={"25vh"}
             chartType="SteppedAreaChart"

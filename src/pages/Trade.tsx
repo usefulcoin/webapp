@@ -1,10 +1,9 @@
-// @ts-nocheck
+
 import * as React from "react";
 import styled from "styled-components";
 
 import { /*initiateSwapIfAvailable,*/ callCurrentRoundID, callBetFee, sendComplete, callPoolTotalSupply, getLatestPrice, callPoolStakedBalance, callPoolMaxAvailable, getDirectRate, getOptionCreation, getOptionCloses, getTotalInterchange, callOpenCalls, callOpenPuts } from "../helpers/web3";
-
-import {TradingViewStockChartWidget} from 'react-tradingview-components'; //
+import PriceChart from "../components/PriceChart"; //
 
 import ReactTooltip from 'react-tooltip';
 import { makeBet } from "../helpers/web3";
@@ -532,33 +531,15 @@ class Trade extends React.Component<any, any> {
 
 
     public renderBetApprove() {
-        const { web3, pair, betDirection, currentPrice } = this.state;
+        const { pair, betDirection, currentPrice } = this.state;
 
         // tslint:disable-next-line:no-console
         console.log(`rerender chart with pair ${pair} currentPrice ${currentPrice}`);
         // tslint:disable-next-line:no-console
         console.log(pair);
-        const wideGirl = window.innerWidth > window.innerHeight;
-        const darkMode = localStorage.getItem('darkMode');
         return (
             <SBetter>
-                {
-                    darkMode === "true" ?
-                    <TradingViewStockChartWidget 
-                    symbol={pair.pair}
-                    theme={"Dark"} 
-                    range='12m'
-                    width={wideGirl ? "584" : window.innerWidth-16}
-                />
-                :
-
-                <TradingViewStockChartWidget 
-                    symbol={pair.pair}
-                    range='12m'
-                    theme="Light"
-                    width={wideGirl ? "584" : window.innerWidth-16}
-                />
-                }
+              <PriceChart pair={pair.pair} currentPrice={currentPrice}/>
                 <br />
                 <Button color={betDirection ? `blue` : `red`} onClick={() => { this.handleMakeBet(betDirection) }}><span style={{ color: `white` }}>Buy {betDirection ? "Call📈 " : "Put📉 "}</span></Button>
 

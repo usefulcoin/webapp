@@ -1,16 +1,13 @@
+// @ts-nocheck
 import * as React from 'react'
-import {Line} from 'react-chartjs-2'
-import { coinPriceDataInUsd } from 'src/helpers/coingecko';
+import {TradingViewStockChartWidget} from 'react-tradingview-components';
 import { colors } from 'src/styles';
 import styled from 'styled-components'
-import {HOUR, MINUTE} from "src/constants";
 import {formatFixedDecimals, divide,} from 'src/helpers/bignumber';
 
 
 const SPriceChart = styled.div`
-  width: 100%;
   
-  padding: 20px;
   color: white;
   border: 1px solid rgb(${colors.grey});
   border-radius: 8px;
@@ -26,20 +23,14 @@ const SInActiveTimeFrame = styled.span`
 
 interface IPriceChartState {
   pendingRequest: boolean;
-  data: any;
   error: string;
   priceInterval: any;
-  timeFrame: string;
-  currentPrice: any;
 }
 
 const INITIAL_STATE: IPriceChartState = {
   pendingRequest: false,
   error: "",
-  data: {},
   priceInterval: null,
-  timeFrame: HOUR,
-  currentPrice: ""
 };
 
 class PriceChart extends React.Component<any, any> {
@@ -53,133 +44,60 @@ class PriceChart extends React.Component<any, any> {
         };
     }
 
-    public componentDidMount() {
-        this.getInitialData();
-        this.setState({
-          priceInterval : setInterval(() => {
-            this.getInitialData()
-        }, 5000)
-        });
+
+
+    public copAlert() {
+      alert("COP: Current Onchain Price. The exact strike price your option should be at if you initiate a transaction now.");
     }
 
 
-    public componentWillUnmount() {
-      clearInterval(this.state.priceInterval);
-    }
+   
 
-    public componentDidUpdate(prevProps: any) {
-      if (this.props !== prevProps) {
-      
-        clearInterval(this.state.priceInterval);
-        this.getInitialData();
-        this.setState({
-          currentPrice: this.props.currentPrice,
-          priceInterval : setInterval(() => {
-            this.getInitialData()
-        }, 5000)
-        });
-      }
-    }
+  
 
-    public async getInitialData() {
-      const {timeFrame} = this.state;
-      const {pair} = this.props;
-      
-      try {
-        this.setState({pendingRequest: true, error: ""});
-        const data = await coinPriceDataInUsd(pair.name, timeFrame === HOUR ? 3 : 1, timeFrame);
-        // tslint:disable-next-line
-        const formattedLabels = [];
-        // tslint:disable-next-line
-        const formattedPrices = [];
-
-        // tslint:disable-next-line
-        console.log(`loaded price data:`);
-        // tslint:disable-next-line
-        console.log(data);
-        for (let i = 0; i < data.length; i++) {
-          const label = new Date(data[i][0]);
-          formattedLabels.push(label.toISOString().split(":")[0]);
-
-          formattedPrices.push(data[i][1]);
-        }
-
-
-        this.setState({pendingRequest: false,
-          
-            data: {
-          labels: formattedLabels,
-          datasets: [
+    public render() {
+      const {error} = this.state;
+      const {pair,currentPrice} = this.props;
+      const wide = window.innerWidth > window.innerHeight;
+      const darkMode = localStorage.getItem('darkMode');
+      return (
+        <SPriceChart>
+          {
+            error !== "" ?
+            <SHelper style={{color: `rgb(${colors.red})`}}>{error}</SHelper>
+            :
+            <>
+            <SHelper style={{color: `rgb(${colors.black})`}}>
+             <span style={{fontSize: "large", fontWeight:"400"}}>COP<span style={{ cursor: "pointer", fontWeight:"bold" }} onClick={() => this.copAlert()}>ⓘ</span>: 
+              ${formatFixedDecimals(divide(currentPrice, 100000000), 3)} USD
+              </span> 
+            </SHelper>
+            <div style={{width:"100%"}}>
             {
-              label: `${pair.symbol} Price`,
-              fill: false,
-              lineTension: 0.1,
-              backgroundColor: `rgb(${colors.blue},1)`,
-              borderColor: `rgb(${colors.blue},0.4)`,
-              borderCapStyle: 'butt',
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: `rgb(${colors.blue},1)`,
-              pointBackgroundColor: '#fff',
-              pointBorderWidth: 1,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: `rgb(${colors.blue},1)`,
-              pointHoverBorderColor: 'rgba(220,220,220,1)',
-              pointHoverBorderWidth: 2,
-              pointRadius: 1,
-              pointHitRadius: 10,
-              data: formattedPrices
-            }
-          ]
-        }}); 
-      } catch(e) {
-            // tslint:disable-next-line:no-console
-            console.log(e);
-            this.setState({pendingRequest: false, error: "Request failed"});
+                      darkMode === "true" ?
+                      <TradingViewStockChartWidget 
+                      symbol={pair}
+                      theme={"Dark"} 
+                      range='12m'
+                      height="250"
+                      width={wide ? "576" : window.innerWidth-24}
+                  />
+                  :
 
-      }
+                  <TradingViewStockChartWidget 
+                      symbol={pair}
+                      range='12m'
+                      theme="Light"
+                      width={wide ? "584" : window.innerWidth-16}
+                  />
+                  }
+            </div>
+            </>
+          }
+        
+        </SPriceChart>
+      )
     }
-
-public setTimeFrame(setting: string) {
-
-  this.setState({
-    timeFrame: setting
-  });
-}
-
- public renderTimeFrame() {
-   const {timeFrame} = this.state;
-   switch(timeFrame) {
-     case MINUTE:
-      return <><SInActiveTimeFrame onClick={() => this.setTimeFrame(HOUR)}>HOUR</SInActiveTimeFrame> <b>MINUTE</b></>
-     default:
-       // Hour
-       return <><b>HOUR</b> <SInActiveTimeFrame onClick={() => this.setTimeFrame(MINUTE)}>MINUTE</SInActiveTimeFrame></>
-   }
- }
-
-  public render() {
-    const {data, error, currentPrice} = this.state;
-    return (
-      <SPriceChart>
-        {
-          error !== "" ?
-          <SHelper style={{color: `rgb(${colors.red})`}}>{error}</SHelper>
-          :
-          <>
-
-          <SHelper style={{color: `rgb(${colors.black})`}}>{this.renderTimeFrame()}</SHelper>
-          <SHelper style={{color: `rgb(${colors.black})`}}>Current Price: {formatFixedDecimals(divide(currentPrice, 100000000), 3)} USD</SHelper>
-          <div style={{width:"100%"}}>
-          <Line data={data} />
-          </div>
-          </>
-        }
-       
-      </SPriceChart>
-    )
-  }
  
 }
 
