@@ -19,7 +19,6 @@ const SToggleSwitch = styled.div`
     border-radius: 8px;
     height: 44px;
     width: 100%;
-    margin: 2px;
     border: 1px solid rgb(${colors.blue});
     display: flex;
     flex-direction: row;

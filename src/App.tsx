@@ -53,7 +53,6 @@ const SLayout = styled.div`
 const SContent = styled(Wrapper)`
   width: 100%;
   height: 100%;
-  padding: 0 16px;
 `;
 
 const SContainer = styled.div`

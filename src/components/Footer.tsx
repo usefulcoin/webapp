@@ -17,7 +17,6 @@ const SFooter = styled.div`
 const SLinks = styled.div`
     display: flex;
     flex-direction: row;
-    margin: 10px;
     width: 100%;
     justify-content: center;
     align-items: center;

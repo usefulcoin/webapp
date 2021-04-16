@@ -36,6 +36,7 @@ const SLanding = styled(Column)`
   width:100%;
   height:100%;
   font-family: "octarine";
+  padding: 6%;
 `;
 const SReasons = styled(Column)`
   width: 100%;

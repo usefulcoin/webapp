@@ -106,9 +106,10 @@ export const globalStyle = `
   }
 
   html, body, #root {
-    margin: auto;
+    margin: 0;
     padding: 0;
     width: 100%;
+    overflow-x: hidden;
   }
 
 
@@ -125,7 +126,7 @@ export const globalStyle = `
     font-weight: ${fonts.weight.normal};
     font-size: ${fonts.size.medium};
     color: rgb(${colors.dark});
-    overflow-y:auto;
+    # overflow-y:auto;
     text-rendering: optimizeLegibility;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-font-smoothing: antialiased;
