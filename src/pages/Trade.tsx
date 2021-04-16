@@ -1,11 +1,12 @@
+// @ts-nocheck
 import * as React from "react";
 import styled from "styled-components";
 
 import { /*initiateSwapIfAvailable,*/ callCurrentRoundID, callBetFee, sendComplete, callPoolTotalSupply, getLatestPrice, callPoolStakedBalance, callPoolMaxAvailable, getDirectRate, getOptionCreation, getOptionCloses, getTotalInterchange, callOpenCalls, callOpenPuts } from "../helpers/web3";
 
+import {TradingViewStockChartWidget} from 'react-tradingview-components'; //
 
 import ReactTooltip from 'react-tooltip';
-// import Right from "../assets/right.png";
 import { makeBet } from "../helpers/web3";
 
 import { enabledPricePairs } from "../constants";
@@ -15,7 +16,6 @@ import OptionTable from 'src/components/OptionTable';
 import BetButton from 'src/components/BetButton';
 import Button from 'src/components/Button';
 import Loading from 'src/components/Loading';
-import PriceChart from 'src/components/PriceChart';
 import { colors } from 'src/styles';
 import { convertAmountFromRawNumber, formatFixedDecimals, divide, greaterThan, multiply, convertToDecimals } from 'src/helpers/bignumber';
 
@@ -32,6 +32,7 @@ const SBetter = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
+
 `
 const SInputContainer = styled.div`
     display: flex;
@@ -57,11 +58,10 @@ const SInputBb = styled.input`
     text-align: center;
     border: none;
     margin: 5px;
-    margin-left: 0px;
     height: 30px;
     font-weight: bold;
     font-size: 1.3rem;
-    width: 100%;
+    width: 95%;
     display: block;
     margin-bottom:1px;
 `
@@ -538,9 +538,27 @@ class Trade extends React.Component<any, any> {
         console.log(`rerender chart with pair ${pair} currentPrice ${currentPrice}`);
         // tslint:disable-next-line:no-console
         console.log(pair);
+        const wideGirl = window.innerWidth > window.innerHeight;
+        const darkMode = localStorage.getItem('darkMode');
         return (
             <SBetter>
-                <PriceChart web3={web3} pair={pair} currentPrice={currentPrice} />
+                {
+                    darkMode === "true" ?
+                    <TradingViewStockChartWidget 
+                    symbol={pair.pair}
+                    theme={"Dark"} 
+                    range='12m'
+                    width={wideGirl ? "584" : window.innerWidth-16}
+                />
+                :
+
+                <TradingViewStockChartWidget 
+                    symbol={pair.pair}
+                    range='12m'
+                    theme="Light"
+                    width={wideGirl ? "584" : window.innerWidth-16}
+                />
+                }
                 <br />
                 <Button color={betDirection ? `blue` : `red`} onClick={() => { this.handleMakeBet(betDirection) }}><span style={{ color: `white` }}>Buy {betDirection ? "Call📈 " : "Put📉 "}</span></Button>
 
@@ -602,6 +620,7 @@ class Trade extends React.Component<any, any> {
                             currentPrice={currentPrice}
                             currentRound={currentRound}
                         />
+                        
                     </>
                     : 
                     <></>
