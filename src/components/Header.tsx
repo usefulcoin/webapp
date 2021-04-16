@@ -109,8 +109,8 @@ const Header = (props: IHeaderProps) => {
   return (
     <>
     <SBanner>V4 {i18n[locale].TESTEDITION} </SBanner>
-   
-    <SHeader {...props}>
+    {connected ?
+      <SHeader {...props}>
       {connected && chainData ? (
         <SActiveChain>
           <Banner />
@@ -131,7 +131,9 @@ const Header = (props: IHeaderProps) => {
         </SActiveAccount>
       )}
     </SHeader>
-    </>
+   :<div style={{height: "100px"}}/>
+    }
+     </>
   )
   // <SBlockie address={address} />
   // const SAddress = styled.p<IHeaderStyle>`
