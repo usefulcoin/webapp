@@ -44,6 +44,7 @@ const SMobileNavItem = styled.li`
 const STogglie = styled.li` 
     padding: 5px;
     background-color: rgb(${colors.darkGrey});
+    border-radius: 0 0 10px 0;
 `
 
 interface INavProps {
@@ -56,7 +57,7 @@ const Nav = (props: INavProps) => {
     const [showPanel, setShowPanel] = React.useState(false);
 
 
-    function navLink(page: string, currentPage: string) {
+    function navLink(page: string, currentPage: string, index: number, length: number) {
         return (
             <div onClick={() => setPage(page)} style={{
                 border: `6px solid rgb(${colors.darkGrey})`,
@@ -66,6 +67,7 @@ const Nav = (props: INavProps) => {
                 color: `white`,
                 padding: "6px",
                 fontSize: "1.10rem",
+                borderRadius: index === 0 ? '0 0 0 10px' : "0",
                 backgroundColor: `rgb(${page === currentPage ? colors.grey : colors.darkGrey})`
             }}
                 key={page}>
@@ -92,10 +94,10 @@ const Nav = (props: INavProps) => {
         return (
 
             <SNav>
-                {pages.map(page => navLink(page, currentPage))}
+                {pages.map((page, i) => navLink(page, currentPage, i, pages.length))}
 
                 <STogglie><LocaleToggle /></STogglie>
-                <DarkModeToggle />
+                <div style={{paddingLeft: "25px"}}><DarkModeToggle /></div>
             </SNav>
         )
     } else {

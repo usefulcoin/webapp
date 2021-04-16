@@ -42,7 +42,7 @@ const Footer = (props: any) => (
          <SLink href="https://discord.gg/4SRYBNdE3r" target="_"><RiDiscordLine/></SLink>
          <SLink href="https://t.me/BIOPset" target="_"><RiTelegramLine/></SLink>
      </SLinks>
-     <p style={{color: `rgb(${colors.black})`}}>BIOPset © 2021. </p>
+     <p style={{color: `rgb(${colors.black})`}}>BIOPset © 2021 </p>
     
    
   </SFooter>
