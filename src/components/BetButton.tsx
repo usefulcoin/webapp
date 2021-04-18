@@ -2,6 +2,8 @@ import * as React from 'react'
 
 import Up from "../assets/up.png";
 import Down from "../assets/down.png";
+import MobileUp from "../assets/mobile_up.png";
+import MobileDown from "../assets/mobile_down.png";
 interface IBetButtonProps {
     up: boolean
     onClick: any
@@ -10,12 +12,29 @@ interface IBetButtonProps {
 
 const BetButton = (props: IBetButtonProps) => {
     const {up, onClick, active} = props;
-    const wideGirl = window.innerWidth > window.innerHeight;
+    const wide = window.innerWidth > window.innerHeight;
+
+    function pickImage() {
+      if (wide) {
+        if (up) {
+          return Up;
+        } else {
+          return Down;
+        }
+      } else {
+        if (up) {
+          return MobileUp;
+        } else {
+          return MobileDown;
+        }
+      }
+    }
+
     return (
         <div style={{
-            width: wideGirl ? "45px" : "90px",
-            height: wideGirl ? "45px" : "66px",
-            background: `url(${up ? Up : Down}) no-repeat`,
+            width:  wide ? "45px" : "100%",
+            height: wide ? "45px" : "50px",
+            background: `url(${pickImage()}) no-repeat`,
             backgroundSize: `cover`,
             backgroundPosition: 'center',
             margin: '3px',
@@ -28,13 +47,12 @@ const BetButton = (props: IBetButtonProps) => {
         }}
         onClick={() => onClick()}
       >
-        {wideGirl ?
+        {wide ?
         
         <div style={{paddingTop: up ? "30px" : "2px"}}>{up ? "UP" : "DOWN"}</div>
         :
-        
-        <div style={{paddingTop: up ? "40px" : "0px", fontSize: "medium"}}>{up ? "UP" : "DOWN"}</div>
-        }
+          <></>
+       }
         </div>
        
     )

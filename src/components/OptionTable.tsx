@@ -69,7 +69,7 @@ const OptionTable = (props: any) => {
             return <Button onClick={() => handleExercise(option.id)}>Exercise ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH) {option.type ? "Call" : "Put"}</Button>;
         } */ else {
             // optionwith no action available
-            return <Button disabled outline={true} color={`rgb(${colors.black})`}>None</Button>;
+            return <div style={{opacity: "50%",  textAlign: "center", width: "100%"}}>None</div>;
         }
     }
 

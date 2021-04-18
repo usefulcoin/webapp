@@ -1100,14 +1100,23 @@ export function sendComplete(address: string, optionId: any, chainId: number, we
   })
 }
 
+export function getBlockNumber(web3: any) {
+  return new Promise(async (resolve, reject) => {
+    web3.eth.getBlockNumber((err: any, result: any) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(result);
+    })
+  })
+}
 
 
-
-export function getAllEvents(chainId: number, web3: any) {
+export function getAllEvents(chainId: number, web3: any, blockNum: number) {
   return new Promise(async (resolve, reject) => {
     const bin = getBOContract(chainId, web3)
     await bin.getPastEvents('allEvents', {// 'create' evemt
-      fromBlock: 'genesis',
+      fromBlock: blockNum,
       toBlock: 'latest'
     }, (error: any, events: any) => {
       if (error) {
@@ -1118,11 +1127,11 @@ export function getAllEvents(chainId: number, web3: any) {
   })
 }
 
-export function getOptionCreation(chainId: number, web3: any) {
+export function getOptionCreation(chainId: number, web3: any, blockNum: number) {
   return new Promise(async (resolve, reject) => {
     const bin = getBOContract(chainId, web3)
     await bin.getPastEvents('Create', {// 'create' evemt
-      fromBlock: 'genesis',
+      fromBlock: blockNum,
       toBlock: 'latest'
     }, (error: any, events: any) => {
       if (error) {
@@ -1133,11 +1142,11 @@ export function getOptionCreation(chainId: number, web3: any) {
     })
   })
 }
-export function getOptionExpiration(chainId: number, web3: any) {
+export function getOptionExpiration(chainId: number, web3: any, blockNum: number) {
   return new Promise(async (resolve, reject) => {
     const bin = getBOContract(chainId, web3)
     await bin.getPastEvents('Expire', {
-      fromBlock: 'genesis',
+      fromBlock: blockNum,
       toBlock: 'latest'
     }, (error: any, events: any) => {
       resolve(events);
@@ -1150,11 +1159,11 @@ export function getOptionExpiration(chainId: number, web3: any) {
   })
 }
 
-export function getOptionExercise(chainId: number, web3: any) {
+export function getOptionExercise(chainId: number, web3: any, blockNum: number) {
   return new Promise(async (resolve, reject) => {
     const bin = getBOContract(chainId, web3)
     await bin.getPastEvents('Exercise', {
-      fromBlock: 'genesis',
+      fromBlock: blockNum,
       toBlock: 'latest'
     }, (error: any, events: any) => {
       resolve(events);
@@ -1167,12 +1176,12 @@ export function getOptionExercise(chainId: number, web3: any) {
   })
 }
 
-export function getOptionCloses(chainId: number, web3: any) {
+export function getOptionCloses(chainId: number, web3: any, blockNum: number) {
   return new Promise(async (resolve, reject) => {
     try {
 
-      let options: any = await getOptionExpiration(chainId, web3);
-      options = options.concat(await getOptionExercise(chainId, web3));
+      let options: any = await getOptionExpiration(chainId, web3, blockNum);
+      options = options.concat(await getOptionExercise(chainId, web3, blockNum));
       resolve(options);
     } catch (e) {
       reject(e);
@@ -1184,9 +1193,11 @@ export function getOptionsAndCloses(chainId: number, web3: any) {
   return new Promise(async (resolve, reject) => {
     try {
 
-      let options: any = await getOptionCreation(chainId, web3);
-      options = options.concat(await getOptionExpiration(chainId, web3));
-      options = options.concat(await getOptionExercise(chainId, web3));
+      let blockNum: any = await getBlockNumber(web3);
+      blockNum = subtract(blockNum, 25000);// about two days
+      let options: any = await getOptionCreation(chainId, web3, blockNum);
+      options = options.concat(await getOptionExpiration(chainId, web3, blockNum));
+      options = options.concat(await getOptionExercise(chainId, web3, blockNum));
       resolve(options);
     } catch (e) {
       reject(e);

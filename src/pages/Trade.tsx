@@ -2,7 +2,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { /*initiateSwapIfAvailable,*/ callCurrentRoundID, callBetFee, sendComplete, callPoolTotalSupply, getLatestPrice, callPoolStakedBalance, callPoolMaxAvailable, getDirectRate, getOptionCreation, getOptionCloses, getTotalInterchange, callOpenCalls, callOpenPuts } from "../helpers/web3";
+import { /*initiateSwapIfAvailable,*/ callCurrentRoundID, callBetFee, sendComplete, callPoolTotalSupply, getLatestPrice, callPoolStakedBalance, callPoolMaxAvailable, getDirectRate, getOptionCreation, getOptionCloses, getTotalInterchange, callOpenCalls, callOpenPuts, getBlockNumber } from "../helpers/web3";
 import PriceChart from "../components/PriceChart"; //
 
 import ReactTooltip from 'react-tooltip';
@@ -16,7 +16,7 @@ import BetButton from 'src/components/BetButton';
 import Button from 'src/components/Button';
 import Loading from 'src/components/Loading';
 import { colors } from 'src/styles';
-import { convertAmountFromRawNumber, formatFixedDecimals, divide, greaterThan, multiply, convertToDecimals } from 'src/helpers/bignumber';
+import { subtract, convertAmountFromRawNumber, formatFixedDecimals, divide, greaterThan, multiply, convertToDecimals } from 'src/helpers/bignumber';
 
 const SBet = styled.div`
     width:100%;
@@ -56,11 +56,12 @@ const SInputBbContainer = styled.div`
 const SInputBb = styled.input`
     text-align: center;
     border: none;
-    margin: 5px;
+    margin-left: 10%;
+    margin-right: 10%;
     height: 30px;
     font-weight: bold;
     font-size: 1.3rem;
-    width: 95%;
+    width: 80%;
     display: block;
     margin-bottom:1px;
 `
@@ -241,8 +242,10 @@ class Trade extends React.Component<any, any> {
 
     public async loadUserOptions() {
         const { chainId, web3, address } = this.state;
+        let blockNum: any = await getBlockNumber(web3);
+        blockNum = subtract(blockNum, 25000);
 
-        const options: any = await getOptionCreation(chainId, web3);
+        const options: any = await getOptionCreation(chainId, web3, blockNum);
         // TODO replace with dynamic price provider
         const cr: any = await callCurrentRoundID(chainId, web3, enabledPricePairs[0].address);
         const massagedOptions = {};
@@ -277,7 +280,7 @@ class Trade extends React.Component<any, any> {
         console.log(massagedOptions);
 
         // load exercise/expire events
-        const completeEvents: any = await getOptionCloses(chainId, web3);
+        const completeEvents: any = await getOptionCloses(chainId, web3, blockNum);
         for (let i = 0; i < completeEvents.length; i++) {
             // tslint:disable-next-line:no-console
             console.log(`found option #1 ${completeEvents[i].returnValues}`);
@@ -496,7 +499,7 @@ class Trade extends React.Component<any, any> {
                         </SInputBox>
                     </SInputBbContainer>
 
-                    <SBetButtonContainer style={{ flexDirection: wideGirl ? "column" : "row" }}>
+                    <SBetButtonContainer style={{ flexDirection: "column"  }}>
                         <BetButton up={true} onClick={() => { this.updateBetDirection(true) }} active={betDirection} />
                         <BetButton up={false} onClick={() => { this.updateBetDirection(false) }} active={!betDirection} />
                     </SBetButtonContainer>

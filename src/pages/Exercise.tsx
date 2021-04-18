@@ -128,12 +128,14 @@ class Exercise extends React.Component<any, any> {
                 if (options[i].returnValues.id !== undefined) {// ensurese we skip other events
                     if (options[i].returnValues.sP === undefined) {
                         // modifier
-                        optionsObjects[options[i].returnValues.id].complete = true;
-                        if (options[i].event === "Expire") {
-                            optionsObjects[options[i].returnValues.id].expired = true;
-                        }
-                        if (options[i].event === "Exercise") {
-                            optionsObjects[options[i].returnValues.id].exercised = true;
+                        if (optionsObjects[options[i].returnValues.id] !== undefined) {
+                            optionsObjects[options[i].returnValues.id].complete = true;
+                            if (options[i].event === "Expire") {
+                                optionsObjects[options[i].returnValues.id].expired = true;
+                            }
+                            if (options[i].event === "Exercise") {
+                                optionsObjects[options[i].returnValues.id].exercised = true;
+                            }
                         }
                     } else {
                         const optionData: any = await getOptionData(options[i].returnValues.id, web3, chainId);

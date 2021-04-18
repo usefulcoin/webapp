@@ -267,7 +267,7 @@ class Trade extends React.Component<any, any> {
         return (
                 <SInputContainer>
                 <Column>
-                    <SInputBbContainer style={{ backgroundColor: `rgb(${colors.darkGrey})`, color: `rgb(${colors.black})` }}>
+                    <SInputBbContainer style={{ backgroundColor: `rgb(${colors.darkGrey})`, color: `rgb(${colors.black})`, height: "100%" }}>
                         <SRow style={{margin: "10px"}}>
                             <span >{i18n[locale].SELL}</span>
                             <span style={{fontSize: fonts.size.tiny, paddingTop: "5px", cursor: "pointer"}} onClick={() => {
