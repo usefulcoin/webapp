@@ -69,7 +69,8 @@ const Nav = (props: INavProps) => {
             <SNavLink onClick={() => setPage(page)} style={page === currentPage ? {
                 fontWeight: "bold",
                 backgroundColor: `rgb(${colors.grey})`,
-                borderTop: `6px solid rgb(${colors.grey})`
+                borderTop: `6px solid rgb(${colors.grey})`,
+                borderRadius: "0px 0px 10px 10px"
             } : {}}
                 key={page}>
                 {page}

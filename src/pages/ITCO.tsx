@@ -269,7 +269,7 @@ class Trade extends React.Component<any, any> {
                 <Column>
                     <SInputBbContainer style={{ backgroundColor: `rgb(${colors.darkGrey})`, color: `rgb(${colors.black})`, height: "100%" }}>
                         <SRow style={{margin: "10px"}}>
-                            <span >{i18n[locale].SELL}</span>
+                            <span/>
                             <span style={{fontSize: fonts.size.tiny, paddingTop: "5px", cursor: "pointer"}} onClick={() => {
                                 this.setState({spendAmount: web3.utils.fromWei(`${balance}`, "ether")})
                                 this.updateToReceive(web3.utils.fromWei(`${balance}`, "ether"));

@@ -8,6 +8,7 @@ import ClaimETHRewards from "../components/governance/ClaimETHRewards";
 import Delegate from "../components/governance/Delegate";
 import StakeBIOP from "../components/governance/StakeBIOP";
 import {  convertAmountFromRawNumber } from 'src/helpers/bignumber';
+import {colors} from "../styles";
 
 const SRewards = styled.div`
     width:100%;
@@ -124,19 +125,19 @@ class Stake extends React.Component<any, any> {
         return(
             <SRewards>
 
-                <h1>Rewards</h1>
-                <p>BIOP governance tokens earned for utilizing the protocol.</p>
+                <h1 style={{color: `rgb(${colors.black})`}}>Earn Rewards</h1>
+                <p style={{color: `rgb(${colors.black})`}}>BIOP governance tokens earned for utilizing the protocol.</p>
                 {loading ?
                 <Loading/>
                 :
                 <div>
-                <p>Claims: <b>{convertAmountFromRawNumber(biopPendingBalance, 18)} BIOP</b></p>
-                <p>Balance: <b>{convertAmountFromRawNumber(biopBalance, 18)} BIOP</b></p>
+                <p  style={{color: `rgb(${colors.black})`}}>Claims: <b>{convertAmountFromRawNumber(biopPendingBalance, 18)} BIOP</b></p>
+                <p style={{color: `rgb(${colors.black})`}}>Balance: <b>{convertAmountFromRawNumber(biopBalance, 18)} BIOP</b></p>
                 {this.showClaimButton()}
                 </div>
                 }
                 <br/>
-                <SHelper>Governance will be available here soon</SHelper>
+                <SHelper style={{color: `rgb(${colors.black})`}}>Governance will be available here soon</SHelper>
 
                 <div style={{opacity: "0%"}}>
                 <div style={{border: "1px solid black"}}>
