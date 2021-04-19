@@ -43,8 +43,15 @@ const SMobileNavItem = styled.li`
 
 const STogglie = styled.li` 
     padding: 5px;
-    background-color: rgb(${colors.darkGrey});
     border-radius: 0 0 10px 0;
+`
+
+const SNavLink = styled.div`
+    cursor: pointer;
+    color: rgb(${colors.black});
+    padding: 6px;
+    fontSize: 1.10rem;
+
 `
 
 interface INavProps {
@@ -59,20 +66,14 @@ const Nav = (props: INavProps) => {
 
     function navLink(page: string, currentPage: string, index: number, length: number) {
         return (
-            <div onClick={() => setPage(page)} style={{
-                border: `6px solid rgb(${colors.darkGrey})`,
-                borderTop: "0px",
-                cursor: "pointer",
-                fontWeight: page === currentPage ? "bold" : "normal",
-                color: `white`,
-                padding: "6px",
-                fontSize: "1.10rem",
-                borderRadius: index === 0 ? '0 0 0 10px' : "0",
-                backgroundColor: `rgb(${page === currentPage ? colors.grey : colors.darkGrey})`
-            }}
+            <SNavLink onClick={() => setPage(page)} style={page === currentPage ? {
+                fontWeight: "bold",
+                backgroundColor: `rgb(${colors.grey})`,
+                borderTop: `6px solid rgb(${colors.grey})`
+            } : {}}
                 key={page}>
                 {page}
-            </div>
+            </SNavLink>
         );
     }
 
