@@ -6,16 +6,6 @@ import Banner from './Banner'
 import { getChainData, ellipseAddress } from '../helpers/utilities'
 import { transitions, colors } from '../styles'
 import Nav from './Nav'
-import i18n from "../i18n";
-
-const SBanner = styled.div`
-  top: 0;
-  position: absolute
-  height: 30px;
-  width: 100%;
-  background-color: black;
-  color: white;
-`
 
 const SHeader = styled.div`
   margin-top: -1px;
@@ -108,13 +98,11 @@ const Header = (props: IHeaderProps) => {
 
   return (
     <>
-    <SBanner>V4 {i18n[locale].TESTEDITION} </SBanner>
     {connected ?
       <SHeader {...props}>
       {connected && chainData ? (
         <SActiveChain>
           <Banner />
-         
         </SActiveChain>
       ) : (
         <></>

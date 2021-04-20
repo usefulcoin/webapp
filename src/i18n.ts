@@ -7,8 +7,8 @@ const i18n = {
         "LOADINGCHART": "Loading Chart",
         "LAUNCH": "Launch",
         "READMORE": "Read More",
-        "LANDING1": "EASY OPTIONS",
-        "LANDING2": 'The binary options settlement protocol ("BIOPSET") is the most transparent programmatic clearinghouse for buying and selling binary options. All users ("settlers") may leverage the protocol to earn fees for settling on-demand binary options offered by liquidity providers ("writers") seeking to earn premiums from price speculators ("traders"). Read more, or click the button to connect your Web3 wallet and launch the application. Do not use BIOPSET in regulated jurisdictions.',
+        "LANDING1": "No KYC. No Token to use Just Binary Options",
+        "LANDING2": 'On-demand, censorship-resistant, peer-to-pool decentralized binary options.',
         "FOOTERDISCLAIMER": "Do not use 🙅‍♀️ in countries where binary options are regulated.",
         "TESTEDITION": "Test Edition",
         "MENU": "Menu"

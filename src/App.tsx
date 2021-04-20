@@ -170,7 +170,7 @@ class App extends React.Component<any, any> {
     }
 
     const locale = localStorage.getItem('locale');
-    this.setState({locale: locale !== null ? locale : DEFAULT_LANG});
+    this.setState({ locale: locale !== null ? locale : DEFAULT_LANG });
   }
 
   public setPage(page: string) {
@@ -259,13 +259,13 @@ class App extends React.Component<any, any> {
       authereum: {
         package: Authereum
       },
-     /*  bitski: {
-        package: Bitski,
-        options: {
-          clientId: process.env.REACT_APP_BITSKI_CLIENT_ID,
-          callbackUrl: window.location.href + "bitski-callback.html"
-        }
-      } */
+      /*  bitski: {
+         package: Bitski,
+         options: {
+           clientId: process.env.REACT_APP_BITSKI_CLIENT_ID,
+           callbackUrl: window.location.href + "bitski-callback.html"
+         }
+       } */
     };
     return providerOptions;
   };
@@ -285,11 +285,6 @@ class App extends React.Component<any, any> {
 
   public toggleModal = () =>
     this.setState({ showModal: !this.state.showModal });
-
-
-
-
-
 
   public resetApp = async () => {
     const { web3 } = this.state;
@@ -336,16 +331,16 @@ class App extends React.Component<any, any> {
           chainId={chainId}
           web3={web3}
         />);
-        case REWARDS:
+      case REWARDS:
         return (<Rewards
           address={address}
           chainId={chainId}
           web3={web3}
         />);
       default:// home page
-     
+
         return (<SBalances>
-          
+
           <h3>Balance</h3>
           <AccountAssets chainId={chainId} assets={assets} />{" "}
         </SBalances>);
@@ -369,35 +364,41 @@ class App extends React.Component<any, any> {
     return (
       <SLayout>
         <Header
-            locale={locale}
-            connected={connected}
-            address={address}
-            chainId={chainId}
-            killSession={this.resetApp}
-            setPage={(page: string) => {
-              this.setState({ page })
-            }}
-            currentPage={page}
-          />
-        <Column spanHeight >
-          
-          <SContent>
-            {fetching ? (
-              <Column center spanHeight>
-                <SContainer>
-                  <Loader />
-                </SContainer>
-              </Column>
-            ) : !!assets && !!assets.length ? (
-              this.renderPage()
-            ) : (
-                  <Landing onConnect={() => this.onConnect()} />
+          locale={locale}
+          connected={connected}
+          address={address}
+          chainId={chainId}
+          killSession={this.resetApp}
+          setPage={(page: string) => {
+            this.setState({ page })
+          }}
+          currentPage={page}
+        />
 
-                )}
+        <Column spanHeight >
+          <SContent>
+            {
+              fetching ? (
+                <Column center spanHeight>
+                  <SContainer>
+                    <Loader />
+                  </SContainer>
+                </Column>
+              ) : !!assets && !!assets.length ? (
+                this.renderPage()
+              ) : (
+                <Landing onConnect={() => this.onConnect()} />
+
+              )
+            }
           </SContent>
         </Column>
-        <Footer locale={locale} 
-            connected={connected}/>
+
+        <Footer
+          locale={locale}
+          connected={connected}
+        />
+
         <Modal show={showModal} toggleModal={this.toggleModal}>
           {pendingRequest ? (
             <SModalContainer>
@@ -415,10 +416,10 @@ class App extends React.Component<any, any> {
               <ModalResult>{result}</ModalResult>
             </SModalContainer>
           ) : (
-                <SModalContainer>
-                  <SModalTitle>{"Call Request Rejected"}</SModalTitle>
-                </SModalContainer>
-              )}
+            <SModalContainer>
+              <SModalTitle>{"Call Request Rejected"}</SModalTitle>
+            </SModalContainer>
+          )}
         </Modal>
       </SLayout>
     );
