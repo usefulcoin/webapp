@@ -6,13 +6,13 @@ export * from './tooltips'
 export const DEFAULT_LANG = "EN🇨🇦";
 
 // pages
+export const BUY_BIOP = "Buy BIOP";
+export const STAKE = "Stake";
 export const HOME_PAGE = "Home";
 export const BUY_SELL = "Exchange";
-export const STAKE = "Write";
-export const BET = "Trade";
+export const TRADE = "Trade";
 export const EXERCISE_EXPIRE = "Settle";
-export const REWARDS = "Rewards";
-export const BUY_BIOP = "BIOP";
+export const GOVERNANCE = "Governance";
 
 
 // time frames

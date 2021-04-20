@@ -42,9 +42,10 @@ export default () => {
   return (
     <>
       <div style={{ alignSelf: "center" }}>
-        <Button onClick={() => setShow(!showPanel)}>
+        <Button
+          onClick={() => setShow(!showPanel)}>
           <span style={{ color: "white" }}>
-          {lang}
+            {lang}
           </span>
         </Button>
       </div>

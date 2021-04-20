@@ -22,6 +22,11 @@ export const colors = {
   pink: '255, 51, 102',
   red: '214, 0, 0',
   fadedRed: '165,0,0',
+  borderRed: '#D60000',
+  navBackground: '#E9E9E9',
+  navFontColor: '#A7A7A7',
+  navActiveFontColor: '#707070',
+  connectButtonColor: '#0067CE',
   purple: '110, 107, 233'
 
 }

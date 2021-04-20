@@ -10,25 +10,30 @@ import Nav from './Nav'
 const SHeader = styled.div`
   margin-top: -1px;
   margin-bottom: 1px;
-  height: 100px;
+  height: 95px;
   display: flex;
   align-items: center;
   opacity: 100%;
-  background-color: rgb(${colors.white});
+  background-color: ${colors.navBackground};
   justify-content: space-between;
-  padding: 0 16px;
   box-shadow: 0px 3px 6px #00000029;
 `
 
 const SActiveAccount = styled.div`
+  background-color: ${colors.connectButtonColor};
+  width: 240px;
+  height: 60px;
+  border-radius: 23px
   display: flex;
   align-items: center;
-  position: relative;
+  justify-content: center;
   font-weight: 500;
+  margin-left: 30px;
+  margin-right: 30px;
 `
 
 const SActiveChain = styled.div`
-display: flex;
+  display: flex;
   align-items: center;
   position: relative;
   font-weight: 500;
@@ -61,7 +66,6 @@ const SDisconnect = styled.div<IHeaderStyle>`
   transition: ${transitions.button};
   font-size: 12px;
   font-family: monospace;
-  position: absolute;
   right: 0;
   top: 20px;
   opacity: 0.7;
@@ -98,38 +102,35 @@ const Header = (props: IHeaderProps) => {
 
   return (
     <>
-    {connected ?
-      <SHeader {...props}>
-      {connected && chainData ? (
-        <SActiveChain>
-          <Banner />
-        </SActiveChain>
-      ) : (
-        <></>
-      )}
-      {connected ? (
-         <Nav setPage={setPage} currentPage={currentPage} locale={locale}/>
-      ) : <></>}
-      {address && (
-        <SActiveAccount>
-          <SBlockie address={address} />
-          <SDisconnect connected={connected} onClick={killSession}>
-          {width > height ? ellipseAddress(address) : ""}
-          </SDisconnect>
-        </SActiveAccount>
-      )}
-    </SHeader>
-   :<div style={{height: "100px"}}/>
-    }
-     </>
+      {connected ?
+        <SHeader {...props}>
+          {connected && chainData ?
+            <SActiveChain>
+              <Banner />
+            </SActiveChain>
+            :
+            null
+          }
+          {connected ?
+            <Nav setPage={setPage} currentPage={currentPage} locale={locale} />
+            :
+            null
+          }
+          {address && (
+            <SActiveAccount>
+              <SBlockie address={address} />
+              <SDisconnect
+                connected={connected}
+                onClick={killSession}>
+                {width > height ? ellipseAddress(address) : ""}
+              </SDisconnect>
+            </SActiveAccount>
+          )}
+        </SHeader>
+        : <div style={{ height: "100px" }} />
+      }
+    </>
   )
-  // <SBlockie address={address} />
-  // const SAddress = styled.p<IHeaderStyle>`
-  /* transition: ${transitions.base};
-  font-weight: bold;
-  margin: ${({ connected }) => (connected ? '-2px auto 0.7em' : '0')};
-`<SAddress connected={connected}>{ellipseAddress(address)}</SAddress>
-        */   
 }
 
 Header.propTypes = {

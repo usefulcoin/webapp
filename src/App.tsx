@@ -27,10 +27,10 @@ import {
 } from "./helpers/utilities";
 import { IAssetData } from "./helpers/types";
 import {
-  BET,
+  TRADE,
   EXERCISE_EXPIRE,
   STAKE,
-  REWARDS,
+  GOVERNANCE,
   BUY_BIOP,
   DEFAULT_LANG
 } from "./constants";
@@ -196,7 +196,6 @@ class App extends React.Component<any, any> {
 
     const networkId = await web3.eth.net.getId();
 
-
     const chainId = await web3.eth.chainId();
     // tslint:disable-next-line:no-console
     console.log(`got chain id curve ${chainId} networkid ${networkId} address ${address}`);
@@ -305,46 +304,55 @@ class App extends React.Component<any, any> {
     } = this.state;
     switch (page) {
       case BUY_BIOP:
-        return (<ITCO
-          address={address}
-          chainId={chainId}
-          web3={web3}
-        />);
-      case BET:
-        return (<Trade
-          address={address}
-          chainId={chainId}
-          web3={web3}
-          openExercise={() => {
-            this.setState({ page: EXERCISE_EXPIRE })
-          }}
-        />);
+        return (
+          <ITCO
+            address={address}
+            chainId={chainId}
+            web3={web3}
+          />
+        );
+      case TRADE:
+        return (
+          <Trade
+            address={address}
+            chainId={chainId}
+            web3={web3}
+            openExercise={() => {
+              this.setState({ page: EXERCISE_EXPIRE })
+            }}
+          />
+        );
       case EXERCISE_EXPIRE:
-        return (<Exercise
-          address={address}
-          chainId={chainId}
-          web3={web3}
-        />);
+        return (
+          <Exercise
+            address={address}
+            chainId={chainId}
+            web3={web3}
+          />
+        );
       case STAKE:
-        return (<Stake
-          address={address}
-          chainId={chainId}
-          web3={web3}
-        />);
-      case REWARDS:
-        return (<Rewards
-          address={address}
-          chainId={chainId}
-          web3={web3}
-        />);
+        return (
+          <Stake
+            address={address}
+            chainId={chainId}
+            web3={web3}
+          />
+        );
+      case GOVERNANCE:
+        return (
+          <Rewards
+            address={address}
+            chainId={chainId}
+            web3={web3}
+          />
+        );
       default:// home page
-
-        return (<SBalances>
-
-          <h3>Balance</h3>
-          <AccountAssets chainId={chainId} assets={assets} />{" "}
-        </SBalances>);
-
+        return (
+          <SBalances>
+            <h3>Balance</h3>
+            <AccountAssets chainId={chainId} assets={assets} />{" "}
+          </SBalances>
+        );
     }
   }
 
