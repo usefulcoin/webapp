@@ -123,8 +123,6 @@ const ConnectButton = (props: IConnectButtonProps) => (
       type="button"
       {...props}
     >
-      <SHoverLayer />
-      <SIcon />
       {props.primary ? i18n[props.locale].LAUNCH : i18n[props.locale].READMORE }
     </SConnectButton>
   </SConnectButtonContainer>

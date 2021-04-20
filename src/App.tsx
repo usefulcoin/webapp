@@ -392,43 +392,44 @@ class App extends React.Component<any, any> {
                     <Loader />
                   </SContainer>
                 </Column>
-              ) : !!assets && !!assets.length ? (
-                this.renderPage()
-              ) : (
-                <Landing onConnect={() => this.onConnect()} />
-
               )
+                :
+                !!assets && !!assets.length ? (
+                  this.renderPage()
+                ) : (
+                  <Landing onConnect={() => this.onConnect()} />
+                )
             }
           </SContent>
+
+          <Modal show={showModal} toggleModal={this.toggleModal}>
+            {pendingRequest ? (
+              <SModalContainer>
+                <SModalTitle>{"Pending Call Request"}</SModalTitle>
+                <SContainer>
+                  <Loader />
+                  <SModalParagraph>
+                    {"Approve or reject request using your wallet"}
+                  </SModalParagraph>
+                </SContainer>
+              </SModalContainer>
+            ) : result ? (
+              <SModalContainer>
+                <SModalTitle>{"Call Request Approved"}</SModalTitle>
+                <ModalResult>{result}</ModalResult>
+              </SModalContainer>
+            ) : (
+              <SModalContainer>
+                <SModalTitle>{"Call Request Rejected"}</SModalTitle>
+              </SModalContainer>
+            )}
+          </Modal>
         </Column>
 
         <Footer
           locale={locale}
           connected={connected}
         />
-
-        <Modal show={showModal} toggleModal={this.toggleModal}>
-          {pendingRequest ? (
-            <SModalContainer>
-              <SModalTitle>{"Pending Call Request"}</SModalTitle>
-              <SContainer>
-                <Loader />
-                <SModalParagraph>
-                  {"Approve or reject request using your wallet"}
-                </SModalParagraph>
-              </SContainer>
-            </SModalContainer>
-          ) : result ? (
-            <SModalContainer>
-              <SModalTitle>{"Call Request Approved"}</SModalTitle>
-              <ModalResult>{result}</ModalResult>
-            </SModalContainer>
-          ) : (
-            <SModalContainer>
-              <SModalTitle>{"Call Request Rejected"}</SModalTitle>
-            </SModalContainer>
-          )}
-        </Modal>
       </SLayout>
     );
   };
