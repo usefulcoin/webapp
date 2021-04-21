@@ -18,6 +18,7 @@ export const GOVERNANCE = "Governance";
 // time frames
 export const HOUR = "HOUR";
 export const MINUTE = "MINUTE";
+export const NetworkContextName = 'NETWORK'
 
 // price pairs
 export const enabledPricePairs = [

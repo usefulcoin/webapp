@@ -11,7 +11,7 @@ import Torus from "@toruslabs/torus-embed";
 import Authereum from "authereum";
 // import { Bitski } from "bitski";
 
-
+import Web3ReactManager from './components/Web3ReactManager'
 import Column from "./components/Column";
 import Wrapper from "./components/Wrapper";
 import Modal from "./components/Modal";
@@ -370,67 +370,69 @@ class App extends React.Component<any, any> {
       locale
     } = this.state;
     return (
-      <SLayout>
-        <Header
-          locale={locale}
-          connected={connected}
-          address={address}
-          chainId={chainId}
-          killSession={this.resetApp}
-          setPage={(page: string) => {
-            this.setState({ page })
-          }}
-          currentPage={page}
-        />
+      <Web3ReactManager>
+        <SLayout>
+          <Header
+            locale={locale}
+            connected={connected}
+            address={address}
+            chainId={chainId}
+            killSession={this.resetApp}
+            setPage={(page: string) => {
+              this.setState({ page })
+            }}
+            currentPage={page}
+          />
 
-        <Column spanHeight >
-          <SContent>
-            {
-              fetching ? (
-                <Column center spanHeight>
+          <Column spanHeight >
+            <SContent>
+              {
+                fetching ? (
+                  <Column center spanHeight>
+                    <SContainer>
+                      <Loader />
+                    </SContainer>
+                  </Column>
+                )
+                  :
+                  !!assets && !!assets.length ? (
+                    this.renderPage()
+                  ) : (
+                    <Landing onConnect={() => this.onConnect()} />
+                  )
+              }
+            </SContent>
+
+            <Modal show={showModal} toggleModal={this.toggleModal}>
+              {pendingRequest ? (
+                <SModalContainer>
+                  <SModalTitle>{"Pending Call Request"}</SModalTitle>
                   <SContainer>
                     <Loader />
+                    <SModalParagraph>
+                      {"Approve or reject request using your wallet"}
+                    </SModalParagraph>
                   </SContainer>
-                </Column>
-              )
-                :
-                !!assets && !!assets.length ? (
-                  this.renderPage()
-                ) : (
-                  <Landing onConnect={() => this.onConnect()} />
-                )
-            }
-          </SContent>
+                </SModalContainer>
+              ) : result ? (
+                <SModalContainer>
+                  <SModalTitle>{"Call Request Approved"}</SModalTitle>
+                  <ModalResult>{result}</ModalResult>
+                </SModalContainer>
+              ) : (
+                <SModalContainer>
+                  <SModalTitle>{"Call Request Rejected"}</SModalTitle>
+                </SModalContainer>
+              )}
+            </Modal>
+          </Column>
 
-          <Modal show={showModal} toggleModal={this.toggleModal}>
-            {pendingRequest ? (
-              <SModalContainer>
-                <SModalTitle>{"Pending Call Request"}</SModalTitle>
-                <SContainer>
-                  <Loader />
-                  <SModalParagraph>
-                    {"Approve or reject request using your wallet"}
-                  </SModalParagraph>
-                </SContainer>
-              </SModalContainer>
-            ) : result ? (
-              <SModalContainer>
-                <SModalTitle>{"Call Request Approved"}</SModalTitle>
-                <ModalResult>{result}</ModalResult>
-              </SModalContainer>
-            ) : (
-              <SModalContainer>
-                <SModalTitle>{"Call Request Rejected"}</SModalTitle>
-              </SModalContainer>
-            )}
-          </Modal>
-        </Column>
-
-        <Footer
-          locale={locale}
-          connected={connected}
-        />
-      </SLayout>
+          <Footer
+            locale={locale}
+            connected={connected}
+          />
+        </SLayout>
+      </Web3ReactManager>
     );
   };
 }
