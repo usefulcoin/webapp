@@ -144,6 +144,7 @@ const INITIAL_STATE: IBetState = {
   currentRound: 0,// current oracle round
   locale: DEFAULT_LANG
 };
+
 class Trade extends React.Component<any, any> {
   // @ts-ignore
   public state: IBetState;

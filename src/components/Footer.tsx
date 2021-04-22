@@ -43,7 +43,7 @@ const Footer = (props: any) => (
          <SLink href="https://t.me/BIOPset" target="_"><RiTelegramLine/></SLink>
      </SLinks>
      {props.connected ? <></>:<LocaleToggle/>}
-     <p style={{color: `rgb(${colors.black})`}}>BIOPset © 2021 </p>
+     <p style={{color: `rgb(${colors.black})`}}>Settlement DAO © 2021 </p>
     
    
   </SFooter>
