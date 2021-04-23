@@ -29,51 +29,6 @@ const IconWrapper = styled.div<{ size?: number }>`
   }
 `
 
-// const Web3StatusGeneric = styled(RebassButton)`
-//   font-weight: 500;
-//   text-align: center;
-//   outline: none;
-//   text-decoration: none;
-//   display: flex;
-//   justify-content: center;
-//   flex-wrap: nowrap;
-//   position: relative;
-//   z-index: 1;
-//   border: 1px solid '#F00';
-//   color: '#F00';
-//   background-color: transparent;
-//   font-size: 16px;
-//   border-radius: 12px;
-//   padding: 10px;
-//   width: 100%;
-//   align-items: center;
-//   padding: 0.5rem;
-//   border-radius: 12px;
-//   cursor: pointer;
-//   user-select: none;
-//   :focus {
-//     outline: none;
-//   }
-//   &:focus {
-//     box-shadow: 0 0 0 1pt '#F00';
-//     border: 1px solid '#F00';
-//   }
-//   &:hover {
-//     border: 1px solid '#F00';
-//   }
-//   &:active {
-//     box-shadow: 0 0 0 1pt '#F00';
-//     border: 1px solid '#F00';
-//   }
-//   &:disabled {
-//     opacity: 50%;
-//     cursor: auto;
-//   }
-//   a:hover {
-//     text-decoration: none;
-//   }
-// `
-
 const Web3StatusError = styled(RebassButton)`
   font-weight: 500;
   :hover,

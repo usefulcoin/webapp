@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Web3 from "web3";
 
@@ -20,8 +20,8 @@ import Loader from "./components/Loader";
 import ModalResult from "./components/ModalResult";
 import AccountAssets from "./components/AccountAssets";
 import Footer from "./components/Footer";
-import Web3Status from "./components/Web3Status";
-
+import WalletModal from './components/WalletModal'
+import { useWalletModalToggle } from './redux/application/hooks'
 import { apiGetAccountAssets } from "./helpers/api";
 import {
   getChainData
@@ -95,42 +95,6 @@ const SBalances = styled(SLanding)`
   }
 `;
 
-
-
-interface IAppState {
-  fetching: boolean;
-  address: string;
-  web3: any;
-  provider: any;
-  connected: boolean;
-  chainId: number;
-  networkId: number;
-  assets: IAssetData[];
-  showModal: boolean;
-  pendingRequest: boolean;
-  result: any | null;
-  page: string;
-  locale: string;
-}
-
-
-
-const INITIAL_STATE: IAppState = {
-  fetching: false,
-  address: "",
-  web3: null,
-  provider: null,
-  connected: false,
-  chainId: 1,
-  networkId: 1,
-  assets: [],
-  showModal: false,
-  pendingRequest: false,
-  result: null,
-  page: BUY_BIOP,
-  locale: DEFAULT_LANG
-};
-
 function initWeb3(provider: any) {
   const web3: any = new Web3(provider);
 
@@ -147,47 +111,40 @@ function initWeb3(provider: any) {
   return web3;
 }
 
-class App extends React.Component<any, any> {
-  // @ts-ignore
-  public web3Modal: Web3Modal;
-  public state: IAppState;
+function App() {
+  const [page, setPage] = useState<string>(BUY_BIOP);
+  const [address, setAddress] = useState<string>("");
+  const [locale, setLocale] = useState<string>(DEFAULT_LANG)
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [fetching, setFetching] = useState<boolean>(false);
+  const [connected, setConnected] = useState<boolean>(false);
+  const [pendingRequest, setPendingRequest] = useState<boolean>(false);
+  const [chainId, setChainId] = useState<number>(1);
+  const [web3, setWeb3] = useState<any>();
+  // const [provider, setProvider] = useState<any>();
+  const [assets, setAssets] = useState<IAssetData[]>([]);
+  const [result, setResult] = useState<any | null>();
 
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      ...INITIAL_STATE
-    };
-
-    this.web3Modal = new Web3Modal({
-      network: this.getNetwork(),
-      cacheProvider: true,
-      providerOptions: this.getProviderOptions()
-    });
-  }
-
-  public componentDidMount() {
-    if (this.web3Modal.cachedProvider) {
-      this.onConnect();
-    }
-
-    const locale = localStorage.getItem('locale');
-    this.setState({ locale: locale !== null ? locale : DEFAULT_LANG });
-  }
-
-  public setPage(page: string) {
-    this.setState({
-      page
-    });
-  }
+  // constructor(props: any) {
+  //   super(props);
+  //   this.state = {
+  //     ...INITIAL_STATE
+  //   };
 
 
-  public onConnect = async () => {
+  // }
 
-    
+  // const componentDidMount() {
+  //   if (this.web3Modal.cachedProvider) {
+  //     this.onConnect();
+  //   }
+  // }
+
+  const onConnect = async () => {
     console.log('connect cliekc');
-    const provider = await this.web3Modal.connect();
+    const provider = await web3Modal.connect();
 
-    await this.subscribeProvider(provider);
+    await subscribeProvider(provider);
 
     const web3: any = initWeb3(provider);
 
@@ -195,51 +152,39 @@ class App extends React.Component<any, any> {
 
     const address = accounts[0];
 
-    const networkId = await web3.eth.net.getId();
-
     const chainId = await web3.eth.chainId();
-    
-    console.log(`got chain id curve ${chainId} networkid ${networkId} address ${address}`);
 
-
-    await this.setState({
-      web3,
-      provider,
-      connected: true,
-      address,
-      chainId,
-      networkId,
-    });
-    await this.getAccountAssets();
+    setWeb3(web3);
+    // setProvider(provider);
+    setConnected(true);
+    setAddress(address);
+    setChainId(chainId);
+    await getAccountAssets();
   };
 
-  public subscribeProvider = async (provider: any) => {
+  const subscribeProvider = async (provider: any) => {
     if (!provider.on) {
       return;
     }
-    provider.on("close", () => this.resetApp());
+    provider.on("close", () => resetApp());
     provider.on("accountsChanged", async (accounts: string[]) => {
-      await this.setState({ address: accounts[0] });
-      await this.getAccountAssets();
+      await setAddress(accounts[0]);
+      await getAccountAssets();
     });
     provider.on("chainChanged", async (chainId: number) => {
-      const { web3 } = this.state;
-      const networkId = await web3.eth.net.getId();
-      await this.setState({ chainId, networkId });
-      await this.getAccountAssets();
+      await setChainId(chainId);
+      await getAccountAssets();
     });
 
     provider.on("networkChanged", async (networkId: number) => {
-      const { web3 } = this.state;
-      const chainId = await web3.eth.chainId();
-      await this.setState({ chainId, networkId });
-      await this.getAccountAssets();
+      await setChainId(chainId);
+      await getAccountAssets();
     });
   };
 
-  public getNetwork = () => getChainData(this.state.chainId).network;
+  const getNetwork = () => getChainData(chainId).network;
 
-  public getProviderOptions = () => {
+  const getProviderOptions = () => {
     const providerOptions = {
       walletconnect: {
         package: WalletConnectProvider,
@@ -270,39 +215,38 @@ class App extends React.Component<any, any> {
     return providerOptions;
   };
 
-  public getAccountAssets = async () => {
-    const { address, chainId } = this.state;
-    this.setState({ fetching: true });
+  const getAccountAssets = async () => {
+    setFetching(true)
     try {
       // get account balances
-      const assets = await apiGetAccountAssets(address, chainId);
-      await this.setState({ fetching: false, assets });
+      setFetching(false);
+      const assets1 = await apiGetAccountAssets(address, chainId);
+      setAssets(assets1);
     } catch (error) {
       console.error(error); // tslint:disable-line
-      await this.setState({ fetching: false });
+      setFetching(false)
     }
   };
 
-  public toggleModal = () =>
-    this.setState({ showModal: !this.state.showModal });
+  const toggleModal = () => {
+    setShowModal(!showModal)
+  }
 
-  public resetApp = async () => {
-    const { web3 } = this.state;
+  const resetApp = async () => {
     if (web3 && web3.currentProvider && web3.currentProvider.close) {
       await web3.currentProvider.close();
     }
-    await this.web3Modal.clearCachedProvider();
-    this.setState({ ...INITIAL_STATE });
+    await web3Modal.clearCachedProvider();
+    // this.setState({ ...INITIAL_STATE });
   };
 
-  public renderPage = () => {
-    const {
-      assets,
-      chainId,
-      page,
-      web3,
-      address
-    } = this.state;
+  const web3Modal = new Web3Modal({
+    network: getNetwork(),
+    cacheProvider: true,
+    providerOptions: getProviderOptions()
+  });
+
+  const renderPage = () => {
     switch (page) {
       case BUY_BIOP:
         return (
@@ -319,7 +263,7 @@ class App extends React.Component<any, any> {
             chainId={chainId}
             web3={web3}
             openExercise={() => {
-              this.setState({ page: EXERCISE_EXPIRE })
+              setPage(EXERCISE_EXPIRE)
             }}
           />
         );
@@ -357,85 +301,81 @@ class App extends React.Component<any, any> {
     }
   }
 
-  public render = () => {
-    const {
-      assets,
-      address,
-      connected,
-      chainId,
-      fetching,
-      showModal,
-      pendingRequest,
-      result,
-      page,
-      locale
-    } = this.state;
-    return (
-      <Web3ReactManager>
-        <SLayout>
-          <Header
-            locale={locale}
-            connected={connected}
-            address={address}
-            chainId={chainId}
-            killSession={this.resetApp}
-            setPage={(page: string) => {
-              this.setState({ page })
-            }}
-            currentPage={page}
-          />
+  const toggleWalletModal = useWalletModalToggle()
 
-          <Column spanHeight >
-            <SContent>
-              {
-                fetching ? (
-                  <Column center spanHeight>
-                    <SContainer>
-                      <Loader />
-                    </SContainer>
-                  </Column>
-                )
-                  :
-                  !!assets && !!assets.length ? (
-                    this.renderPage()
-                  ) : (
-                    <Landing onConnect={() => this.onConnect()} />
-                  )
-              }
-            </SContent>
+  useEffect(() => {
+    setResult('AAA');
+    setPendingRequest(false);
+    const locale1 = localStorage.getItem('locale');
+    setLocale(locale1 !== null ? locale : DEFAULT_LANG);
+    toggleWalletModal();
+  }, [])
 
-            <Modal show={showModal} toggleModal={this.toggleModal}>
-              {pendingRequest ? (
-                <SModalContainer>
-                  <SModalTitle>{"Pending Call Request"}</SModalTitle>
+  return (
+    <Web3ReactManager>
+      <SLayout>
+        <Header
+          locale={locale}
+          connected={connected}
+          address={address}
+          chainId={chainId}
+          killSession={resetApp}
+          setPage={(page: string) => {
+            setPage(page)
+          }}
+          currentPage={page}
+        />
+
+        <Column spanHeight >
+          <SContent>
+            {
+              fetching ? (
+                <Column center spanHeight>
                   <SContainer>
                     <Loader />
-                    <SModalParagraph>
-                      {"Approve or reject request using your wallet"}
-                    </SModalParagraph>
                   </SContainer>
-                </SModalContainer>
-              ) : result ? (
-                <SModalContainer>
-                  <SModalTitle>{"Call Request Approved"}</SModalTitle>
-                  <ModalResult>{result}</ModalResult>
-                </SModalContainer>
-              ) : (
-                <SModalContainer>
-                  <SModalTitle>{"Call Request Rejected"}</SModalTitle>
-                </SModalContainer>
-              )}
-            </Modal>
-          </Column>
-          <Web3Status />
-          <Footer
-            locale={locale}
-            connected={connected}
-          />
-        </SLayout>
-      </Web3ReactManager>
-    );
-  };
+                </Column>
+              )
+                :
+                !!assets && !!assets.length ? (
+                  renderPage()
+                ) : (
+                  <Landing onConnect={onConnect} />
+                )
+            }
+          </SContent>
+
+          <Modal show={showModal} toggleModal={toggleModal}>
+            {pendingRequest ? (
+              <SModalContainer>
+                <SModalTitle>{"Pending Call Request"}</SModalTitle>
+                <SContainer>
+                  <Loader />
+                  <SModalParagraph>
+                    {"Approve or reject request using your wallet"}
+                  </SModalParagraph>
+                </SContainer>
+              </SModalContainer>
+            ) : result ? (
+              <SModalContainer>
+                <SModalTitle>{"Call Request Approved"}</SModalTitle>
+                <ModalResult>{result}</ModalResult>
+              </SModalContainer>
+            ) : (
+              <SModalContainer>
+                <SModalTitle>{"Call Request Rejected"}</SModalTitle>
+              </SModalContainer>
+            )}
+          </Modal>
+        </Column>
+        <WalletModal />
+        <Footer
+          locale={locale}
+          connected={connected}
+        />
+      </SLayout>
+    </Web3ReactManager>
+  );
 }
 
 export default App;
