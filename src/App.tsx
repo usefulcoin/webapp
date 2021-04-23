@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Web3 from "web3";
+import { Route, Redirect, Switch } from 'react-router-dom'
 
 import Web3Modal from "web3modal";
 // @ts-ignore
@@ -9,7 +10,6 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import Fortmatic from "fortmatic";
 import Torus from "@toruslabs/torus-embed";
 import Authereum from "authereum";
-// import { Bitski } from "bitski";
 
 import Web3ReactManager from './components/Web3ReactManager'
 import Column from "./components/Column";
@@ -18,7 +18,6 @@ import Modal from "./components/Modal";
 import Header from "./components/Header";
 import Loader from "./components/Loader";
 import ModalResult from "./components/ModalResult";
-import AccountAssets from "./components/AccountAssets";
 import Footer from "./components/Footer";
 import WalletModal from './components/WalletModal'
 import { useWalletModalToggle } from './redux/application/hooks'
@@ -28,10 +27,6 @@ import {
 } from "./helpers/utilities";
 import { IAssetData } from "./helpers/types";
 import {
-  TRADE,
-  EXERCISE_EXPIRE,
-  STAKE,
-  GOVERNANCE,
   BUY_BIOP,
   DEFAULT_LANG
 } from "./constants";
@@ -116,30 +111,15 @@ function App() {
   const [address, setAddress] = useState<string>("");
   const [locale, setLocale] = useState<string>(DEFAULT_LANG)
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [fetching, setFetching] = useState<boolean>(false);
   const [connected, setConnected] = useState<boolean>(false);
   const [pendingRequest, setPendingRequest] = useState<boolean>(false);
   const [chainId, setChainId] = useState<number>(1);
   const [web3, setWeb3] = useState<any>();
-  // const [provider, setProvider] = useState<any>();
+    // @ts-ignore
   const [assets, setAssets] = useState<IAssetData[]>([]);
   const [result, setResult] = useState<any | null>();
 
-  // constructor(props: any) {
-  //   super(props);
-  //   this.state = {
-  //     ...INITIAL_STATE
-  //   };
-
-
-  // }
-
-  // const componentDidMount() {
-  //   if (this.web3Modal.cachedProvider) {
-  //     this.onConnect();
-  //   }
-  // }
-
+  // @ts-ignore
   const onConnect = async () => {
     console.log('connect cliekc');
     const provider = await web3Modal.connect();
@@ -216,17 +196,13 @@ function App() {
   };
 
   const getAccountAssets = async () => {
-    setFetching(true)
     try {
       // get account balances
-      setFetching(false);
       const assets1 = await apiGetAccountAssets(address, chainId);
       setAssets(assets1);
     } catch (error) {
       console.error(error); // tslint:disable-line
-      setFetching(false)
     }
-    onConnect();
   };
 
   const toggleModal = () => {
@@ -247,61 +223,7 @@ function App() {
     providerOptions: getProviderOptions()
   });
 
-  const renderPage = () => {
-    switch (page) {
-      case BUY_BIOP:
-        return (
-          <ITCO
-            address={address}
-            chainId={chainId}
-            web3={web3}
-          />
-        );
-      case TRADE:
-        return (
-          <Trade
-            address={address}
-            chainId={chainId}
-            web3={web3}
-            openExercise={() => {
-              setPage(EXERCISE_EXPIRE)
-            }}
-          />
-        );
-      case EXERCISE_EXPIRE:
-        return (
-          <Exercise
-            address={address}
-            chainId={chainId}
-            web3={web3}
-          />
-        );
-      case STAKE:
-        return (
-          <Stake
-            address={address}
-            chainId={chainId}
-            web3={web3}
-          />
-        );
-      case GOVERNANCE:
-        return (
-          <Rewards
-            address={address}
-            chainId={chainId}
-            web3={web3}
-          />
-        );
-      default:// home page
-        return (
-          <SBalances>
-            <h3>Balance</h3>
-            <AccountAssets chainId={chainId} assets={assets} />{" "}
-          </SBalances>
-        );
-    }
-  }
-
+// @ts-ignore
   const toggleWalletModal = useWalletModalToggle()
 
   useEffect(() => {
@@ -328,7 +250,7 @@ function App() {
 
         <Column spanHeight >
           <SContent>
-            {
+            {/* {
               fetching ? (
                 <Column center spanHeight>
                   <SContainer>
@@ -342,7 +264,16 @@ function App() {
                 ) : (
                   <Landing onConnect={toggleWalletModal} />
                 )
-            }
+            } */}
+            <Switch>
+              <Route exact path="/home" component={Landing} />
+              <Route exact path="/buy" component={ITCO} />
+              <Route exact path="/trade" component={Trade} />
+              <Route exact path="/exercise" component={Exercise} />
+              <Route exact path="/stake" component={Stake} />
+              <Route exact path="/governance" component={Rewards} />
+              <Redirect to={{ ...location, pathname: '/home' }} />
+            </Switch>
           </SContent>
 
           <Modal show={showModal} toggleModal={toggleModal}>

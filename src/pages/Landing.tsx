@@ -4,9 +4,8 @@ import * as React from "react";
 import styled from "styled-components";
 import Column from 'src/components/Column';
 import ConnectButton from "../components/ConnectButton";
-// @ts-ignore
-import { ScrollDownIndicator } from 'react-landing-page';
 import { colors } from 'src/styles';
+// @ts-ignore
 import logo from "../assets/logo.png";
 import i18n from "../i18n";
 import { DEFAULT_LANG } from "src/constants";
@@ -84,11 +83,11 @@ class Landing extends React.Component<any, any> {
             <SLogo /><span>biopset</span>
           </SBrand>
           <h3 style={{ color: `rgb(${colors.black})`, maxWidth: 600 }}>
-            {i18n[locale].LANDING1}
+            {
+              // @ts-ignore
+              i18n[locale].LANDING2
+            }
           </h3>
-          <p style={{ fontSize: 36, color: `rgb(${colors.lightGrey})` }}>
-            {i18n[locale].LANDING2}
-          </p>
           <ConnectButton
             primary={true}
             locale={locale}
