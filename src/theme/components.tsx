@@ -3,7 +3,8 @@ import ReactGA from 'react-ga'
 import { Link } from 'react-router-dom'
 import styled, { keyframes } from 'styled-components'
 import { darken } from 'polished'
-import { ArrowLeft, X, ExternalLink as LinkIconFeather, Trash } from 'react-feather'
+import { X, ExternalLink as LinkIconFeather, Trash } from 'react-feather'
+import { colors } from '../styles'
 
 export const ButtonText = styled.button`
   outline: none;
@@ -23,8 +24,8 @@ export const ButtonText = styled.button`
   }
 `
 
-export const Button = styled.button.attrs<{ warning: boolean }, { backgroundColor: string }>(({ warning, theme }) => ({
-  backgroundColor: warning ? theme.red1 : theme.primary1
+export const Button = styled.button.attrs<{ warning: boolean }, { backgroundColor: string }>(({ warning }) => ({
+  backgroundColor: warning ? colors.red1 : colors.primary1
 }))`
   padding: 1rem 2rem 1rem 2rem;
   border-radius: 3rem;
@@ -34,7 +35,7 @@ export const Button = styled.button.attrs<{ warning: boolean }, { backgroundColo
   border: none;
   outline: none;
   background-color: ${({ backgroundColor }) => backgroundColor};
-  color: ${({ theme }) => theme.white};
+  color: ${colors.white};
   width: 100%;
 
   :hover,
@@ -47,8 +48,8 @@ export const Button = styled.button.attrs<{ warning: boolean }, { backgroundColo
   }
 
   :disabled {
-    background-color: ${({ theme }) => theme.bg1};
-    color: ${({ theme }) => theme.text4};
+    background-color: ${colors.bg1};
+    color: ${colors.text4};
     cursor: auto;
   }
 `
@@ -67,7 +68,7 @@ export const IconWrapper = styled.div<{ stroke?: string; size?: string; marginRi
   margin-right: ${({ marginRight }) => marginRight ?? 0};
   margin-left: ${({ marginLeft }) => marginLeft ?? 0};
   & > * {
-    stroke: ${({ theme, stroke }) => stroke ?? theme.blue1};
+    stroke: ${({ stroke }) => stroke ?? colors.blue1};
   }
 `
 
@@ -78,7 +79,7 @@ export const LinkStyledButton = styled.button<{ disabled?: boolean }>`
   background: none;
 
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-  color: ${({ theme, disabled }) => (disabled ? theme.text2 : theme.primary1)};
+  color: ${({ disabled }) => (disabled ? colors.text2 : colors.primary1)};
   font-weight: 500;
 
   :hover {
@@ -99,7 +100,7 @@ export const LinkStyledButton = styled.button<{ disabled?: boolean }>`
 export const StyledInternalLink = styled(Link)`
   text-decoration: none;
   cursor: pointer;
-  color: ${({ theme }) => theme.primary1};
+  color: ${colors.primary1};
   font-weight: 500;
 
   :hover {
@@ -119,7 +120,7 @@ export const StyledInternalLink = styled(Link)`
 const StyledLink = styled.a`
   text-decoration: none;
   cursor: pointer;
-  color: ${({ theme }) => theme.primary1};
+  color: ${colors.primary1};
   font-weight: 500;
 
   :hover {
@@ -162,14 +163,14 @@ export const LinkIcon = styled(LinkIconFeather)`
   height: 16px;
   width: 18px;
   margin-left: 10px;
-  stroke: ${({ theme }) => theme.blue1};
+  stroke: ${colors.blue1};
 `
 
 export const TrashIcon = styled(Trash)`
   height: 16px;
   width: 18px;
   margin-left: 10px;
-  stroke: ${({ theme }) => theme.text3};
+  stroke: ${colors.text3};
 
   cursor: pointer;
   align-items: center;
@@ -271,37 +272,12 @@ export const Spinner = styled.img`
   height: 16px;
 `
 
-const BackArrowLink = styled(StyledInternalLink)`
-  color: ${({ theme }) => theme.text1};
-`
-export function BackArrow({ to }: { to: string }) {
-  return (
-    <BackArrowLink to={to}>
-      <ArrowLeft />
-    </BackArrowLink>
-  )
-}
-
-export const CustomLightSpinner = styled(Spinner)<{ size: string }>`
-  height: ${({ size }) => size};
-  width: ${({ size }) => size};
-`
-
 export const HideSmall = styled.span`
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    display: none;
-  `};
 `
 
 export const HideExtraSmall = styled.span`
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-    display: none;
-  `};
 `
 
 export const ExtraSmallOnly = styled.span`
   display: none;
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-    display: block;
-  `};
 `

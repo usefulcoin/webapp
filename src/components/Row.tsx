@@ -24,7 +24,7 @@ const SRow = styled.div<IRowStyleProps>`
   justify-content: ${({ center }) => (center ? 'center' : 'flex-start')};
 `
 
-const Row = (props: IRowProps) => {
+const RowBetween = (props: IRowProps) => {
   const { children} = props
   return (
     <SRow
@@ -35,17 +35,17 @@ const Row = (props: IRowProps) => {
   )
 }
 
-Row.propTypes = {
+RowBetween.propTypes = {
   children: PropTypes.node.isRequired,
   spanHeight: PropTypes.bool,
   maxWidth: PropTypes.number,
   center: PropTypes.bool
 }
 
-Row.defaultProps = {
+RowBetween.defaultProps = {
   spanHeight: false,
   maxWidth: 600,
   center: false
 }
 
-export default Row
+export default RowBetween

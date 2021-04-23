@@ -16,7 +16,7 @@ const SColumn = styled.div<IColumnStyleProps>`
   position: relative;
   width: 100%;
   height: ${({ spanHeight }) => (spanHeight ? '100%' : 'auto')};
-  max-width: ${({ maxWidth }) => `${maxWidth}px`};
+  max-width: ${({ maxWidth }) => (maxWidth !== 0? `${maxWidth}px` : '100%')};
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -44,7 +44,7 @@ Column.propTypes = {
 
 Column.defaultProps = {
   spanHeight: false,
-  maxWidth: '100%',
+  maxWidth: 0,
   center: false
 }
 

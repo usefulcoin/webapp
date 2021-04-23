@@ -7,7 +7,7 @@ import Down from "../assets/down.png";
 
 const OptionDirection = (props: any) => {
     const {optionType} = props;
-    // tslint:disable-next-line:no-console
+    
     console.log(`option type ${optionType}, typ ${typeof(optionType)}`);
 
     if (optionType) {

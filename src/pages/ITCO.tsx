@@ -181,9 +181,9 @@ class Trade extends React.Component<any, any> {
     const { chainId, web3 } = this.state;
     const data: any = await callITCOAmountSold(chainId, web3);
 
-    // tslint:disable-next-line:no-console
+    
     console.log(`sold ${data} curtier ${data}`);
-    // tslint:disable-next-line:no-console
+    
     console.log(data);
     const tier = data[0];
     const price = data[1];
@@ -198,9 +198,9 @@ class Trade extends React.Component<any, any> {
   public async updateToReceive(spend: any) {
     const { price, web3 } = this.state
     try {
-      // tslint:disable-next-line:no-console
+      
       console.log(`setting toReceive with spend ${spend} and price ${price}`);
-      // tslint:disable-next-line:no-console
+      
       console.log(`toReceive becomes: ${divide(web3.utils.toWei(`${spend}`), price)}`);
       this.setState({ toReceive: divide(web3.utils.toWei(`${spend}`), price), error: "" });
     } catch (e) {

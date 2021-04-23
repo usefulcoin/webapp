@@ -20,7 +20,8 @@
     "noUnusedLocals": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["react-spring", "jest"],
   },
   "exclude": [
     "node_modules",

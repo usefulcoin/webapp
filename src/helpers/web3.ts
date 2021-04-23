@@ -11,7 +11,7 @@ export function blockTimestamp(blockNumber: string, web3: any) {
     try {
       const block = await web3.eth.getBlock(blockNumber);
 
-      // tslint:disable-next-line:no-console
+      
       console.log(` raw block is ${block}`);
       resolve(block.timestamp * 1000);
     } catch (e) {
@@ -56,9 +56,9 @@ export function getLatestPrice(chainId: number, web3: any) {
           if (err) {
             reject(err)
           }
-          // tslint:disable-next-line:no-console
+          
           console.log(data);
-          // tslint:disable-next-line:no-console
+          
           console.log("^ data is here");
           resolve(data.answer);
         }
@@ -77,13 +77,13 @@ export function callCurrentRoundID(chainId: number, web3: any, oracle: any) {
           if (err) {
             reject(err)
           }
-          // tslint:disable-next-line:no-console
+          
           console.log(data);
-          // tslint:disable-next-line:no-console
+          
           console.log("^ data is here");
-          // tslint:disable-next-line:no-console
+          
           console.log(data.roundId);
-          // tslint:disable-next-line:no-console
+          
           console.log("^ round id is here");
           resolve(data.roundId);
         }
@@ -124,7 +124,7 @@ export function getDirectRate(currentPrice: number, pair: string, dir: boolean, 
 
     } catch (e) {
 
-      // tslint:disable-next-line:no-console
+      
       console.log(`caught error ${e}`);
       reject(e);
     }
@@ -150,7 +150,7 @@ function optionStack(bo: any, direction: boolean) {
 
     } catch (e) {
 
-      // tslint:disable-next-line:no-console
+      
       console.log(`caught error ${e}`);
       reject(e);
     }
@@ -165,7 +165,7 @@ export function getRate(currentPrice: number, pair: string, dir: boolean, time: 
     try {
       const bo = getBOContract(chainId, web3)
       const max = await callPoolMaxAvailable(chainId, web3);
-      // tslint:disable-next-line:no-console
+      
       console.log(`max is ${max} pair ${pair}, time ${time}, amount ${amount}, chainID: ${chainId}`);
       await bo.methods
         .getRate(pair, max, amount, currentPrice, time, dir)
@@ -181,7 +181,7 @@ export function getRate(currentPrice: number, pair: string, dir: boolean, time: 
         )
     } catch (e) {
 
-      // tslint:disable-next-line:no-console
+      
       console.log(`caught error ${e}`);
       reject(e);
     }
@@ -486,7 +486,7 @@ export function sendV2ApproveV3(amount: any, address: string, chainId: number, w
   return new Promise(async (resolve, reject) => {
     const bp = getV2TokenContract(chainId, web3)
     // const ts = await callV2BIOPTotalSupply(chainId, web3);
-    // tslint:disable-next-line:no-console
+    
     // console.log(`sending v2v3 approve with ts ${ts}`);
 
     await bp.methods
@@ -507,16 +507,16 @@ export function initiateSwapIfAvailable(address: string, chainId: number, web3: 
   return new Promise(async (resolve, reject) => {
     const balance = await callV2BIOPBalance(address, chainId, web3);
 
-    // tslint:disable-next-line:no-console
+    
     console.log(`biop v2 balance is ${balance} type ${typeof (balance)}`);
 
     // tslint:disable-next-line
     if (greaterThan(balance, 0)) {
       if (window.confirm("BIOP v2 balance detected. Do you want to swap to v3?")) {
-        // tslint:disable-next-line:no-console
+        
         console.log(`user has v2 balance so we initiate swap`);
         const approved = await callV2BIOPV3Approved(address, chainId, web3);
-        // tslint:disable-next-line:no-console
+        
         console.log(`user has v2approved ${approved} amd balance ${balance}`);
 
         // user has v2 balance so we initiate swap
@@ -571,7 +571,7 @@ export function getITCOContract(chainId: number, web3: any) {
 
 export function buyFromITCO(amount: number, address: string, chainId: number, web3: any) {
 
-  // tslint:disable-next-line:no-console
+  
   console.log(`buying itco with amount eth ${amount}`);
   return new Promise(async (resolve, reject) => {
     await web3.eth.sendTransaction({
@@ -741,7 +741,7 @@ export function callSoldAmount(chainId: number, web3: any) {
             reject(err)
           }
 
-          // tslint:disable-next-line:no-console
+          
           console.log(`biop raw balance is ${data}`);
           resolve(data)
         }
@@ -777,7 +777,7 @@ export function callPoolMaxAvailable(chainId: number, web3: any): Promise<string
         { from: zeroAddress },
         (err: any, data: any) => {
           if (err) {
-            // tslint:disable-next-line:no-console
+            
             console.log(err);
 
             reject(0)
@@ -828,11 +828,11 @@ export function callPoolStakedBalance(address: string, chainId: number, web3: an
 export function sendDeposit(address: string, amount: string, chainId: number, web3: any, onComplete: any) {
   return new Promise(async (resolve, reject) => {
     const pool = getBOContract(chainId, web3);
-    // tslint:disable-next-line:no-console
+    
     console.log(`depoyts`);
-    // tslint:disable-next-line:no-console
+    
     console.log(amount);
-    // tslint:disable-next-line:no-console
+    
     console.log(bigNumberStringToInt(amount));
     await pool.methods
       .stake()
@@ -853,11 +853,11 @@ export function sendDeposit(address: string, amount: string, chainId: number, we
 
 export function sendWithdrawGuarded(address: string, amount: string, chainId: number, web3: any, onComplete: any) {
   return new Promise(async (resolve, reject) => {
-    // tslint:disable-next-line:no-console
+    
     console.log(`depoyts`);
-    // tslint:disable-next-line:no-console
+    
     console.log(amount);
-    // tslint:disable-next-line:no-console
+    
     console.log(bigNumberStringToInt(amount));
     const lockedAmount: any = await getPoolLockedAmount(chainId, web3);
 
@@ -962,7 +962,7 @@ export function callMaxMin(chainId: number, web3: any) {
       const min = callMinRounds(chainId, web3);
       resolve({ max, min });
     } catch (e) {
-      // tslint:disable-next-line:no-console 
+       
       console.log(`error loading max min ${e}`);
       reject({ max: 3, min: 1 });
     }
@@ -975,29 +975,29 @@ export function callMaxMin(chainId: number, web3: any) {
 export function makeBet(address: string, amount: string, callOption: boolean, time: number, priceProvider: string, chainId: number, web3: any, onComplete: any) {
   return new Promise(async (resolve, reject) => {
 
-    // tslint:disable-next-line:no-console 
+     
     console.log(`make bet 2  senbt vy ${address} priceprovider ${priceProvider}, amount ${amount}`);
     const pool = getBOContract(chainId, web3);
 
 
 
     const formattedAmount = bigNumberStringToInt(amount);
-    // tslint:disable-next-line:no-console 
+     
     console.log(`bet amuynt raw type ${typeof (amount)}`);
-    // tslint:disable-next-line:no-console 
+     
     console.log(`bet amuynt raw ${amount}`);
-    // tslint:disable-next-line:no-console
+    
     console.log(`bet amuynt raw ${formattedAmount}`);
 
     const poolLockedAmount = await getPoolLockedAmount(chainId, web3);
-    // tslint:disable-next-line:no-console
+    
     console.log(`pool locked amount${poolLockedAmount}`);
-    // tslint:disable-next-line:no-console
+    
     console.log(`formatted amount ${formattedAmount}`);
-    // tslint:disable-next-line:no-console
+    
     //   console.log(`possible payout ${possiblePaout}`);
 
-    // tslint:disable-next-line:no-console
+    
     console.log(`${callOption} ${priceProvider} ${time} ${BO_CONTRACT[chainId].address}`);
     await pool.methods
       .bet(callOption, priceProvider, time)
@@ -1020,7 +1020,7 @@ export function getPossiblePayout(amount: string, web3: any, chainId: number) {
   return new Promise(async (resolve, reject) => {
     const bin = getBOContract(chainId, web3);
     const formattedAmount = bigNumberStringToInt(amount);
-    // tslint:disable-next-line:no-console
+    
     console.log(`formatted amount ${formattedAmount}`);
     await bin.methods
       .calculatePossiblePayout(formattedAmount)
@@ -1077,7 +1077,7 @@ export function getOptionData(optionId: any, web3: any, chainId: number) {
 export function sendComplete(address: string, optionId: any, chainId: number, web3: any, onComplete: any) {
   return new Promise(async (resolve, reject) => {
     const bin = getBOContract(chainId, web3);
-    // tslint:disable-next-line:no-console
+    
     console.log(`expiring option #${optionId}`);
     await bin.methods
       .complete(optionId)

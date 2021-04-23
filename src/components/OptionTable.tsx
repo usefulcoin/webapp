@@ -33,21 +33,21 @@ const OptionTable = (props: any) => {
     function renderExpireExercise(option: any) {
         const { currentPrice, handleComplete, currentRound } = props;
 
-            // tslint:disable-next-line:no-console
+            
             console.log(`${add(option.exp,option.purchaseRound)} exp round ${currentRound} current round ${currentPrice} for option `);
-            // tslint:disable-next-line:no-console
+            
             console.log(option);
-            // tslint:disable-next-line:no-console
+            
             console.log(option.strikePrice > currentPrice);
-            // tslint:disable-next-line:no-console
+            
             console.log(`${typeof(option.strikePrice)} ${typeof(currentPrice)}`);
-            // tslint:disable-next-line:no-console
+            
             console.log(option.type === false);
-            // tslint:disable-next-line:no-console
+            
             console.log(`${typeof(option.type)} `);
-            // tslint:disable-next-line:no-console
+            
             console.log(smallerThan(option.purchaseRound,currentRound));
-            // tslint:disable-next-line:no-console
+            
             console.log(`${typeof(option.purchaseRound)} ${typeof(currentRound)}`);
         if (option.expired) { 
             return <Button disabled outline={true} color={`rgb(${colors.black})`}>Settled for {convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH</Button>;
@@ -59,12 +59,12 @@ const OptionTable = (props: any) => {
         } /* else if (option.type === false && option.strikePrice > currentPrice && smallerThan(option.purchaseRound,currentRound)) {
             // put option ready to exercise
 
-            // tslint:disable-next-line:no-console
+            
             console.log(`${option.strikePrice} stik ${currentPrice} current`);
             return <Button onClick={() => handleExercise(option.id)}>Exercise ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH) Put</Button>;
         } else if (option.type === true && option.strikePrice < currentPrice && smallerThan(option.purchaseRound, currentRound)) {
             // call option ready to exercise
-            // tslint:disable-next-line:no-console
+            
             console.log(`${option.strikePrice} stik ${currentPrice} current`);
             return <Button onClick={() => handleExercise(option.id)}>Exercise ({convertToDecimals(web3.utils.fromWei(`${option.lockedValue}`, "ether"), 3)}  ETH) {option.type ? "Call" : "Put"}</Button>;
         } */ else {
@@ -79,9 +79,9 @@ const OptionTable = (props: any) => {
     const width = window.innerWidth;
     const height = window.innerHeight;
     if (options.length > 0) {
-        // tslint:disable-next-line:no-console
+        
         console.log("showing options!!!");
-        // tslint:disable-next-line:no-console
+        
         console.log(options);
         return (
             <STable>

@@ -72,9 +72,9 @@ class Stake extends React.Component<any, any> {
         const biopBalance = await callBIOPBalance(address, chainId, web3);
 
 
-            // tslint:disable-next-line:no-console
+            
             console.log("presend");
-            // tslint:disable-next-line:no-console
+            
             console.log(biopBalance);
         this.setState({biopBalance})
     }
@@ -85,9 +85,9 @@ class Stake extends React.Component<any, any> {
         const biopPendingBalance = await callBIOPPendingBalance(address, chainId, web3);
 
 
-            // tslint:disable-next-line:no-console
+            
             console.log("presend");
-            // tslint:disable-next-line:no-console
+            
             console.log(biopPendingBalance);
         this.setState({biopPendingBalance})
     }

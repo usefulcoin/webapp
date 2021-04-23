@@ -6,9 +6,11 @@ import { SUPPORTED_WALLETS } from '../../constants'
 import { injected } from '../../connectors'
 import { darken } from 'polished'
 import Loader from '../Loader'
+import { colors } from '../../styles'
 
 const PendingSection = styled.div`
-  ${({ theme }) => theme.flexColumnNoWrap};
+  display: flex;
+  flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -22,13 +24,14 @@ const StyledLoader = styled(Loader)`
 `
 
 const LoadingMessage = styled.div<{ error?: boolean }>`
-  ${({ theme }) => theme.flexRowNoWrap};
+  display: flex;
+  flex-flow: column nowrap;
   align-items: center;
   justify-content: flex-start;
   border-radius: 12px;
   margin-bottom: 20px;
-  color: ${({ theme, error }) => (error ? theme.red1 : 'inherit')};
-  border: 1px solid ${({ theme, error }) => (error ? theme.red1 : theme.text4)};
+  color: ${({ error }) => (error ? colors.red1 : 'inherit')};
+  border: 1px solid ${({ error }) => (error ? colors.red1 : colors.text4)};
 
   & > * {
     padding: 1rem;
@@ -36,7 +39,8 @@ const LoadingMessage = styled.div<{ error?: boolean }>`
 `
 
 const ErrorGroup = styled.div`
-  ${({ theme }) => theme.flexRowNoWrap};
+  display: flex;
+  flex-flow: row nowrap;
   align-items: center;
   justify-content: flex-start;
 `
@@ -44,8 +48,8 @@ const ErrorGroup = styled.div`
 const ErrorButton = styled.div`
   border-radius: 8px;
   font-size: 12px;
-  color: ${({ theme }) => theme.text1};
-  background-color: ${({ theme }) => theme.bg4};
+  color: ${colors.text1};
+  background-color: ${colors.bg4};
   margin-left: 1rem;
   padding: 0.5rem;
   font-weight: 600;
@@ -53,12 +57,13 @@ const ErrorButton = styled.div`
 
   &:hover {
     cursor: pointer;
-    background-color: ${({ theme }) => darken(0.1, theme.text4)};
+    background-color: ${darken(0.1, colors.text4)};
   }
 `
 
 const LoadingWrapper = styled.div`
-  ${({ theme }) => theme.flexRowNoWrap};
+  display: flex;
+  flex-flow: row nowrap;
   align-items: center;
   justify-content: center;
 `

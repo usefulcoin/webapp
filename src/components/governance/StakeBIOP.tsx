@@ -89,15 +89,15 @@ class StakeBIOP extends React.Component<any, any> {
     public async getCurrentBalance() {
         const {chainId, web3, address} = this.state;
         
-        // tslint:disable-next-line:no-console
+        
         console.log(`getting balcen with id ${chainId}`);
         const biopBalance = await callBIOPBalance(address, chainId, web3);
         const staked = await callDGovStaked(address, chainId, web3);
 
 
-            // tslint:disable-next-line:no-console
+            
             console.log("presend");
-            // tslint:disable-next-line:no-console
+            
             console.log(biopBalance);
             this.setState({biopBalance, staked});
     }
@@ -161,7 +161,7 @@ class StakeBIOP extends React.Component<any, any> {
     public buttons() {
         const {approved, biopBalance} = this.state;
         
-            // tslint:disable-next-line:no-console
+            
             console.log(`approved ${approved} ${biopBalance}`);
         if (approved >= biopBalance) {
             return <SRow ><><Button disabled>Approved✅</Button></><SLarge>→</SLarge><SCol><Button onClick={() => this.handleStake()}>Stake</Button><Button onClick={() => this.handleWithdraw()}>Withdraw</Button></SCol></SRow>;

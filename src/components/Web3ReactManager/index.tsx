@@ -7,6 +7,7 @@ import { network } from '../../connectors'
 import { useEagerConnect, useInactiveListener } from '../../hooks'
 import { NetworkContextName } from '../../constants'
 import Loader from '../Loader'
+import { colors } from '../../styles'
 
 const MessageWrapper = styled.div`
   display: flex;
@@ -16,7 +17,7 @@ const MessageWrapper = styled.div`
 `
 
 const Message = styled.h2`
-  color: ${({ theme }) => theme.secondary1};
+  color: ${colors.secondary1};
 `
 
 export default function Web3ReactManager({ children }: { children: JSX.Element }) {

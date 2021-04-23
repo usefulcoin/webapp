@@ -68,19 +68,19 @@ class ITCOChart extends React.Component<any, any> {
           x.push([i, greaterThanOrEqual(tier, i) ? parseFloat(divide(prices[i-1], 1000000000000000000)) : parseFloat("0"), greaterThanOrEqual(tier, i) ? parseFloat("0") : parseFloat(divide(prices[i-1], 1000000000000000000))])
         }
 
-            // tslint:disable-next-line:no-console
+            
             console.log("set graph data to:");
-            // tslint:disable-next-line:no-console
+            
             console.log(x);
 
-            // tslint:disable-next-line:no-console
+            
             console.log(`tier is : ${tier} type ${typeof(tier)}`);
         this.setState({ 
             pendingRequest: false,
             data: x,
           }); 
       } catch(e) {
-            // tslint:disable-next-line:no-console
+            
             console.log(e);
             this.setState({pendingRequest: false, error: "Request failed"});
 

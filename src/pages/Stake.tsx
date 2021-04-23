@@ -82,9 +82,9 @@ class Stake extends React.Component<any, any> {
         const poolBalance = await getETHBalance(BO_CONTRACT[chainId].address, web3);
 
 
-            // tslint:disable-next-line:no-console
+            
             console.log("presend");
-            // tslint:disable-next-line:no-console
+            
             console.log(nextWithdraw);
         this.setState({totalStaked, staked, nextWithdraw, locktotalLocked, poolBalance})
     }
@@ -97,11 +97,11 @@ class Stake extends React.Component<any, any> {
         if (changeAmount > 0) {
 
         await sendWithdrawGuarded(address, web3.utils.toWei(changeAmount, "ether"), chainId, web3, (param1: any, param2: any) => {
-            // tslint:disable-next-line:no-console
+            
             console.log("confirmed");
-            // tslint:disable-next-line:no-console
+            
             console.log(param1);
-            // tslint:disable-next-line:no-console
+            
             console.log(param2);
             this.getStaked();
             this.setState({pendingRequest: false, error: "", changeAmount: 0});
@@ -124,11 +124,11 @@ class Stake extends React.Component<any, any> {
             // tslint:disable-next-line
             alert("Your deposit amount will be (soft) locked for 14 days.");
             await sendDeposit(address, web3.utils.toWei(changeAmount, "ether"), chainId, web3, (param1: any, param2: any) => {
-                // tslint:disable-next-line:no-console
+                
                 console.log("confirmed");
-                // tslint:disable-next-line:no-console
+                
                 console.log(param1);
-                // tslint:disable-next-line:no-console
+                
                 console.log(param2);
                 this.getStaked();
                 this.setState({pendingRequest: false, error: "", changeAmount: 0});
@@ -145,9 +145,9 @@ class Stake extends React.Component<any, any> {
             const unlock = new Date(nextWithdraw*1000);// add 1 days
             const now = new Date();
             const lockInPlace = unlock.getTime() > now.getTime();
-            // tslint:disable-next-line:no-console
+            
             console.log(unlock.getTime());
-            // tslint:disable-next-line:no-console
+            
             console.log(now.getTime());
                 return (
                     <div>

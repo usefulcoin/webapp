@@ -217,7 +217,7 @@ class Trade extends React.Component<any, any> {
     const { chainId, web3 } = this.state;
     const ti = await getTotalInterchange(web3, chainId);
 
-    // tslint:disable-next-line:no-console
+    
     console.log(`interschange is ${ti}`);
     this.setState({ totalInterchange: ti });
   }
@@ -226,7 +226,7 @@ class Trade extends React.Component<any, any> {
     const { chainId, web3 } = this.state;
     const fee = await callBetFee(chainId, web3);
 
-    // tslint:disable-next-line:no-console
+    
     console.log(`fee is ${fee}`);
     this.setState({ betFee: fee });
   }
@@ -235,7 +235,7 @@ class Trade extends React.Component<any, any> {
     const { chainId, web3 } = this.state;
     const latestPrice = await getLatestPrice(chainId, web3);
 
-    // tslint:disable-next-line:no-console
+    
     console.log(`latestRound is ${latestPrice}`);
     this.setState({ currentPrice: latestPrice });
   }
@@ -250,9 +250,9 @@ class Trade extends React.Component<any, any> {
     const cr: any = await callCurrentRoundID(chainId, web3, enabledPricePairs[0].address);
     const massagedOptions = {};
     for (let i = 0; i < options.length; i++) {
-      // tslint:disable-next-line:no-console
+      
       console.log(`loaded event ${options[i].returnValues.account} purchase round:${options[i].pR} ${address}`);
-      // tslint:disable-next-line:no-console
+      
       console.log(options[i]);
 
       if (options[i].returnValues) {
@@ -274,17 +274,17 @@ class Trade extends React.Component<any, any> {
 
     }
 
-    // tslint:disable-next-line:no-console
+    
     console.log("massaged options");
-    // tslint:disable-next-line:no-console
+    
     console.log(massagedOptions);
 
     // load exercise/expire events
     const completeEvents: any = await getOptionCloses(chainId, web3, blockNum);
     for (let i = 0; i < completeEvents.length; i++) {
-      // tslint:disable-next-line:no-console
+      
       console.log(`found option #1 ${completeEvents[i].returnValues}`);
-      // tslint:disable-next-line:no-console
+      
       console.log(completeEvents[i]);
 
 
@@ -303,9 +303,9 @@ class Trade extends React.Component<any, any> {
 
     const sorted = Object.keys(massagedOptions).sort((a: any, b: any) => b - a);
 
-    // tslint:disable-next-line:no-console
+    
     console.log(`sorted $`);
-    // tslint:disable-next-line:no-console
+    
     console.log(sorted);
     const sortedOptions: any = [];
     sorted.forEach((id: any) => {
@@ -314,12 +314,12 @@ class Trade extends React.Component<any, any> {
       }
     });
 
-    // tslint:disable-next-line:no-console
+    
     console.log(`sorted options`);
-    // tslint:disable-next-line:no-console
+    
     console.log(sortedOptions);
 
-    // tslint:disable-next-line:no-console
+    
     this.setState({ userOptions: sortedOptions, currentRound: cr });
   }
 
@@ -331,10 +331,10 @@ class Trade extends React.Component<any, any> {
     let maxBet: string = await callPoolMaxAvailable(chainId, web3);
     maxBet = divide(maxBet, 10);
     maxBet = divide(maxBet, openOptions)
-    // tslint:disable-next-line:no-console
+    
     console.log(`type ${maxBet} maxBet`);
 
-    // tslint:disable-next-line:no-console
+    
     console.log("presend");
     this.setState({ totalStaked, staked, maxBet });
   }
@@ -359,16 +359,16 @@ class Trade extends React.Component<any, any> {
 
   public async updateRate() {
     const { chainId, web3, maxBet, betDirection, openOptions, rounds, betAmount, currentPrice, pair } = this.state;
-    // tslint:disable-next-line:no-console
+    
     console.log(`maxBet ${convertAmountFromRawNumber(maxBet, 18)}. bet size ${betAmount}`);
     if (greaterThan(betAmount, convertAmountFromRawNumber(maxBet, 18))) {
-      // tslint:disable-next-line:no-console
+      
       console.log(`bet to big`);
       this.setState({ amountToWin: "invalid" });
     } else {
 
       const amountToWin = await getDirectRate(currentPrice, pair.address, betDirection, rounds, openOptions, web3.utils.toWei(`${betAmount}`, "ether"), chainId, web3);
-      // tslint:disable-next-line:no-console
+      
       console.log(`new amountToWin ${amountToWin}.`);
       this.setState({ amountToWin: formatFixedDecimals(`${web3.utils.fromWei(`${amountToWin}`, "ether")}`, 5) });
       this.loadBetFee();
@@ -378,14 +378,14 @@ class Trade extends React.Component<any, any> {
 
   public async handleMakeBet(direction: boolean) {
     const { betAmount, web3, chainId, address, rounds, pair } = this.state;
-    // tslint:disable-next-line:no-console
+    
     console.log(`makeBet 1`);
     this.setState({ pendingRequest: true, lastBetCall: direction });
     try {
       await makeBet(address, web3.utils.toWei(`${betAmount}`, "ether"), direction, rounds, pair.address, chainId, web3, (param1: any, param2: any) => {
-        // tslint:disable-next-line:no-console
+        
         console.log(`makeBet ${param1} maxBet`);
-        // tslint:disable-next-line:no-console
+        
         console.log(param1, param2);
         this.getStaked();
         this.setState({ error: "", pendingRequest: false, hasBet: true });
@@ -393,7 +393,7 @@ class Trade extends React.Component<any, any> {
 
     } catch (e) {
 
-      // tslint:disable-next-line:no-console
+      
       console.log(e);
       this.setState({ error: "Betting Failed", pendingRequest: false });
     }
@@ -406,11 +406,11 @@ class Trade extends React.Component<any, any> {
     const { address, chainId, web3 } = this.state
     try {
 
-      // tslint:disable-next-line:no-console
+      
       console.log(`sending exercise for opton ${optionId}`);
       await sendComplete(address, optionId, chainId, web3, (p1: any, p2: any) => {
 
-        // tslint:disable-next-line:no-console
+        
         console.log(p1, p2);
         this.loadUserOptions();
         this.setState({ error: "", pendingRequest: false });
@@ -453,7 +453,7 @@ class Trade extends React.Component<any, any> {
     return (
       <SSelect onChange={(e) => {
 
-        // tslint:disable-next-line:no-console
+        
         console.log(`type ${typeof (e.target.value)}`);
         this.setState({
           pair: JSON.parse(e.target.value)
@@ -544,9 +544,9 @@ class Trade extends React.Component<any, any> {
   public renderBetApprove() {
     const { pair, betDirection, currentPrice } = this.state;
 
-    // tslint:disable-next-line:no-console
+    
     console.log(`rerender chart with pair ${pair} currentPrice ${currentPrice}`);
-    // tslint:disable-next-line:no-console
+    
     console.log(pair);
     return (
       <SBetter>
@@ -561,7 +561,7 @@ class Trade extends React.Component<any, any> {
   public render() {
     const { currentRound, totalInterchange, web3, currentPrice, userOptions, pendingRequest, error, hasBet, lastBetCall } = this.state;
     // const { openExercise } = this.props;
-    // tslint:disable-next-line:no-console
+    
     console.log(`userOptions here ${userOptions}`);
     return (
       <SBet>

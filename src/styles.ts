@@ -2,8 +2,6 @@ import background from "./assets/background.png";
 import backgroundDark from "./assets/background-dark.png";
 const darkMode = localStorage.getItem('darkMode');
 const isDarkMode = darkMode === 'true' ? true : false;
-// tslint:disable-next-line:no-console
-console.log(`darkMode: ${isDarkMode} type ${typeof(isDarkMode)}`);
 
 export const colors = {
   white: isDarkMode ? '0, 0, 0' : '255, 255, 255',
@@ -27,8 +25,49 @@ export const colors = {
   navFontColor: '#A7A7A7',
   navActiveFontColor: '#707070',
   connectButtonColor: '#0067CE',
-  purple: '110, 107, 233'
+  purple: '110, 107, 233',
+  // text
+  text1: isDarkMode ? '#FFFFFF' : '#000000',
+  text2: isDarkMode ? '#C3C5CB' : '#565A69',
+  text3: isDarkMode ? '#6C7284' : '#888D9B',
+  text4: isDarkMode ? '#565A69' : '#C3C5CB',
+  text5: isDarkMode ? '#2C2F36' : '#EDEEF2',
 
+  // backgrounds / greys
+  bg1: isDarkMode ? '#212429' : '#FFFFFF',
+  bg2: isDarkMode ? '#2C2F36' : '#F7F8FA',
+  bg3: isDarkMode ? '#40444F' : '#EDEEF2',
+  bg4: isDarkMode ? '#565A69' : '#CED0D9',
+  bg5: isDarkMode ? '#6C7284' : '#888D9B',
+
+  //specialty colors
+  modalBG: isDarkMode ? 'rgba(0,0,0,.425)' : 'rgba(0,0,0,0.3)',
+  advancedBG: isDarkMode ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.6)',
+  shadow1: isDarkMode ? '#000' : '#2F80ED',
+
+  //primary colors
+  primary1: isDarkMode ? '#2172E5' : '#ff007a',
+  primary2: isDarkMode ? '#3680E7' : '#FF8CC3',
+  primary3: isDarkMode ? '#4D8FEA' : '#FF99C9',
+  primary4: isDarkMode ? '#376bad70' : '#F6DDE8',
+  primary5: isDarkMode ? '#153d6f70' : '#FDEAF1',
+
+  // color text
+  primaryText1: isDarkMode ? '#6da8ff' : '#ff007a',
+
+  // secondary colors
+  secondary1: isDarkMode ? '#2172E5' : '#ff007a',
+  secondary2: isDarkMode ? '#17000b26' : '#F6DDE8',
+  secondary3: isDarkMode ? '#17000b26' : '#FDEAF1',
+
+  // other
+  red1: '#FD4040',
+  red2: '#F82D3A',
+  red3: '#D60000',
+  green1: '#27AE60',
+  yellow1: '#FFE270',
+  yellow2: '#F3841E',
+  blue1: '#2172E5',
 }
 
 export const fonts = {

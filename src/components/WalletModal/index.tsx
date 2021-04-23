@@ -6,7 +6,7 @@ import { isMobile } from 'react-device-detect'
 import ReactGA from 'react-ga'
 import styled from 'styled-components'
 import MetamaskIcon from '../../assets/images/metamask.png'
-import { ReactComponent as Close } from '../../assets/images/x.svg'
+import Close from '../../assets/images/x.svg'
 import { fortmatic, injected, portis } from '../../connectors'
 import { OVERLAY_READY } from '../../connectors/Fortmatic'
 import { SUPPORTED_WALLETS } from '../../constants'
@@ -15,6 +15,7 @@ import { ApplicationModal } from '../../redux/application/actions'
 import { useModalOpen, useWalletModalToggle } from '../../redux/application/hooks'
 import { ExternalLink } from '../../theme/components'
 // import AccountDetails from '../AccountDetails'
+import { colors } from '../../styles'
 
 import Modal from '../CustomModal'
 import Option from './Option'
@@ -30,36 +31,27 @@ const CloseIcon = styled.div`
   }
 `
 
-const CloseColor = styled(Close)`
-  path {
-    stroke: ${({ theme }) => theme.text4};
-  }
-`
-
 const Wrapper = styled.div`
-  ${({ theme }) => theme.flexColumnNoWrap}
+  display: flex;
+  flex-flow: column nowrap;
   margin: 0;
   padding: 0;
   width: 100%;
 `
 
 const HeaderRow = styled.div`
-  ${({ theme }) => theme.flexRowNoWrap};
+  display: flex;
+  flex-flow: column nowrap;
   padding: 1rem 1rem;
-  font-weight: 500;
-  color: ${props => (props.color === 'blue' ? ({ theme }) => theme.primary1 : 'inherit')};
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    padding: 1rem;
-  `};
+  font-weight: bold;
+  color: ${props => (props.color === 'blue' ? colors.primary1 : 'inherit')};
 `
 
 const ContentWrapper = styled.div`
-  background-color: ${({ theme }) => theme.bg2};
+  background-color: ${colors.bg2};
   padding: 2rem;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-
-  ${({ theme }) => theme.mediaWidth.upToMedium`padding: 1rem`};
 `
 
 const UpperSection = styled.div`
@@ -83,24 +75,17 @@ const UpperSection = styled.div`
 `
 
 const Blurb = styled.div`
-  ${({ theme }) => theme.flexRowNoWrap}
+  display: flex;
+  flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 2rem;
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    margin: 1rem;
-    font-size: 12px;
-  `};
 `
 
 const OptionGrid = styled.div`
   display: grid;
   grid-gap: 10px;
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    grid-template-columns: 1fr;
-    grid-gap: 10px;
-  `};
 `
 
 const HoverText = styled.div`
@@ -117,14 +102,7 @@ const WALLET_VIEWS = {
 }
 
 export default function WalletModal({
-  pendingTransactions,
-  confirmedTransactions,
-  ENSName
-}: {
-  pendingTransactions: string[] // hashes of pending
-  confirmedTransactions: string[] // hashes of confirmed
-  ENSName?: string
-}) {
+}: {}) {
   // important that these are destructed from the account-specific web3-react context
   const { active, account, connector, activate, error } = useWeb3React()
 
@@ -293,7 +271,7 @@ export default function WalletModal({
       return (
         <UpperSection>
           <CloseIcon onClick={toggleWalletModal}>
-            <CloseColor />
+            <img src={Close} alt={''} />
           </CloseIcon>
           <HeaderRow>{error instanceof UnsupportedChainIdError ? 'Wrong Network' : 'Error connecting'}</HeaderRow>
           <ContentWrapper>
@@ -306,21 +284,10 @@ export default function WalletModal({
         </UpperSection>
       )
     }
-    // if (account && walletView === WALLET_VIEWS.ACCOUNT) {
-    //   return (
-    //     <AccountDetails
-    //       toggleWalletModal={toggleWalletModal}
-    //       pendingTransactions={pendingTransactions}
-    //       confirmedTransactions={confirmedTransactions}
-    //       ENSName={ENSName}
-    //       openOptions={() => setWalletView(WALLET_VIEWS.OPTIONS)}
-    //     />
-    //   )
-    // }
     return (
       <UpperSection>
         <CloseIcon onClick={toggleWalletModal}>
-          <CloseColor />
+          <img src={Close} alt={''} />
         </CloseIcon>
         {walletView !== WALLET_VIEWS.ACCOUNT ? (
           <HeaderRow color="blue">
@@ -335,7 +302,7 @@ export default function WalletModal({
           </HeaderRow>
         ) : (
           <HeaderRow>
-            <HoverText>Connect to a wallet2</HoverText>
+            <HoverText>Connect to a wallet</HoverText>
           </HeaderRow>
         )}
         <ContentWrapper>
@@ -361,7 +328,7 @@ export default function WalletModal({
   }
 
   return (
-    <Modal isOpen={walletModalOpen} onDismiss={toggleWalletModal} minHeight={false} maxHeight={90}>
+    <Modal isOpen={true} onDismiss={toggleWalletModal} minHeight={false} maxHeight={90}>
       <Wrapper>{getModalContent()}</Wrapper>
     </Modal>
   )

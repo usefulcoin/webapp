@@ -142,7 +142,7 @@ class Modal extends React.Component<IModalProps, IModalState> {
       const offset = lightboxRect.top > 0 ? lightboxRect.top : 0
 
       if (offset !== INITIAL_STATE.offset && offset !== this.state.offset) {
-        this.setState({ offset })
+        // this.setState({ offset })
       }
     }
   }

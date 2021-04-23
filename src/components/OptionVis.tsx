@@ -65,7 +65,7 @@ const OptionVis = (props: any) => {
 
 
     const {calls, puts, exercised, expired, avgValue} = props;
-    // tslint:disable-next-line:no-console
+    
     console.log(`vising ${calls}, ${puts}, ${exercised}, ${expired}`);
            
     if (calls > 0 && puts > 0 && exercised > 0 && expired > 0) {

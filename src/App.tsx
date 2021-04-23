@@ -20,6 +20,7 @@ import Loader from "./components/Loader";
 import ModalResult from "./components/ModalResult";
 import AccountAssets from "./components/AccountAssets";
 import Footer from "./components/Footer";
+import Web3Status from "./components/Web3Status";
 
 import { apiGetAccountAssets } from "./helpers/api";
 import {
@@ -182,7 +183,7 @@ class App extends React.Component<any, any> {
 
   public onConnect = async () => {
 
-    // tslint:disable-next-line:no-console
+    
     console.log('connect cliekc');
     const provider = await this.web3Modal.connect();
 
@@ -197,7 +198,7 @@ class App extends React.Component<any, any> {
     const networkId = await web3.eth.net.getId();
 
     const chainId = await web3.eth.chainId();
-    // tslint:disable-next-line:no-console
+    
     console.log(`got chain id curve ${chainId} networkid ${networkId} address ${address}`);
 
 
@@ -426,7 +427,7 @@ class App extends React.Component<any, any> {
               )}
             </Modal>
           </Column>
-
+          <Web3Status />
           <Footer
             locale={locale}
             connected={connected}

@@ -93,7 +93,7 @@ class Landing extends React.Component<any, any> {
             primary={true}
             locale={locale}
             onClick={() => {
-              // tslint:disable-next-line:no-console
+              
               console.log('connect clicked');
               onConnect();
             }}
@@ -103,7 +103,7 @@ class Landing extends React.Component<any, any> {
             primary={false}
             locale={locale}
             onClick={() => {
-              // tslint:disable-next-line:no-console
+              
               window.open('https://docs.biopset.com', '_blank');
             }}
           />
