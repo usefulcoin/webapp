@@ -20,7 +20,6 @@ import Loader from "./components/Loader";
 import ModalResult from "./components/ModalResult";
 import Footer from "./components/Footer";
 import WalletModal from './components/WalletModal'
-import { useWalletModalToggle } from './redux/application/hooks'
 import { apiGetAccountAssets } from "./helpers/api";
 import {
   getChainData
@@ -115,7 +114,7 @@ function App() {
   const [pendingRequest, setPendingRequest] = useState<boolean>(false);
   const [chainId, setChainId] = useState<number>(1);
   const [web3, setWeb3] = useState<any>();
-    // @ts-ignore
+  // @ts-ignore
   const [assets, setAssets] = useState<IAssetData[]>([]);
   const [result, setResult] = useState<any | null>();
 
@@ -222,9 +221,6 @@ function App() {
     cacheProvider: true,
     providerOptions: getProviderOptions()
   });
-
-// @ts-ignore
-  const toggleWalletModal = useWalletModalToggle()
 
   useEffect(() => {
     setResult('AAA');

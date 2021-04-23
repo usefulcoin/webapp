@@ -1,6 +1,5 @@
-
-
-import * as React from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Column from 'src/components/Column';
 import ConnectButton from "../components/ConnectButton";
@@ -39,80 +38,48 @@ const SLanding = styled(Column)`
 `;
 const SReasons = styled(Column)`
   width: 100%;
+  justity-content: center;
 `;
 
-interface IBetProps {
-  onConnect: any
-}
+function Landing() {
+  const [locale, setLocale] = useState<string>(DEFAULT_LANG);
 
+  useEffect(() => {
+    const locale1 = localStorage.getItem('locale');
+    setLocale(locale1 !== null ? locale : DEFAULT_LANG);
+  }, [])
 
-interface ILandingState {
-  locale: string;
-}
-
-const INITIAL_STATE: ILandingState = {
-  locale: DEFAULT_LANG
-};
-
-class Landing extends React.Component<any, any> {
-
-  // @ts-ignore
-  public state: ILandingState;
-
-  constructor(props: IBetProps) {
-    super(props);
-    this.state = {
-      ...INITIAL_STATE
-    };
-  }
-
-
-  public async componentDidMount() {
-    const locale = localStorage.getItem('locale');
-    this.setState({ locale: locale !== null ? locale : DEFAULT_LANG });
-  }
-
-
-  public render() {
-    const { onConnect } = this.props;
-    const { locale } = this.state;
-    return (
-      <SLanding >
-        <SReasons >
-          <SBrand>
-            <SLogo /><span>biopset</span>
-          </SBrand>
-          <h3 style={{ color: `rgb(${colors.black})`, maxWidth: 600 }}>
-            {
-              // @ts-ignore
-              i18n[locale].LANDING2
-            }
-          </h3>
+  return (
+    <SLanding >
+      <SReasons >
+        <SBrand>
+          <SLogo /><span>biopset</span>
+        </SBrand>
+        <h3 style={{ color: `rgb(${colors.black})`, maxWidth: 600 }}>
+          {
+            // @ts-ignore
+            i18n[locale].LANDING2
+          }
+        </h3>
+        <Link to="/buy" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
           <ConnectButton
             primary={true}
             locale={locale}
             onClick={() => {
-              
-              console.log('connect clicked');
-              onConnect();
             }}
           />
+        </Link>
+        <ConnectButton
+          primary={false}
+          locale={locale}
+          onClick={() => {
+            window.open('https://docs.biopset.com', '_blank');
+          }}
+        />
+      </SReasons>
+    </SLanding>
 
-          <ConnectButton
-            primary={false}
-            locale={locale}
-            onClick={() => {
-              
-              window.open('https://docs.biopset.com', '_blank');
-            }}
-          />
-
-        </SReasons>
-      </SLanding>
-
-    )
-  }
-
+  )
 }
 
 export default Landing

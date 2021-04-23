@@ -1,5 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
+// @ts-ignore
 import logo from "../assets/logo.png";
 
 
@@ -15,19 +16,10 @@ const SLoading = styled.div`
     -webkit-animation: spin 4s infinite linear;
 `
 
-
-
 const Loading = () => {
   return (
-    <div>
-    <SLoading
-    />
-   
-    </div>
+    <SLoading />
   )
 }
-
-
-
 
 export default Loading

@@ -154,14 +154,11 @@ class Trade extends React.Component<any, any> {
     this.state = {
       ...INITIAL_STATE
     };
-    this.state.web3 = props.web3;
-    this.state.address = props.address;
-    this.state.chainId = props.chainId;
   }
 
   public async componentDidMount() {
-    await this.getAmountSold();
-    this.getBalance();
+    // await this.getAmountSold();
+    // this.getBalance();
 
     const locale = localStorage.getItem('locale');
     this.setState({ locale: locale !== null ? locale : DEFAULT_LANG });
@@ -211,6 +208,7 @@ class Trade extends React.Component<any, any> {
   public renderRoundsSelect() {
     return (
       <SSelect onChange={async (e: any) => {
+        // @ts-ignore
         await this.setState({ rounds: Times[e.target.value] });
       }}>
         {Object.keys(Times).map((key: any, i: number) => {
@@ -225,6 +223,7 @@ class Trade extends React.Component<any, any> {
 
   public renderInput() {
     const { locale, spendAmount, toReceive, /*currentPrice, */web3, balance, biopBalance, address, chainId, error } = this.state;
+
     return (
       <SInputContainer>
         <Column maxWidth={600}>
@@ -237,7 +236,10 @@ class Trade extends React.Component<any, any> {
                   this.updateToReceive(web3.utils.fromWei(`${balance}`, "ether"));
                 }}
               >
-                {i18n[locale].AVAILABLE}: {formatFixedDecimals(web3.utils.fromWei(`${balance}`, "ether"), 6)}
+                {
+                  // @ts-ignore
+                  i18n[locale].AVAILABLE}: {formatFixedDecimals(web3.utils.fromWei(`${balance}`, "ether"), 6)
+                }
               </span>
             </SRow>
             <SInputRow >
@@ -253,9 +255,17 @@ class Trade extends React.Component<any, any> {
             <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
 
             <SRow style={{ margin: "10px" }}>
-              <span>{i18n[locale].BUY}</span>
+              <span>
+                {
+                  // @ts-ignore
+                  i18n[locale].BUY
+                }
+              </span>
               <span style={{ fontSize: fonts.size.tiny, paddingTop: "5px", cursor: "pointer" }}>
-                {i18n[locale].AVAILABLE}: {formatFixedDecimals(web3.utils.fromWei(`${biopBalance}`, "ether"), 6)}
+                {
+                  // @ts-ignore
+                  i18n[locale].AVAILABLE}: {formatFixedDecimals(web3.utils.fromWei(`${biopBalance}`, "ether"), 6)
+                }
               </span>
             </SRow>
             <SInputRow >
@@ -273,7 +283,10 @@ class Trade extends React.Component<any, any> {
               }}
             >
               <div style={{ color: `white` }}>
-                {i18n[locale].BUY}
+                {
+                  // @ts-ignore
+                  i18n[locale].BUY
+                }
               </div>
             </Button>
           </SInputBbContainer>
@@ -292,9 +305,9 @@ class Trade extends React.Component<any, any> {
     return (
       <SBet>
         <SRow style={{ flexDirection: width > height ? "row" : "column" }}>
-          <ITCOChart web3={web3} chainId={chainId} tier={tier} />
+          { web3 && <ITCOChart web3={web3} chainId={chainId} tier={tier} /> }
           {
-            pendingRequest ?
+            pendingRequest || !web3 ?
               <Loading />
               :
               <SInterface>
