@@ -226,6 +226,7 @@ function App() {
       console.error(error); // tslint:disable-line
       setFetching(false)
     }
+    onConnect();
   };
 
   const toggleModal = () => {
@@ -308,7 +309,6 @@ function App() {
     setPendingRequest(false);
     const locale1 = localStorage.getItem('locale');
     setLocale(locale1 !== null ? locale : DEFAULT_LANG);
-    toggleWalletModal();
   }, [])
 
   return (
@@ -340,7 +340,7 @@ function App() {
                 !!assets && !!assets.length ? (
                   renderPage()
                 ) : (
-                  <Landing onConnect={onConnect} />
+                  <Landing onConnect={toggleWalletModal} />
                 )
             }
           </SContent>

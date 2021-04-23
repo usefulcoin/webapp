@@ -14,7 +14,6 @@ import usePrevious from '../../hooks/usePrevious'
 import { ApplicationModal } from '../../redux/application/actions'
 import { useModalOpen, useWalletModalToggle } from '../../redux/application/hooks'
 import { ExternalLink } from '../../theme/components'
-// import AccountDetails from '../AccountDetails'
 import { colors } from '../../styles'
 
 import Modal from '../CustomModal'
@@ -326,7 +325,7 @@ export default function WalletModal({
       </UpperSection>
     )
   }
-
+  console.log("=======>", walletModalOpen)
   return (
     <Modal isOpen={walletModalOpen} onDismiss={toggleWalletModal} minHeight={false} maxHeight={90}>
       <Wrapper>{getModalContent()}</Wrapper>
