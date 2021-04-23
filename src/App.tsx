@@ -26,9 +26,10 @@ import {
 } from "./helpers/utilities";
 import { IAssetData } from "./helpers/types";
 import {
-  BUY_BIOP,
   DEFAULT_LANG
 } from "./constants";
+
+import { useWalletModalToggle } from './redux/application/hooks'
 
 // Pages
 import Rewards from './pages/Rewards';
@@ -106,7 +107,8 @@ function initWeb3(provider: any) {
 }
 
 function App() {
-  const [page, setPage] = useState<string>(BUY_BIOP);
+  const toggleWalletModal = useWalletModalToggle()
+
   const [address, setAddress] = useState<string>("");
   const [locale, setLocale] = useState<string>(DEFAULT_LANG)
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -238,29 +240,11 @@ function App() {
           address={address}
           chainId={chainId}
           killSession={resetApp}
-          setPage={(page: string) => {
-            setPage(page)
-          }}
-          currentPage={page}
+          onConnect={toggleWalletModal}
         />
 
         <Column spanHeight >
           <SContent>
-            {/* {
-              fetching ? (
-                <Column center spanHeight>
-                  <SContainer>
-                    <Loader />
-                  </SContainer>
-                </Column>
-              )
-                :
-                !!assets && !!assets.length ? (
-                  renderPage()
-                ) : (
-                  <Landing onConnect={toggleWalletModal} />
-                )
-            } */}
             <Switch>
               <Route exact path="/home" component={Landing} />
               <Route exact path="/buy" component={ITCO} />

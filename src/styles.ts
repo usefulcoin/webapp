@@ -32,6 +32,7 @@ export const colors = {
   text3: isDarkMode ? '#6C7284' : '#888D9B',
   text4: isDarkMode ? '#565A69' : '#C3C5CB',
   text5: isDarkMode ? '#2C2F36' : '#EDEEF2',
+  text6: isDarkMode ? '#000000' : '#FFFFFF',
 
   // backgrounds / greys
   bg1: isDarkMode ? '#212429' : '#FFFFFF',

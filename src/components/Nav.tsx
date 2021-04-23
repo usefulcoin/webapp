@@ -1,6 +1,5 @@
-import * as React from 'react'
+import React, { useState } from "react";
 import styled from 'styled-components'
-import * as PropTypes from 'prop-types'
 import DarkModeToggle from './DarkModeToggle';
 import LocaleToggle from './LocaleToggle';
 import { colors } from "../styles";
@@ -57,18 +56,16 @@ const SNavLink = styled.div`
 `
 
 interface INavProps {
-  currentPage: string
-  setPage: (page: string) => void
   locale: string
 }
 
 const Nav = (props: INavProps) => {
-  const [showPanel, setShowPanel] = React.useState(false);
+  const [currentPage, setCurrentPage] = useState(BUY_BIOP);
 
   function navLink(page: string, currentPage: string, index: number, length: number) {
     return (
       <SNavLink
-        onClick={() => setPage(page)}
+        onClick={() => setCurrentPage(page)}
         style={page === currentPage ?
           {
             color: `${colors.navActiveFontColor}`,
@@ -82,8 +79,6 @@ const Nav = (props: INavProps) => {
       </SNavLink>
     );
   }
-
-  const { currentPage, setPage, locale } = props;
 
   const width = window.innerWidth;
   const height = window.innerHeight;
@@ -108,43 +103,41 @@ const Nav = (props: INavProps) => {
   } else {
     return (
       <div>
-        {showPanel ?
-          <SMobileContainer >
-            <ul>
-              {pages.map(page => {
-                return <SMobileNavItem
+        <SMobileContainer >
+          <ul>
+            {pages.map(page => {
+              return (
+                <SMobileNavItem
                   key={page}
                   onClick={() => {
-                    setPage(page);
-                    setShowPanel(false);
+                    setCurrentPage(page);
                   }}
                   style={{ fontWeight: page === currentPage ? "bold" : "normal" }}
                 >
                   {page}
                 </SMobileNavItem>
-              })}
-              <LocaleToggle />
-              <DarkModeToggle />
-            </ul>
-          </SMobileContainer>
-          :
-          <Button
-            onClick={() => setShowPanel(!showPanel)}
-          >
-            <span style={{ color: `white` }}>{i18n[locale].MENU}</span>
-          </Button>
-        }
+              )
+            })}
+            <LocaleToggle />
+            <DarkModeToggle />
+          </ul>
+        </SMobileContainer>
+        :
+        <Button
+        >
+          <span style={{ color: `white` }}>
+            {
+              // @ts-ignore
+              i18n[locale].MENU
+            }
+          </span>
+        </Button>
       </div>
     )
   }
-
-
 }
 
 
-Nav.propTypes = {
-  setPage: PropTypes.func.isRequired,
-  currentPage: PropTypes.string.isRequired
-}
+Nav.propTypes = {}
 
 export default Nav;

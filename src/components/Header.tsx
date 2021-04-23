@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import * as PropTypes from 'prop-types'
 import Blockie from './Blockie'
 import Banner from './Banner'
-import { getChainData, ellipseAddress } from '../helpers/utilities'
+import { ellipseAddress } from '../helpers/utilities'
 import { transitions, colors } from '../styles'
 import Nav from './Nav'
 
@@ -63,17 +63,17 @@ interface IHeaderStyle {
 
 
 const SDisconnect = styled.div<IHeaderStyle>`
+  color: ${colors.text6}
   transition: ${transitions.button};
-  font-size: 12px;
+  font-size: ${({ connected }) => connected ? '12px' : '15px'};
+  font-weight: ${({ connected }) => connected ? 500 : 900};
   font-family: monospace;
   right: 0;
   top: 20px;
   opacity: 0.7;
   cursor: pointer;
 
-  opacity: ${({ connected }) => (connected ? 1 : 0)};
-  visibility: ${({ connected }) => (connected ? 'visible' : 'hidden')};
-  pointer-events: ${({ connected }) => (connected ? 'auto' : 'none')};
+  pointer-events: auto;
 
   &:hover {
     transform: translateY(-1px);
@@ -84,17 +84,15 @@ const SDisconnect = styled.div<IHeaderStyle>`
 
 interface IHeaderProps {
   killSession: () => void
+  onConnect: () => void
   connected: boolean
   address: string
   chainId: number
-  setPage: (page: string) => void,
-  currentPage: string,
   locale: string
 }
 
 const Header = (props: IHeaderProps) => {
-  const { connected, address, chainId, killSession, setPage, currentPage, locale } = props
-  const chainData = chainId ? getChainData(chainId) : null;
+  const { connected, address, killSession, onConnect, locale } = props
 
 
   const width = window.innerWidth;
@@ -102,21 +100,13 @@ const Header = (props: IHeaderProps) => {
 
   return (
     <>
-      {connected ?
-        <SHeader {...props}>
-          {connected && chainData ?
-            <SActiveChain>
-              <Banner />
-            </SActiveChain>
-            :
-            null
-          }
-          {connected ?
-            <Nav setPage={setPage} currentPage={currentPage} locale={locale} />
-            :
-            null
-          }
-          {address && (
+      <SHeader {...props}>
+        <SActiveChain>
+          <Banner />
+        </SActiveChain>
+        <Nav locale={locale} />
+        {
+          address ?
             <SActiveAccount>
               <SBlockie address={address} />
               <SDisconnect
@@ -125,10 +115,16 @@ const Header = (props: IHeaderProps) => {
                 {width > height ? ellipseAddress(address) : ""}
               </SDisconnect>
             </SActiveAccount>
-          )}
-        </SHeader>
-        : <div style={{ height: "100px" }} />
-      }
+            :
+            <SActiveAccount>
+              <SDisconnect
+                connected={connected}
+                onClick={onConnect}>
+                Connect Wallet
+              </SDisconnect>
+            </SActiveAccount>
+        }
+      </SHeader>
     </>
   )
 }
