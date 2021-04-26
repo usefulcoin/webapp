@@ -325,7 +325,7 @@ export default function WalletModal({
       </UpperSection>
     )
   }
-  console.log("=======>", walletModalOpen)
+  
   return (
     <Modal isOpen={walletModalOpen} onDismiss={toggleWalletModal} minHeight={false} maxHeight={90}>
       <Wrapper>{getModalContent()}</Wrapper>

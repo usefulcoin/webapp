@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import i18n from "../i18n";
 import { /*initiateSwapIfAvailable,*/ getETHBalance, callITCOAmountSold, buyFromITCO, callBIOPBalance } from "../helpers/web3";
@@ -10,7 +10,9 @@ import Button from 'src/components/Button';
 import Loading from 'src/components/Loading';
 import ITCOChart from 'src/components/ITCOChart';
 import { colors, fonts } from 'src/styles';
+import { useActiveWeb3React } from '../hooks'
 import { /* convertAmountFromRawNumber, */ formatFixedDecimals, divide, /* greaterThan, multiply,  *//* convertToDecimals */ } from 'src/helpers/bignumber';
+import { initWeb3 } from '../utils';
 
 const SBet = styled.div`
   width:100%;
@@ -83,129 +85,106 @@ const Times = {
     "15 MIN": 60*15, */
 };
 
-interface IBetProps {
-  address: string
-  chainId: number
-  web3: any
-  openExercise: any
-}
+const Trade = () => {
+  const { account, chainId, library } = useActiveWeb3React()
+  const web3 = initWeb3(library);
 
-
-interface IBetState {
-  address: string;
-  web3: any;
-  chainId: number;
-  pendingRequest: boolean;
-  error: string;
-  spendAmount: number;
-  toReceive: any;
-  price: number;
-  tier: any;
-  hasBet: boolean;
-  pair: any;
-  rounds: number;
-  userOptions: any;
-  currentPrice: number;
-  priceInterval: any;
-  optionsInterval: any;
-  lastBetCall: boolean;
-  balance: any;// in WEI
-  biopBalance: any;
-  betDirection: boolean;
-  openOptions: number;
-  betFee: number;
-  currentRound: number;
-  locale: string;
-}
-
-const INITIAL_STATE: IBetState = {
-  address: "",
-  web3: null,
-  chainId: 1,
-  pendingRequest: false,
-  error: "",
-  spendAmount: 0.0,
-  price: 0,
-  tier: 1,
-  toReceive: 0,
-  hasBet: false,
-  pair: enabledPricePairs[0],
-  rounds: 1,// 30 mins
-  userOptions: [],
-  currentPrice: 0,
-  priceInterval: null,
-  optionsInterval: null,
-  lastBetCall: false,
-  balance: 0,
-  biopBalance: 0,
-  betDirection: true, // true means call
-  openOptions: 2,
-  betFee: 0,
-  currentRound: 0,// current oracle round
-  locale: DEFAULT_LANG
-};
-
-class Trade extends React.Component<any, any> {
+  const [address, setAddress] = useState<string>("")
+  const [networkId, setNetworkId] = useState<number>(42)
   // @ts-ignore
-  public state: IBetState;
+  const [pendingRequest, setPendingRequest] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
 
-  constructor(props: IBetProps) {
-    super(props);
-    this.state = {
-      ...INITIAL_STATE
-    };
+  // @ts-ignore
+  const [spendAmount, setSpendAmount] = useState<number>(0.0);
+  const [price, setPrice] = useState<number>(0);
+  // @ts-ignore
+  const [currentPrice, setCurrentPrice] = useState<number>(0);
+  // @ts-ignore
+  const [priceInterval, setPriceInterval] = useState<any>();
+  const [balance, setBalance] = useState<number>(0);
+  // @ts-ignore
+  const [biopBalance, setBiopBalance] = useState<number>(0);
+  // @ts-ignore
+  const [betFee, setBetFee] = useState<number>(0);
+  const [tier, setTier] = useState<any>(1);
+  // @ts-ignore
+  const [round, setRound] = useState<number>(1);
+  // @ts-ignore
+  const [openOptions, setOpenOptions] = useState<number>(2);
+  // @ts-ignore
+  const [currentRound, setCurrentRound] = useState<number>(0);
+
+  // @ts-ignore
+  const [loading, setLoading] = useState<boolean>(false);
+  // @ts-ignore
+  const [hasBet, setHasBet] = useState<boolean>(false);
+  // @ts-ignore
+  const [lastBetCall, setLastBetCall] = useState<boolean>(false);
+  // @ts-ignore
+  const [betDirection, setBetDirection] = useState<boolean>(true);
+
+  const [toReceive, setToReceive] = useState<any>(0);
+  // @ts-ignore
+  const [userOptions, setUserOption] = useState<any>([]);
+  // @ts-ignore
+  const [optionsInterval, setOptionsInterval] = useState<any>();
+  // @ts-ignore
+  const [pair, setPair] = useState<any>(enabledPricePairs[0]);
+
+
+  const locale = localStorage.getItem('locale') ? localStorage.getItem('locale') : DEFAULT_LANG;
+
+  useEffect(() => {
+    if (!!account) {
+      setAddress('');
+    }
+  }, [account]);
+
+  useEffect(() => {
+    if (!!chainId) {
+      setNetworkId(chainId)
+    }
+  }, [chainId]);
+
+  useEffect(() => {
+    if (!!address && !!networkId) {
+      getBalance();
+      getAmountSold();
+    }
+  }, [address, web3]);
+
+  const getBalance = async () => {
+    const ba = await getETHBalance('0x9292F65c97cea374191Ee8650A098c7E2DF1dCB9', web3);
+    const biba = await callBIOPBalance('0x9292F65c97cea374191Ee8650A098c7E2DF1dCB9', networkId, web3);
+    console.log('====>', ba, biba)
+    setBalance(Number(ba));
+    setBiopBalance(Number(biba));
   }
 
-  public async componentDidMount() {
-    // await this.getAmountSold();
-    // this.getBalance();
-
-    const locale = localStorage.getItem('locale');
-    this.setState({ locale: locale !== null ? locale : DEFAULT_LANG });
-
-
+  const getAmountSold = async () => {
+    const data: any = await callITCOAmountSold(networkId, web3);
+    setPrice(data[0]);
+    setTier(data[1]);
   }
 
-  public async getBalance() {
-    const { address, web3, chainId } = this.state;
-    const ba = await getETHBalance(address, web3);
-    const biba = await callBIOPBalance(address, chainId, web3);
-
-    this.setState({ balance: ba, biopBalance: biba });
-  }
-
-  public async getAmountSold() {
-    const { chainId, web3 } = this.state;
-    const data: any = await callITCOAmountSold(chainId, web3);
-
-    
-    console.log(`sold ${data} curtier ${data}`);
-    
-    console.log(data);
-    const tier = data[0];
-    const price = data[1];
-    this.setState({ price, tier });
-  }
-
-  public async handlespendAmountUpdate(e: any) {
+  // @ts-ignore
+  const handlespendAmountUpdate = async (e: any) => {
     const newBet = e.target.value.split(" ");
-    await this.setState({ spendAmount: newBet })
+    await setSpendAmount(newBet);
   }
 
-  public async updateToReceive(spend: any) {
-    const { price, web3 } = this.state
+  const updateToReceive = async (spend: any) => {
     try {
-      
-      console.log(`setting toReceive with spend ${spend} and price ${price}`);
-      
-      console.log(`toReceive becomes: ${divide(web3.utils.toWei(`${spend}`), price)}`);
-      this.setState({ toReceive: divide(web3.utils.toWei(`${spend}`), price), error: "" });
+      setToReceive(divide(web3.utils.toWei(`${spend}`), price));
+      setError("");
     } catch (e) {
-      this.setState({ error: "Invalid Input" });
+      setError("Invalid Input");
     }
   }
 
-  public renderRoundsSelect() {
+  // @ts-ignore
+  const renderRoundsSelect = () => {
     return (
       <SSelect onChange={async (e: any) => {
         // @ts-ignore
@@ -221,9 +200,7 @@ class Trade extends React.Component<any, any> {
     )
   };
 
-  public renderInput() {
-    const { locale, spendAmount, toReceive, /*currentPrice, */web3, balance, biopBalance, address, chainId, error } = this.state;
-
+  const renderInput = () => {
     return (
       <SInputContainer>
         <Column maxWidth={600}>
@@ -232,8 +209,8 @@ class Trade extends React.Component<any, any> {
               <span />
               <span style={{ fontSize: fonts.size.tiny, paddingTop: "5px", cursor: "pointer" }}
                 onClick={() => {
-                  this.setState({ spendAmount: web3.utils.fromWei(`${balance}`, "ether") })
-                  this.updateToReceive(web3.utils.fromWei(`${balance}`, "ether"));
+                  setSpendAmount(web3.utils.fromWei(`${balance}`, "ether"));
+                  updateToReceive(web3.utils.fromWei(`${balance}`, "ether"));
                 }}
               >
                 {
@@ -246,8 +223,8 @@ class Trade extends React.Component<any, any> {
               <SInput
                 value={spendAmount}
                 onChange={(e) => {
-                  this.setState({ spendAmount: e.target.value })
-                  this.updateToReceive(e.target.value);
+                  setSpendAmount(Number(e.target.value));
+                  updateToReceive(e.target.value);
                 }}
               />
               <span style={{ color: `white` }}>|</span> <span style={{ color: `white` }}>ETH</span>
@@ -276,10 +253,10 @@ class Trade extends React.Component<any, any> {
             </SInputRow>
             <Button
               onClick={async () => {
-                this.setState({ loading: true })
-                await buyFromITCO(web3.utils.toWei(`${spendAmount}`), address, chainId, web3);
-                this.setState({ loading: false })
-                await this.getBalance();
+                setLoading(true);
+                await buyFromITCO(web3.utils.toWei(`${spendAmount}`), address, networkId, web3);
+                setLoading(false);
+                await getBalance();
               }}
             >
               <div style={{ color: `white` }}>
@@ -292,32 +269,28 @@ class Trade extends React.Component<any, any> {
           </SInputBbContainer>
           <ReactTooltip effect="solid" />
         </Column>
-      </SInputContainer>
-
+      </SInputContainer >
     )
   }
 
-  public render() {
-    const { pendingRequest, chainId, web3, tier } = this.state;
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
 
-    return (
-      <SBet>
-        <SRow style={{ flexDirection: width > height ? "row" : "column" }}>
-          { web3 && <ITCOChart web3={web3} chainId={chainId} tier={tier} /> }
-          {
-            pendingRequest || !web3 ?
-              <Loading />
-              :
-              <SInterface>
-                {this.renderInput()}
-              </SInterface>
-          }
-        </SRow>
-      </SBet>
-    )
-  }
+  return (
+    <SBet>
+      <SRow style={{ flexDirection: width > height ? "row" : "column" }}>
+        {!!web3 && !!address && < ITCOChart web3={web3} chainId={networkId} tier={tier} />}
+        {
+          pendingRequest || !web3 || !address ?
+            <Loading />
+            :
+            <SInterface>
+              {renderInput()}
+            </SInterface>
+        }
+      </SRow>
+    </SBet>
+  )
 }
 
 export default Trade

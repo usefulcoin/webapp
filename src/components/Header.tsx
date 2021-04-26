@@ -51,23 +51,19 @@ const SActiveChain = styled.div`
   }
 `
 
-
-
 const SBlockie = styled(Blockie)`
   margin-right: 10px;
 `
 
 interface IHeaderStyle {
-  connected: boolean
+  account: string | null | undefined
 }
-
-
 
 const SDisconnect = styled.div<IHeaderStyle>`
   color: ${colors.text6}
   transition: ${transitions.button};
-  font-size: ${({ connected }) => connected ? '12px' : '15px'};
-  font-weight: ${({ connected }) => connected ? 500 : 900};
+  font-size: ${({ account }) => account ? '12px' : '15px'};
+  font-weight: ${({ account }) => account ? 500 : 900};
   font-family: monospace;
   right: 0;
   top: 20px;
@@ -86,14 +82,11 @@ const SDisconnect = styled.div<IHeaderStyle>`
 interface IHeaderProps {
   killSession: () => void
   onConnect: () => void
-  connected: boolean
-  address: string
-  chainId: number
   locale: string
 }
 
 const Header = (props: IHeaderProps) => {
-  const { connected, killSession, onConnect, locale } = props
+  const { killSession, onConnect, locale } = props
 
   const { account } = useActiveWeb3React()
 
@@ -113,16 +106,18 @@ const Header = (props: IHeaderProps) => {
             <SActiveAccount>
               <SBlockie address={account} />
               <SDisconnect
-                connected={connected}
-                onClick={killSession}>
+                account={account}
+                onClick={killSession}
+              >
                 {width > height ? ellipseAddress(account) : ""}
               </SDisconnect>
             </SActiveAccount>
             :
             <SActiveAccount>
               <SDisconnect
-                connected={connected}
-                onClick={onConnect}>
+                account={account}
+                onClick={onConnect}
+              >
                 Connect Wallet
               </SDisconnect>
             </SActiveAccount>

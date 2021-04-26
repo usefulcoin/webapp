@@ -19,6 +19,7 @@ const Row = styled(Box)<{
   border-radius: ${({ borderRadius }) => borderRadius};
 `
 
+// @ts-ignore
 export const RowBetween = styled(Row)`
   justify-content: space-between;
 `

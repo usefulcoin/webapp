@@ -80,10 +80,6 @@ class Stake extends React.Component<any, any> {
         const totalStaked = await callPoolTotalSupply(chainId, web3);
         const locktotalLocked = await getPoolLockedAmount(chainId, web3);
         const poolBalance = await getETHBalance(BO_CONTRACT[chainId].address, web3);
-
-
-            
-            console.log("presend");
             
             console.log(nextWithdraw);
         this.setState({totalStaked, staked, nextWithdraw, locktotalLocked, poolBalance})
@@ -214,7 +210,9 @@ class Stake extends React.Component<any, any> {
                     <Loading/>
                     :
                     <>
-                    <Input value={changeAmount} placeholder={`Amount To ${staking ? "Stake" : "Withdraw"}`} onChange={(e: any) => this.setState({ changeAmount: e.target.value })} id="amountStake" />
+                    <Input value={changeAmount} placeholder={`Amount To ${staking ? "Stake" : "Withdraw"}`}
+                        onChange={(e: any) => this.setState({ changeAmount: e.target.value })}
+                        id="amountStake" />
                     <SHelper style={{color: `rgb(${colors.black})`}}>Amount In ETH</SHelper>
 
                     <br/>

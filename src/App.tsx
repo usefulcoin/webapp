@@ -1,16 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Web3 from "web3";
 import { Route, Redirect, Switch } from 'react-router-dom'
-
-import Web3Modal from "web3modal";
-// @ts-ignore
-import WalletConnectProvider from "@walletconnect/web3-provider";
-// @ts-ignore
-import Fortmatic from "fortmatic";
-import Torus from "@toruslabs/torus-embed";
-import Authereum from "authereum";
-
 import Web3ReactManager from './components/Web3ReactManager'
 import Column from "./components/Column";
 import Wrapper from "./components/Wrapper";
@@ -20,10 +10,6 @@ import Loader from "./components/Loader";
 import ModalResult from "./components/ModalResult";
 import Footer from "./components/Footer";
 import WalletModal from './components/WalletModal'
-import { apiGetAccountAssets } from "./helpers/api";
-import {
-  getChainData
-} from "./helpers/utilities";
 import { IAssetData } from "./helpers/types";
 import {
   DEFAULT_LANG
@@ -61,10 +47,6 @@ const SContainer = styled.div`
   word-break: break-word;
 `;
 
-const SLanding = styled(Column)`
-  height: 600px;
-`;
-
 const SModalContainer = styled.div`
   width: 100%;
   position: relative;
@@ -81,148 +63,22 @@ const SModalParagraph = styled.p`
   margin-top: 30px;
 `;
 
-// @ts-ignore
-const SBalances = styled(SLanding)`
-  height: 100%;
-  width: 100%;
-  & h3 {
-    padding-top: 30px;
-  }
-`;
-
-function initWeb3(provider: any) {
-  const web3: any = new Web3(provider);
-
-  web3.eth.extend({
-    methods: [
-      {
-        name: "chainId",
-        call: "eth_chainId",
-        outputFormatter: web3.utils.hexToNumber
-      }
-    ]
-  });
-
-  return web3;
-}
-
 function App() {
   const toggleWalletModal = useWalletModalToggle()
 
-  const [address, setAddress] = useState<string>("");
   const [locale, setLocale] = useState<string>(DEFAULT_LANG)
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [connected, setConnected] = useState<boolean>(false);
   const [pendingRequest, setPendingRequest] = useState<boolean>(false);
-  const [chainId, setChainId] = useState<number>(1);
-  const [web3, setWeb3] = useState<any>();
   // @ts-ignore
   const [assets, setAssets] = useState<IAssetData[]>([]);
   const [result, setResult] = useState<any | null>();
-
-  // @ts-ignore
-  const onConnect = async () => {
-    console.log('connect cliekc');
-    const provider = await web3Modal.connect();
-
-    await subscribeProvider(provider);
-
-    const web3: any = initWeb3(provider);
-
-    const accounts = await web3.eth.getAccounts();
-
-    const address = accounts[0];
-
-    const chainId = await web3.eth.chainId();
-
-    setWeb3(web3);
-    // setProvider(provider);
-    setConnected(true);
-    setAddress(address);
-    setChainId(chainId);
-    await getAccountAssets();
-  };
-
-  const subscribeProvider = async (provider: any) => {
-    if (!provider.on) {
-      return;
-    }
-    provider.on("close", () => resetApp());
-    provider.on("accountsChanged", async (accounts: string[]) => {
-      await setAddress(accounts[0]);
-      await getAccountAssets();
-    });
-    provider.on("chainChanged", async (chainId: number) => {
-      await setChainId(chainId);
-      await getAccountAssets();
-    });
-
-    provider.on("networkChanged", async (networkId: number) => {
-      await setChainId(chainId);
-      await getAccountAssets();
-    });
-  };
-
-  const getNetwork = () => getChainData(chainId).network;
-
-  const getProviderOptions = () => {
-    const providerOptions = {
-      walletconnect: {
-        package: WalletConnectProvider,
-        options: {
-          infuraId: "ec1bd267c03c4b3e824ab2f2ad57f9c0"// process.env.REACT_APP_INFURA_ID
-        }
-      },
-      torus: {
-        package: Torus
-      },
-      fortmatic: {
-        package: Fortmatic,
-        options: {
-          key: "pk_live_A9BC4B1ACC54B79C"// process.env.REACT_APP_FORTMATIC_KEY
-        }
-      },
-      authereum: {
-        package: Authereum
-      },
-      /*  bitski: {
-         package: Bitski,
-         options: {
-           clientId: process.env.REACT_APP_BITSKI_CLIENT_ID,
-           callbackUrl: window.location.href + "bitski-callback.html"
-         }
-       } */
-    };
-    return providerOptions;
-  };
-
-  const getAccountAssets = async () => {
-    try {
-      // get account balances
-      const assets1 = await apiGetAccountAssets(address, chainId);
-      setAssets(assets1);
-    } catch (error) {
-      console.error(error); // tslint:disable-line
-    }
-  };
 
   const toggleModal = () => {
     setShowModal(!showModal)
   }
 
   const resetApp = async () => {
-    if (web3 && web3.currentProvider && web3.currentProvider.close) {
-      await web3.currentProvider.close();
-    }
-    await web3Modal.clearCachedProvider();
-    // this.setState({ ...INITIAL_STATE });
   };
-
-  const web3Modal = new Web3Modal({
-    network: getNetwork(),
-    cacheProvider: true,
-    providerOptions: getProviderOptions()
-  });
 
   useEffect(() => {
     setResult('AAA');
@@ -236,9 +92,6 @@ function App() {
       <SLayout>
         <Header
           locale={locale}
-          connected={connected}
-          address={address}
-          chainId={chainId}
           killSession={resetApp}
           onConnect={toggleWalletModal}
         />
@@ -282,7 +135,6 @@ function App() {
         <WalletModal />
         <Footer
           locale={locale}
-          connected={connected}
         />
       </SLayout>
     </Web3ReactManager>
