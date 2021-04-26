@@ -1,4 +1,4 @@
-import background from "./assets/background.png";
+import backgroundRight from "./assets/background-right.png";
 import backgroundDark from "./assets/background-dark.png";
 const darkMode = localStorage.getItem('darkMode');
 const isDarkMode = darkMode === 'true' ? true : false;
@@ -142,7 +142,7 @@ export const globalStyle = `
   @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,800');
 
   html {
-    background: url(${isDarkMode ? backgroundDark : background}) no-repeat center center fixed;
+    background: url(${isDarkMode ? backgroundDark : backgroundRight}) no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;

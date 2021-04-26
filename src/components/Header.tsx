@@ -6,6 +6,7 @@ import Banner from './Banner'
 import { ellipseAddress } from '../helpers/utilities'
 import { transitions, colors } from '../styles'
 import Nav from './Nav'
+import { useActiveWeb3React } from '../hooks'
 
 const SHeader = styled.div`
   margin-top: -1px;
@@ -92,7 +93,9 @@ interface IHeaderProps {
 }
 
 const Header = (props: IHeaderProps) => {
-  const { connected, address, killSession, onConnect, locale } = props
+  const { connected, killSession, onConnect, locale } = props
+
+  const { account } = useActiveWeb3React()
 
 
   const width = window.innerWidth;
@@ -106,13 +109,13 @@ const Header = (props: IHeaderProps) => {
         </SActiveChain>
         <Nav locale={locale} />
         {
-          address ?
+          account ?
             <SActiveAccount>
-              <SBlockie address={address} />
+              <SBlockie address={account} />
               <SDisconnect
                 connected={connected}
                 onClick={killSession}>
-                {width > height ? ellipseAddress(address) : ""}
+                {width > height ? ellipseAddress(account) : ""}
               </SDisconnect>
             </SActiveAccount>
             :
