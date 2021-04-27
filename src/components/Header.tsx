@@ -107,7 +107,7 @@ const Header = (props: IHeaderProps) => {
               <SBlockie address={account} />
               <SDisconnect
                 account={account}
-                onClick={killSession}
+                onClick={() => killSession()}
               >
                 {width > height ? ellipseAddress(account) : ""}
               </SDisconnect>
@@ -116,7 +116,7 @@ const Header = (props: IHeaderProps) => {
             <SActiveAccount>
               <SDisconnect
                 account={account}
-                onClick={onConnect}
+                onClick={() => onConnect()}
               >
                 Connect Wallet
               </SDisconnect>

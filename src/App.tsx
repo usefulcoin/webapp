@@ -64,6 +64,7 @@ const SModalParagraph = styled.p`
 `;
 
 function App() {
+  // @ts-ignore
   const toggleWalletModal = useWalletModalToggle()
 
   const [locale, setLocale] = useState<string>(DEFAULT_LANG)

@@ -86,11 +86,11 @@ const Times = {
 };
 
 const Trade = () => {
-  const { account, chainId, library } = useActiveWeb3React()
-  const web3 = initWeb3(library);
+  const { account, chainId } = useActiveWeb3React();
 
   const [address, setAddress] = useState<string>("")
-  const [networkId, setNetworkId] = useState<number>(42)
+  const [networkId, setNetworkId] = useState<number>(42);
+  const [web3, setWeb3] = useState<any>();
   // @ts-ignore
   const [pendingRequest, setPendingRequest] = useState<boolean>(false);
   const [error, setError] = useState<string>();
@@ -137,13 +137,14 @@ const Trade = () => {
 
   useEffect(() => {
     if (!!account) {
-      setAddress('');
+      setAddress(account);
     }
   }, [account]);
 
   useEffect(() => {
     if (!!chainId) {
       setNetworkId(chainId)
+      setWeb3(initWeb3(chainId));
     }
   }, [chainId]);
 
