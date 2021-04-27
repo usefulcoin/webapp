@@ -15,8 +15,11 @@ import { /* convertAmountFromRawNumber, */ formatFixedDecimals, divide, /* great
 import { initWeb3 } from '../utils';
 
 const SBet = styled.div`
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 650px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 const SHelper = styled.div`
   font-size: x-small;
@@ -33,7 +36,6 @@ const SInputContainer = styled.div`
 const SInputBbContainer = styled.div`
   flex: 1;
   height: 100px;
-  text-transform: uppercase;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   font-weight: bold;
@@ -54,6 +56,7 @@ const SRow = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    item-aligns: 'center';
 `;
 
 const SInputRow = styled.div`
@@ -75,8 +78,10 @@ const SSelect = styled.select`
 `;
 
 const SInterface = styled.div`
-    padding: 20px;
-    border-radius: 40px;
+  background: #F6F6F6;
+  box-shadow: 0px 11px 10px #00000029;
+  padding: 20px;
+  border-radius: 35px;
 `
 
 const Times = {
@@ -158,7 +163,6 @@ const Trade = () => {
   const getBalance = async () => {
     const ba = await getETHBalance('0x9292F65c97cea374191Ee8650A098c7E2DF1dCB9', web3);
     const biba = await callBIOPBalance('0x9292F65c97cea374191Ee8650A098c7E2DF1dCB9', networkId, web3);
-    console.log('====>', ba, biba)
     setBalance(Number(ba));
     setBiopBalance(Number(biba));
   }
@@ -204,11 +208,16 @@ const Trade = () => {
   const renderInput = () => {
     return (
       <SInputContainer>
-        <Column maxWidth={600}>
-          <SInputBbContainer style={{ backgroundColor: `rgb(${colors.darkGrey})`, color: `rgb(${colors.black})`, height: "100%" }}>
+        <Column>
+          <SInputBbContainer style={{ height: "100%" }}>
             <SRow style={{ margin: "10px" }}>
-              <span />
-              <span style={{ fontSize: fonts.size.tiny, paddingTop: "5px", cursor: "pointer" }}
+              <span style={{ color: '#707070' }}>
+                {
+                  // @ts-ignore
+                  i18n[locale].SELL
+                }
+              </span>
+              <span style={{ color: '#A7A7A7', fontSize: fonts.size.tiny, paddingTop: "5px", cursor: "pointer" }}
                 onClick={() => {
                   setSpendAmount(web3.utils.fromWei(`${balance}`, "ether"));
                   updateToReceive(web3.utils.fromWei(`${balance}`, "ether"));
@@ -233,13 +242,13 @@ const Trade = () => {
             <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
 
             <SRow style={{ margin: "10px" }}>
-              <span>
+              <span style={{ color: '#707070' }}>
                 {
                   // @ts-ignore
                   i18n[locale].BUY
                 }
               </span>
-              <span style={{ fontSize: fonts.size.tiny, paddingTop: "5px", cursor: "pointer" }}>
+              <span style={{ color: '#A7A7A7', fontSize: fonts.size.tiny, paddingTop: "5px", cursor: "pointer" }} >
                 {
                   // @ts-ignore
                   i18n[locale].AVAILABLE}: {formatFixedDecimals(web3.utils.fromWei(`${biopBalance}`, "ether"), 6)
@@ -279,17 +288,17 @@ const Trade = () => {
 
   return (
     <SBet>
-      <SRow style={{ flexDirection: width > height ? "row" : "column" }}>
-        {!!web3 && !!address && < ITCOChart web3={web3} chainId={networkId} tier={tier} />}
-        {
-          pendingRequest || !web3 || !address ?
-            <Loading />
-            :
+      {
+        pendingRequest || !web3 || !address ?
+          <Loading />
+          :
+          <SRow style={{ flexDirection: width > height ? "row" : "column" }}>
+            < ITCOChart web3={web3} chainId={networkId} tier={tier} />
             <SInterface>
               {renderInput()}
             </SInterface>
-        }
-      </SRow>
+          </SRow>
+      }
     </SBet>
   )
 }

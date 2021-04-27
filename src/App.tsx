@@ -2,14 +2,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Route, Redirect, Switch } from 'react-router-dom'
 import Web3ReactManager from './components/Web3ReactManager'
-import Column from "./components/Column";
-import Wrapper from "./components/Wrapper";
 import Modal from "./components/Modal";
 import Header from "./components/Header";
 import Loader from "./components/Loader";
 import ModalResult from "./components/ModalResult";
 import Footer from "./components/Footer";
-import WalletModal from './components/WalletModal'
 import { IAssetData } from "./helpers/types";
 import {
   DEFAULT_LANG
@@ -30,11 +27,6 @@ const SLayout = styled.div`
   width: 100%;
   min-height: 100vh;
   text-align: center;
-`;
-
-const SContent = styled(Wrapper)`
-  width: 100%;
-  height: 100%;
 `;
 
 const SContainer = styled.div`
@@ -97,18 +89,15 @@ function App() {
           onConnect={toggleWalletModal}
         />
 
-        <Column spanHeight >
-          <SContent>
-            <Switch>
-              <Route exact path="/home" component={Landing} />
-              <Route exact path="/buy" component={ITCO} />
-              <Route exact path="/trade" component={Trade} />
-              <Route exact path="/exercise" component={Exercise} />
-              <Route exact path="/stake" component={Stake} />
-              <Route exact path="/governance" component={Rewards} />
-              <Redirect to={{ ...location, pathname: '/home' }} />
-            </Switch>
-          </SContent>
+        <Switch>
+          <Route exact path="/home" component={Landing} />
+          <Route exact path="/buy" component={ITCO} />
+          <Route exact path="/trade" component={Trade} />
+          <Route exact path="/exercise" component={Exercise} />
+          <Route exact path="/stake" component={Stake} />
+          <Route exact path="/governance" component={Rewards} />
+          <Redirect to={{ ...location, pathname: '/home' }} />
+        </Switch>
 
           <Modal show={showModal} toggleModal={toggleModal}>
             {pendingRequest ? (
@@ -132,8 +121,7 @@ function App() {
               </SModalContainer>
             )}
           </Modal>
-        </Column>
-        <WalletModal />
+          
         <Footer
           locale={locale}
         />

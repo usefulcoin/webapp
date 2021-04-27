@@ -1,8 +1,8 @@
 const i18n = {
     "EN🇨🇦": {
-        "BUY": "BUY",
-        "SELL": "SELL",
-        "AVAILABLE": "AVAILABLE",
+        "BUY": "Buy",
+        "SELL": "Sell",
+        "AVAILABLE": "Available",
         "TIERS": "tiers",
         "LOADINGCHART": "Loading Chart",
         "LAUNCH": "Launch",

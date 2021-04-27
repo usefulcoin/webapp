@@ -197,9 +197,7 @@ export function handleSignificantDecimals(
 export function formatFixedDecimals(value: string, decimals: number): string {
   const _value = convertNumberToString(value)
   const _decimals = convertStringToNumber(decimals)
-  const result = new BigNumber(
-    new BigNumber(_value).toFixed(_decimals)
-  ).toString()
+  const result = new BigNumber(_value).toFormat(_decimals)
   return result
 }
 

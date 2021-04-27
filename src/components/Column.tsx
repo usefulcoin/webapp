@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 interface IColumnStyleProps {
   spanHeight: boolean
-  maxWidth: number
   center: boolean
 }
 
@@ -16,7 +15,6 @@ const SColumn = styled.div<IColumnStyleProps>`
   position: relative;
   width: 100%;
   height: ${({ spanHeight }) => (spanHeight ? '100%' : 'auto')};
-  max-width: ${({ maxWidth }) => (maxWidth !== 0? `${maxWidth}px` : '100%')};
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -25,7 +23,7 @@ const SColumn = styled.div<IColumnStyleProps>`
 `
 
 const Column = (props: IColumnProps) => {
-  const { children} = props
+  const { children } = props
   return (
     <SColumn
       {...props}
@@ -44,7 +42,6 @@ Column.propTypes = {
 
 Column.defaultProps = {
   spanHeight: false,
-  maxWidth: 0,
   center: false
 }
 

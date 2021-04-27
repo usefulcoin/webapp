@@ -5,8 +5,8 @@ import { RiTwitterLine, RiTelegramLine, RiDiscordLine } from 'react-icons/ri';
 import { colors } from "../styles";
 
 const SFooter = styled.div`
-  margin-top: 100px;
-  height: 150px;
+  margin-top: 30px;
+  height: 100px;
   width: 100%;
   display: flex;
   flex-direction: column;

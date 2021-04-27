@@ -7,18 +7,13 @@ import { DEFAULT_LANG } from 'src/constants';
 import i18n from "../i18n";
 
 const SPriceChart = styled.div`
-  
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-  color: white;
-  border: 1px solid rgb(${colors.grey});
-  border-radius: 8px;
-  background-color: rgb(${colors.white});
-  margin: 5px;
+  background: #F6F6F6;
+  box-shadow: 0px 11px 10px #00000029;
+  padding: 10px;
+  border-radius: 35px;
 `
 const SHelper = styled.div`
-    font-size: x-small;
+  font-size: x-small;
 `
 
 
