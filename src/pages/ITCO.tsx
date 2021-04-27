@@ -30,7 +30,6 @@ const SInputContainer = styled.div`
   flex-direction: row;
   width: 100%;
   align-items: stretch;
-  padding-bottom: 10px;
 `
 
 const SInputBbContainer = styled.div`
@@ -40,15 +39,14 @@ const SInputBbContainer = styled.div`
   -moz-box-sizing: border-box;
   font-weight: bold;
   font-size: 1.05rem;
-  margin-top: 10px;
   border-radius: 40px;
-  padding: 20px;
 `
 
 const SInput = styled.input`
-  background-color: rgb(${colors.lightGrey});
+  background: transparent;
   border: none;
-  color: rgb(${colors.white});
+  border-width: 0px;
+  color: #707070;
   font-weight: bold;
 `
 
@@ -60,13 +58,13 @@ const SRow = styled.div`
 `;
 
 const SInputRow = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 10px; 
-    background-color: rgb(${colors.lightGrey});
-    border-radius: 20px;
-    padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 10px; 
+  background-color: #E9E9E9;
+  border-radius: 20px;
+  padding: 10px;
 `
 
 const SSelect = styled.select`
@@ -237,7 +235,7 @@ const Trade = () => {
                   updateToReceive(e.target.value);
                 }}
               />
-              <span style={{ color: `white` }}>|</span> <span style={{ color: `white` }}>ETH</span>
+              <span style={{ color: '#707070' }}>ETH</span>
             </SInputRow>
             <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
 
@@ -259,8 +257,9 @@ const Trade = () => {
               <SInput
                 value={toReceive}
               />
-              <span style={{ color: `white` }}>|</span> <span style={{ color: `white` }}>BIOP</span>
+              <span style={{ color: '#707070' }}>BIOP</span>
             </SInputRow>
+            <div style={{ height: 15 }} />
             <Button
               onClick={async () => {
                 setLoading(true);
@@ -293,13 +292,14 @@ const Trade = () => {
           <Loading />
           :
           <SRow style={{ flexDirection: width > height ? "row" : "column" }}>
-            < ITCOChart web3={web3} chainId={networkId} tier={tier} />
+            <ITCOChart web3={web3} chainId={networkId} tier={tier} />
+            <div style={{ width: 150, height: 10 }} />
             <SInterface>
               {renderInput()}
             </SInterface>
           </SRow>
       }
-    </SBet>
+    </SBet >
   )
 }
 

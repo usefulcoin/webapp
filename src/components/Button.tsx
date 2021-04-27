@@ -42,6 +42,8 @@ const SHoverLayer = styled.div`
 `
 
 const SButton = styled.button<IButtonStyleProps>`
+  width: 150px;
+  height: 40px;
   transition: ${transitions.button};
   position: relative;
   border: none;
@@ -54,7 +56,7 @@ const SButton = styled.button<IButtonStyleProps>`
   color: ${({ outline, color }) =>
     outline ? `rgb(${colors[color]})` : `rgb(${colors.white})`};
   box-shadow: ${({ outline }) => (outline ? 'none' : `${shadows.soft}`)};
-  border-radius: 8px;
+  border-radius: 16px;
   font-size: ${fonts.size.medium};
   font-weight: ${fonts.weight.semibold};
   padding: ${({ icon, left }) =>
@@ -71,11 +73,11 @@ const SButton = styled.button<IButtonStyleProps>`
     &:hover {
       transform: ${({ disabled }) => (!disabled ? 'translateY(-1px)' : 'none')};
       box-shadow: ${({ disabled, outline }) =>
-        !disabled
-          ? outline
-            ? 'none'
-            : `${shadows.hover}`
-          : `${shadows.soft}`};
+    !disabled
+      ? outline
+        ? 'none'
+        : `${shadows.hover}`
+      : `${shadows.soft}`};
     }
 
     &:hover ${SHoverLayer} {
@@ -88,7 +90,7 @@ const SButton = styled.button<IButtonStyleProps>`
     transform: ${({ disabled }) => (!disabled ? 'translateY(1px)' : 'none')};
     box-shadow: ${({ outline }) => (outline ? 'none' : `${shadows.soft}`)};
     color: ${({ outline, color }) =>
-      outline ? `rgb(${colors[color]})` : `rgba(${colors.white}, 0.24)`};
+    outline ? `rgb(${colors[color]})` : `rgba(${colors.white}, 0.24)`};
 
     & ${SIcon} {
       opacity: 0.8;
@@ -101,14 +103,14 @@ const SButton = styled.button<IButtonStyleProps>`
     display: ${({ icon }) => (icon ? 'block' : 'none')};
     mask: ${({ icon }) => (icon ? `url(${icon}) center no-repeat` : 'none')};
     background-color: ${({ outline, color }) =>
-      outline ? `rgb(${colors[color]})` : `rgb(${colors.white})`};
+    outline ? `rgb(${colors[color]})` : `rgb(${colors.white})`};
     transition: 0.15s ease;
   }
 `
 
 const Button = (props: IButtonProps) => (
   <SButton
-   
+
     {...props}
   >
     <SHoverLayer />
