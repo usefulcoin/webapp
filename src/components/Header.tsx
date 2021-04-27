@@ -23,7 +23,7 @@ const SHeader = styled.div`
 const SActiveAccount = styled.div`
   background-color: ${colors.connectButtonColor};
   width: 240px;
-  height: 60px;
+  height: 50px;
   border-radius: 23px
   display: flex;
   align-items: center;

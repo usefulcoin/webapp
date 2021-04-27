@@ -101,7 +101,7 @@ class Exercise extends React.Component<any, any> {
         const { chainId, web3 } = this.state;
         const latestPrice = await getLatestPrice(chainId, web3);
 
-        
+
         console.log(`latestRound is ${latestPrice}`);
         this.setState({ currentPrice: latestPrice });
     }
@@ -114,15 +114,15 @@ class Exercise extends React.Component<any, any> {
         const cr: any = await callCurrentRoundID(chainId, web3, enabledPricePairs[0].address);
 
 
-        
+
         console.log("options");
-        
+
         console.log(options);
         const optionsObjects = {};
         for (let i = 0; i < options.length; i++) {
-            
+
             console.log(`loaded event ${options[i]}`);
-            
+
             console.log(options[i]);
             if (options[i].returnValues) {
                 if (options[i].returnValues.id !== undefined) {// ensurese we skip other events
@@ -139,9 +139,9 @@ class Exercise extends React.Component<any, any> {
                         }
                     } else {
                         const optionData: any = await getOptionData(options[i].returnValues.id, web3, chainId);
-                        
+
                         console.log("loaded option data");
-                        
+
                         console.log(optionData);
                         optionsObjects[options[i].returnValues.id] = {
                             blockNumber: options[i].blockNumber,
@@ -164,9 +164,9 @@ class Exercise extends React.Component<any, any> {
 
         const sorted = Object.keys(optionsObjects).sort((a: any, b: any) => b - a);
 
-        
+
         console.log(`sorted $`);
-        
+
         console.log(sorted);
         let calls = 0;
         let puts = 0;
@@ -186,23 +186,23 @@ class Exercise extends React.Component<any, any> {
                 expired += 1;
             }
 
-            
+
             console.log(`avgValue ${avgValue}`);
             avgValue = add(avgValue, optionsObjects[id].lockedValue);
 
-            
+
             console.log(`avgValue after ${avgValue}. purchase value of option = ${optionsObjects[id].purchaseValue}`);
             sortedOptions.push(optionsObjects[id]);
 
         });
 
-        
+
         console.log(`totalValue ${avgValue}`);
         avgValue = floorDivide(avgValue, sorted.length);
-        
+
         console.log(`avgValue ${avgValue}`);
 
-        
+
         console.log(sortedOptions);
         this.setState({ options: sortedOptions, calls, puts, exercised, expired, avgValue, currentRound: cr })
     }
@@ -216,11 +216,11 @@ class Exercise extends React.Component<any, any> {
         const { address, chainId, web3 } = this.state
         try {
 
-            
+
             console.log(`sending exercise for opton ${optionId}`);
             await sendComplete(address, optionId, chainId, web3, (p1: any, p2: any) => {
 
-                
+
                 console.log(p1, p2);
                 this.loadOpenOptions();
                 this.setState({ error: "", pendingRequest: false });

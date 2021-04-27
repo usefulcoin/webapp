@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import styled from 'styled-components'
+import { useHistory } from "react-router-dom";
+import styled from 'styled-components';
 import DarkModeToggle from './DarkModeToggle';
 import LocaleToggle from './LocaleToggle';
 import { colors } from "../styles";
@@ -8,7 +9,8 @@ import {
   STAKE,
   EXERCISE_EXPIRE,
   GOVERNANCE,
-  BUY_BIOP
+  BUY_BIOP,
+  BIOP_ROUTE
 } from "../constants";
 import Button from './Button';
 import i18n from "../i18n";
@@ -60,12 +62,13 @@ interface INavProps {
 }
 
 const Nav = (props: INavProps) => {
+  const history = useHistory();
   const [currentPage, setCurrentPage] = useState(BUY_BIOP);
 
   function navLink(page: string, currentPage: string, index: number, length: number) {
     return (
       <SNavLink
-        onClick={() => setCurrentPage(page)}
+        onClick={() => { setCurrentPage(page), history.push(BIOP_ROUTE[index]); }}
         style={page === currentPage ?
           {
             color: `${colors.navActiveFontColor}`,
@@ -111,6 +114,7 @@ const Nav = (props: INavProps) => {
                   key={page}
                   onClick={() => {
                     setCurrentPage(page);
+                    history.push('/stak')
                   }}
                   style={{ fontWeight: page === currentPage ? "bold" : "normal" }}
                 >
