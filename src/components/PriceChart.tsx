@@ -52,7 +52,6 @@ class PriceChart extends React.Component<any, any> {
     const { error } = this.state;
     const { pair, currentPrice } = this.props;
     const wide = window.innerWidth > window.innerHeight;
-    const chartWidth = wide ? "576" : window.innerWidth - 24;
     const darkMode = localStorage.getItem('darkMode');
     return (
       <SPriceChart>
@@ -85,7 +84,6 @@ class PriceChart extends React.Component<any, any> {
               </div>
             </>
         }
-
       </SPriceChart>
     )
   }

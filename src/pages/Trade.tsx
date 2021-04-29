@@ -17,10 +17,9 @@ import {
   getBlockNumber
 } from "../helpers/web3";
 import PriceChart from "../components/PriceChart";
-import ReactTooltip from 'react-tooltip';
 import { makeBet } from "../helpers/web3";
 import { enabledPricePairs } from "../constants";
-import OptionTable from 'src/components/OptionTable';
+// import OptionTable from 'src/components/OptionTable';
 import BetButton from 'src/components/BetButton';
 import Button from 'src/components/Button';
 import Loading from 'src/components/Loading';
@@ -31,7 +30,6 @@ import {
   formatFixedDecimals,
   divide,
   greaterThan,
-  multiply,
   convertToDecimals
 } from 'src/helpers/bignumber';
 import { useActiveWeb3React } from '../hooks';
@@ -58,23 +56,24 @@ const SInputContainer = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  margin: 0 auto;
   align-items: stretch;
-  padding: 10px;
+  padding-left: 20px;
+  padding-top: 50px;
 `
 
-const SInputBbContainer = styled.div`
-  flex: 1;
-  height: 100px;
-  text-transform: uppercase;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  font-weight: bold;
-  font-size: 1.05rem;
-  margin-top: 10px;
-  border-radius: 8px;
-`
+// const SInputBbContainer = styled.div`
+//   flex: 1;
+//   height: 100px;
+//   text-transform: uppercase;
+//   box-sizing: border-box;
+//   -moz-box-sizing: border-box;
+//   font-weight: bold;
+//   font-size: 1.05rem;
+//   margin-top: 10px;
+//   border-radius: 8px;
+// `
 const SInputBb = styled.input`
+  background-color: transparent;
   text-align: center;
   border: none;
   margin-left: 10%;
@@ -91,10 +90,10 @@ const SInputBox = styled.div`
 position: relative;
 `
 
-const SOutlined = styled.span`
-  -webkit-text-stroke-width: 0.5px;
-  -webkit-text-stroke-color: white;
-`
+// const SOutlined = styled.span`
+//   -webkit-text-stroke-width: 0.5px;
+//   -webkit-text-stroke-color: white;
+// `
 
 const SBetButtonContainer = styled.div`
   display: flex;
@@ -102,18 +101,18 @@ const SBetButtonContainer = styled.div`
   justify-content: space-between;
 `;
 
-const SRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
+// const SRow = styled.div`
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: space-between;
+// `;
 
-const SColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  height: 100%;
-`;
+// const SColumn = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-around;
+//   height: 100%;
+// `;
 
 const SSelect = styled.select`
   background-color: #F6F6F6;
@@ -152,20 +151,25 @@ const Trade = () => {
   const [betAmount, setBetAmount] = useState<number>(0.1);
   const [maxBet, setMaxBet] = useState<number>(1);
   const [amountToWin, setAmountToWin] = useState<any>(0);
+  // @ts-ignore
   const [hasBet, setHasBet] = useState<boolean>(false);
   const [pair, setPair] = useState<any>(enabledPricePairs[0]);
   const [rounds, setRounds] = useState<number>(1);
+  // @ts-ignore
   const [userOptions, setUserOptions] = useState<any>([]);
   const [currentPrice, setCurrentPrice] = useState<number>(0);
   // @ts-ignore
   const [priceInterval, setPriceInterval] = useState<any>();
   // @ts-ignore
   const [optionsInterval, setOptionsInterval] = useState<any>();
+  // @ts-ignore
   const [lastBetCall, setLastBetCall] = useState<boolean>(false);
+  // @ts-ignore
   const [totalInterchange, setTotalInterchange] = useState<number>(0);
   const [betDirection, setBetDirection] = useState<boolean>(false);
   const [openOptions, setOpenOptions] = useState<number>(2);
   const [betFee, setBetFee] = useState<number>(0);
+  // @ts-ignore
   const [currentRound, setCurrentRound] = useState<number>(0);
   // @ts-ignore
   const [staked, setStaked] = useState<number>(0);
@@ -359,6 +363,7 @@ const Trade = () => {
     }
   }
 
+  // @ts-ignore
   const handleComplete = async (optionId: any) => {
     setPendingRequest(true);
     try {
@@ -375,6 +380,7 @@ const Trade = () => {
     }
   }
 
+  // @ts-ignore
   const renderMaxBet = () => {
     if (maxBet === 0) {
       return <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>Pool Maxed Out</SHelper>
@@ -433,59 +439,69 @@ const Trade = () => {
     // <SHelper style={{ paddingTop: "0px", marginTop: "0px" }}>STRIKE PRICE: {formatFixedDecimals(web3.utils.fromWei(floorDivide(currentPrice, 100), "lovelace"), 8)} USD</SHelper>
 
     return (
-      <div>
-        <SInputContainer style={{ flexDirection: "row" }}>
-          <SInputBbContainer style={{ backgroundColor: `rgb(${colors.white})`, color: `rgb(${colors.black})` }}>
-            <span style={{ marginLeft: "0px" }}>QUANTITY</span><br />
-            <SInputBox>
-              <SInputBb style={{ backgroundColor: `rgb(${colors.white})`, color: `rgb(${colors.black})` }} value={betAmount} placeholder={`Amount To Bet`} onChange={(e) => handleBetAmountUpdate(e)} id="amountStake" />
-              {renderMaxBet()}
-            </SInputBox>
-          </SInputBbContainer>
-
-          <ReactTooltip effect="solid" />{/* data-tip={MaxYieldToolTip} on the element to show it with */}
+      <div style={{ color: '#707070', textAlign: 'left', margin: 50 }}>
+        {/* <SInputContainer style={{ flexDirection: "row" }}>
+          <ReactTooltip effect="solid" />
           <SInputBbContainer style={{ backgroundColor: `rgb(${colors.fadedBlue})`, color: `rgb(${colors.white})` }}>
             <SRow>
               <SColumn style={{ textAlign: "left" }}>
-                <span style={{ marginLeft: "20px", color: `white` }}>Win Total <span style={{ cursor: "pointer" }} onClick={() => openBettingAlert()}>ⓘ</span>:</span>
-                <span style={{ marginLeft: "20px", color: `white` }}>Trading Fee:</span>
                 <span style={{ marginLeft: "20px", color: `white` }}>Maximium Yield:</span>
                 <span style={{ marginLeft: "20px", color: `white` }}>Minimum Yield:</span>
-
               </SColumn>
               <SColumn style={{ textAlign: "right" }}>
-                <span style={{ marginRight: "20px", color: `white` }} >{amountToWin}</span>
-                <span style={{ marginRight: "20px", color: `white` }}>{divide(betFee, 1000)}%</span>
                 {
                   greaterThan(divide(multiply(divide(amountToWin, betAmount), 100), 2), 5) ?
                     <span style={{ marginRight: "20px", color: `rgb(${colors.white})` }}>{greaterThan(multiply(divide(amountToWin, 2), 100), 0) ? divide(multiply(divide(amountToWin, betAmount), 100), 2) : "100"}%</span>
                     :
                     <SOutlined style={{ marginRight: "20px", color: greaterThan(divide(multiply(divide(amountToWin, betAmount), 100), 2), 5) ? `rgb(${colors.white})` : `rgb(${colors.red})` }}>{greaterThan(multiply(divide(amountToWin, 2), 100), 0) ? divide(multiply(divide(amountToWin, betAmount), 100), 2) : "100"}%</SOutlined>
-
                 }
                 <span style={{ marginRight: "20px", color: `white` }}>-100%</span>
-
               </SColumn>
             </SRow>
-
           </SInputBbContainer>
-          <br />
+        </SInputContainer> */}
 
-        </SInputContainer>
+        <div style={{ width: 300 }}>
+          <div style={{ fontSize: 20, fontWeight: 700, textAlign: 'left' }}>
+            Price:
+          </div>
+          <div style={{ backgroundColor: '#E9E9E9', height: 50, borderRadius: 5, display: 'flex', alignItems: 'center' }} >
+            <SInputBox>
+              <SInputBb style={{ color: `rgb(${colors.black})` }} value={betAmount} placeholder={`Amount To Bet`} onChange={(e) => handleBetAmountUpdate(e)} id="amountStake" />
+              {/* {renderMaxBet()} */}
+            </SInputBox>
+          </div>
+          <div style={{ fontSize: 14 }}>Trading Fee: <span> {divide(betFee, 1000)}%</span></div>
+        </div>
 
-        <SBetButtonContainer style={{ flexDirection: "row" }}>
-          <BetButton up={true} onClick={() => { updateBetDirection(true) }} active={betDirection} />
-          <BetButton up={false} onClick={() => { updateBetDirection(false) }} active={!betDirection} />
+        <div style={{ marginTop: 50 }}>
+          <div style={{ fontSize: 20, fontWeight: 700, textAlign: 'left' }}>
+            TOTAL Win <span style={{ cursor: "pointer", color: '#FF7700' }} onClick={() => openBettingAlert()}>ⓘ</span> :
+          </div>
+          <div style={{ backgroundColor: '#E9E9E9', color: `rgb(${colors.black})`, height: 50, borderRadius: 5, display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
+            {amountToWin}
+          </div>
+        </div>
+
+        <SBetButtonContainer style={{ flexDirection: "row", marginTop: 80 }}>
+          <div style={{ backgroundColor: '#F6F6F6', boxShadow: '0px 3px 6px #0000005F', borderRadius: 5, padding: 20 }}>
+            <BetButton up={true} onClick={() => { updateBetDirection(true) }} active={betDirection} />
+          </div>
+          <div style={{ backgroundColor: '#F2D8D8', boxShadow: '0px 3px 6px #0000005F', borderRadius: 5, padding: 20 }}>
+            <BetButton up={false} onClick={() => { updateBetDirection(false) }} active={!betDirection} />
+          </div>
         </SBetButtonContainer>
 
-        <Button color={betDirection ? `blue` : `red`}
-          borderRadius={5}
-          onClick={() => { handleMakeBet(betDirection) }}
-        >
-          <span style={{ color: `white` }}>
-            Buy {betDirection ? "Call" : "Put"}
-          </span>
-        </Button>
+        <div style={{ marginTop: 80, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Button color={betDirection ? `blue` : `red`}
+            borderRadius={5}
+            onClick={() => { handleMakeBet(betDirection) }}
+          >
+            <span style={{ color: `white` }}>
+              Buy {betDirection ? "Call" : "Put"}
+            </span>
+          </Button>
+        </div>
       </div>
     )
   }
@@ -493,7 +509,6 @@ const Trade = () => {
   const renderBetApprove = () => {
     console.log(`rerender chart with pair ${pair} currentPrice ${currentPrice}`);
 
-    console.log(pair);
     return (
       <SBetter>
         <PriceChart pair={pair.pair} currentPrice={currentPrice} />
@@ -509,7 +524,7 @@ const Trade = () => {
           pendingRequest ?
             <Loading />
             :
-            <div>
+            <div style={{ width: '100%', height: '100%' }}>
               <SInputContainer>
                 {renderPairSelect()}
                 {renderRoundsSelect()}
@@ -520,7 +535,7 @@ const Trade = () => {
               </SInterface>
             </div>
         }
-        <SHelper >Trading Volume: {formatFixedDecimals(web3.utils.fromWei(`${totalInterchange}`, "ether"), 8)} ETH</SHelper>
+        {/* <SHelper >Trading Volume: {formatFixedDecimals(web3.utils.fromWei(`${totalInterchange}`, "ether"), 8)} ETH</SHelper>
         {
           hasBet ?
             <SHelper>Share your price prediction with the world:
@@ -549,7 +564,7 @@ const Trade = () => {
           </>
           :
           <></>
-        }
+        } */}
       </SBet>
     )
   } else {
