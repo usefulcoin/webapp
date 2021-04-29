@@ -10,6 +10,7 @@ const SPriceChart = styled.div`
   background: #F6F6F6;
   box-shadow: 0px 11px 10px #00000029;
   padding: 10px;
+  width: 400px;
   border-radius: 35px;
   display: flex;
   justify-content: center;
@@ -114,7 +115,6 @@ class ITCOChart extends React.Component<any, any> {
               />
             </div>
         }
-
       </SPriceChart>
     )
   }

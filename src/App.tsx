@@ -6,7 +6,6 @@ import Modal from "./components/Modal";
 import Header from "./components/Header";
 import Loader from "./components/Loader";
 import ModalResult from "./components/ModalResult";
-import Footer from "./components/Footer";
 import { IAssetData } from "./helpers/types";
 import {
   DEFAULT_LANG
@@ -121,10 +120,6 @@ function App() {
               </SModalContainer>
             )}
           </Modal>
-          
-        <Footer
-          locale={locale}
-        />
       </SLayout>
     </Web3ReactManager>
   );

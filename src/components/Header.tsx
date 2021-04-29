@@ -11,7 +11,7 @@ import { useActiveWeb3React } from '../hooks'
 const SHeader = styled.div`
   margin-top: -1px;
   margin-bottom: 1px;
-  height: 95px;
+  height: 70px;
   display: flex;
   align-items: center;
   opacity: 100%;

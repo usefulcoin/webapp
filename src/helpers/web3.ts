@@ -10,8 +10,6 @@ export function blockTimestamp(blockNumber: string, web3: any) {
   return new Promise(async (resolve, reject) => {
     try {
       const block = await web3.eth.getBlock(blockNumber);
-
-      
       console.log(` raw block is ${block}`);
       resolve(block.timestamp * 1000);
     } catch (e) {
@@ -27,7 +25,6 @@ export function getETHBalance(address: string, web3: any) {
       if (err) {
         reject(err)
       }
-
       resolve(result)
     })
 
@@ -56,10 +53,6 @@ export function getLatestPrice(chainId: number, web3: any) {
           if (err) {
             reject(err)
           }
-          
-          console.log(data);
-          
-          console.log("^ data is here");
           resolve(data.answer);
         }
       )
@@ -77,14 +70,6 @@ export function callCurrentRoundID(chainId: number, web3: any, oracle: any) {
           if (err) {
             reject(err)
           }
-          
-          console.log(data);
-          
-          console.log("^ data is here");
-          
-          console.log(data.roundId);
-          
-          console.log("^ round id is here");
           resolve(data.roundId);
         }
       )
@@ -104,7 +89,6 @@ export function getDirectRate(currentPrice: number, pair: string, dir: boolean, 
   return new Promise(async (resolve, reject) => {
 
     try {
-
       const bo = getBOContract(chainId, web3)
       const rc = getRateCalcContract(chainId, web3)
       const stack = await optionStack(bo, dir);
@@ -117,14 +101,10 @@ export function getDirectRate(currentPrice: number, pair: string, dir: boolean, 
             if (err) {
               reject(err)
             }
-
             resolve(data);
           }
         )
-
     } catch (e) {
-
-      
       console.log(`caught error ${e}`);
       reject(e);
     }
@@ -134,7 +114,6 @@ export function getDirectRate(currentPrice: number, pair: string, dir: boolean, 
 
 function optionStack(bo: any, direction: boolean) {
   return new Promise(async (resolve, reject) => {
-
     try {
       const oc = bo.methods.oC();
       const op = bo.methods.oP();
@@ -142,15 +121,9 @@ function optionStack(bo: any, direction: boolean) {
         // call
         resolve(oc - op >= 1 ? oc - op : 1);
       } else {
-
         resolve(op - oc >= 1 ? op - oc : 1);
       }
-
-
-
     } catch (e) {
-
-      
       console.log(`caught error ${e}`);
       reject(e);
     }
@@ -161,11 +134,10 @@ function optionStack(bo: any, direction: boolean) {
 
 export function getRate(currentPrice: number, pair: string, dir: boolean, time: number, stack: number, amount: number, chainId: number, web3: any) {
   return new Promise(async (resolve, reject) => {
-
     try {
       const bo = getBOContract(chainId, web3)
       const max = await callPoolMaxAvailable(chainId, web3);
-      
+
       console.log(`max is ${max} pair ${pair}, time ${time}, amount ${amount}, chainID: ${chainId}`);
       await bo.methods
         .getRate(pair, max, amount, currentPrice, time, dir)
@@ -175,13 +147,10 @@ export function getRate(currentPrice: number, pair: string, dir: boolean, time: 
             if (err) {
               reject(err)
             }
-
             resolve(data);
           }
         )
     } catch (e) {
-
-      
       console.log(`caught error ${e}`);
       reject(e);
     }
@@ -211,7 +180,6 @@ export function callBIOPBalance(address: string, chainId: number, web3: any) {
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -230,7 +198,6 @@ export function callBIOPTotalSupply(chainId: number, web3: any) {
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -248,7 +215,6 @@ export function callBIOPAllowance(spender: string, address: string, chainId: num
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -267,7 +233,6 @@ export function sendBIOPApprove(spender: string, address: string, chainId: numbe
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -295,7 +260,6 @@ export function sendDGovStake(amount: string, address: string, chainId: number, 
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -315,7 +279,6 @@ export function sendDGovWithdraw(amount: string, address: string, chainId: numbe
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -335,7 +298,6 @@ export function callDGovStaked(address: string, chainId: number, web3: any) {
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -371,7 +333,6 @@ export function callDGovRep(address: string, chainId: number, web3: any) {
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -389,7 +350,6 @@ export function sendDGovDelegate(rep: string, address: string, chainId: number, 
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -409,7 +369,6 @@ export function sendDGovUnDelegate(address: string, chainId: number, web3: any, 
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -425,7 +384,6 @@ export function getV2TokenContract(chainId: number, web3: any) {
   );
   return token;
 }
-
 
 export function callV2BIOPBalance(address: string, chainId: number, web3: any): Promise<string> {
   return new Promise(async (resolve, reject) => {
@@ -444,7 +402,6 @@ export function callV2BIOPBalance(address: string, chainId: number, web3: any): 
       )
   })
 }
-
 
 export function callV2BIOPV3Approved(address: string, chainId: number, web3: any): Promise<string> {
   return new Promise(async (resolve, reject) => {
@@ -475,8 +432,7 @@ export function callV2BIOPTotalSupply(chainId: number, web3: any): Promise<strin
           if (err) {
             reject(`${err}`);
           }
-
-          resolve(data)
+          resolve(data);
         }
       )
   })
@@ -484,11 +440,7 @@ export function callV2BIOPTotalSupply(chainId: number, web3: any): Promise<strin
 
 export function sendV2ApproveV3(amount: any, address: string, chainId: number, web3: any, callback: any) {
   return new Promise(async (resolve, reject) => {
-    const bp = getV2TokenContract(chainId, web3)
-    // const ts = await callV2BIOPTotalSupply(chainId, web3);
-    
-    // console.log(`sending v2v3 approve with ts ${ts}`);
-
+    const bp = getV2TokenContract(chainId, web3);
     await bp.methods
       .approve(BIOP_CONTRACT[chainId].address, amount)
       .send(
@@ -507,16 +459,14 @@ export function initiateSwapIfAvailable(address: string, chainId: number, web3: 
   return new Promise(async (resolve, reject) => {
     const balance = await callV2BIOPBalance(address, chainId, web3);
 
-    
     console.log(`biop v2 balance is ${balance} type ${typeof (balance)}`);
-
     // tslint:disable-next-line
     if (greaterThan(balance, 0)) {
       if (window.confirm("BIOP v2 balance detected. Do you want to swap to v3?")) {
-        
+
         console.log(`user has v2 balance so we initiate swap`);
         const approved = await callV2BIOPV3Approved(address, chainId, web3);
-        
+
         console.log(`user has v2approved ${approved} amd balance ${balance}`);
 
         // user has v2 balance so we initiate swap
@@ -540,7 +490,6 @@ export function initiateSwapIfAvailable(address: string, chainId: number, web3: 
           // step 1: approve v3 contract
           sendV2ApproveV3(balance, address, chainId, web3, async (d: any) => {
             const v3 = getBIOPContract(chainId, web3);
-
             // step 2: init swap
             await v3.methods
               .swapv2v3()
@@ -568,10 +517,7 @@ export function getITCOContract(chainId: number, web3: any) {
   return itco;
 }
 
-
 export function buyFromITCO(amount: number, address: string, chainId: number, web3: any) {
-
-  
   console.log(`buying itco with amount eth ${amount}`);
   return new Promise(async (resolve, reject) => {
     await web3.eth.sendTransaction({
@@ -602,7 +548,6 @@ export function callITCOAmountSold(chainId: number, web3: any) {
   })
 }
 
-
 export function postBuyBIOP(amount: string, address: string, chainId: number, web3: any) {
   return new Promise(async (resolve, reject) => {
     const itco = getITCOContract(chainId, web3);
@@ -620,8 +565,6 @@ export function postBuyBIOP(amount: string, address: string, chainId: number, we
       )
   })
 }
-
-
 
 export function getBOContract(chainId: number, web3: any) {
   const pool = new web3.eth.Contract(
@@ -642,7 +585,6 @@ export function callBIOPPendingBalance(address: string, chainId: number, web3: a
           if (err) {
             reject(err)
           }
-
           resolve(data);
         }
       )
@@ -660,7 +602,6 @@ export function callBetFee(chainId: number, web3: any) {
           if (err) {
             reject(0)
           }
-
           resolve(data);
         }
       )
@@ -678,12 +619,12 @@ export function callOpenCalls(chainId: number, web3: any) {
           if (err) {
             reject(0)
           }
-
           resolve(data);
         }
       )
   })
 }
+
 export function callOpenPuts(chainId: number, web3: any) {
   return new Promise(async (resolve, reject) => {
     const bo = getBOContract(chainId, web3);
@@ -695,7 +636,6 @@ export function callOpenPuts(chainId: number, web3: any) {
           if (err) {
             reject(0)
           }
-
           resolve(data);
         }
       )
@@ -704,10 +644,7 @@ export function callOpenPuts(chainId: number, web3: any) {
 
 export function claimRewards(address: string, chainId: number, web3: any, onComplete: any) {
   return new Promise(async (resolve, reject) => {
-
     const pool = getBOContract(chainId, web3);
-
-
     await pool.methods
       .claimRewards()
       .send(
@@ -716,7 +653,6 @@ export function claimRewards(address: string, chainId: number, web3: any, onComp
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -724,10 +660,6 @@ export function claimRewards(address: string, chainId: number, web3: any, onComp
       .on('error', onComplete)
   })
 }
-
-
-
-
 
 export function callSoldAmount(chainId: number, web3: any) {
   return new Promise(async (resolve, reject) => {
@@ -740,15 +672,12 @@ export function callSoldAmount(chainId: number, web3: any) {
           if (err) {
             reject(err)
           }
-
-          
           console.log(`biop raw balance is ${data}`);
           resolve(data)
         }
       )
   })
 }
-
 
 // POOL functions 
 export function callPoolTotalSupply(chainId: number, web3: any) {
@@ -762,12 +691,12 @@ export function callPoolTotalSupply(chainId: number, web3: any) {
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
   })
 }
+
 export function callPoolMaxAvailable(chainId: number, web3: any): Promise<string> {
   return new Promise(async (resolve, reject) => {
     const pool = getBOContract(chainId, web3)
@@ -777,12 +706,9 @@ export function callPoolMaxAvailable(chainId: number, web3: any): Promise<string
         { from: zeroAddress },
         (err: any, data: any) => {
           if (err) {
-            
             console.log(err);
-
             reject(0)
           }
-
           resolve(data)
         }
       )
@@ -800,7 +726,6 @@ export function callPoolNextWithdraw(address: string, chainId: number, web3: any
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -818,7 +743,6 @@ export function callPoolStakedBalance(address: string, chainId: number, web3: an
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -828,11 +752,6 @@ export function callPoolStakedBalance(address: string, chainId: number, web3: an
 export function sendDeposit(address: string, amount: string, chainId: number, web3: any, onComplete: any) {
   return new Promise(async (resolve, reject) => {
     const pool = getBOContract(chainId, web3);
-    
-    console.log(`depoyts`);
-    
-    console.log(amount);
-    
     console.log(bigNumberStringToInt(amount));
     await pool.methods
       .stake()
@@ -842,7 +761,6 @@ export function sendDeposit(address: string, amount: string, chainId: number, we
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -853,14 +771,8 @@ export function sendDeposit(address: string, amount: string, chainId: number, we
 
 export function sendWithdrawGuarded(address: string, amount: string, chainId: number, web3: any, onComplete: any) {
   return new Promise(async (resolve, reject) => {
-    
-    console.log(`depoyts`);
-    
-    console.log(amount);
-    
     console.log(bigNumberStringToInt(amount));
     const lockedAmount: any = await getPoolLockedAmount(chainId, web3);
-
     const poolBalance: any = await callPoolTotalSupply(chainId, web3);
     if (greaterThan(amount, subtract(poolBalance, lockedAmount))) {
       alert("Invalid withdraw. Try withdrawing a little less. A portion of the funds you are trying to withdraw are currently locked in open options.");
@@ -868,7 +780,6 @@ export function sendWithdrawGuarded(address: string, amount: string, chainId: nu
       onComplete();
     } else {
       resolve(sendWithdraw(address, amount, chainId, web3, onComplete));
-
     }
   });
 
@@ -877,7 +788,6 @@ export function sendWithdrawGuarded(address: string, amount: string, chainId: nu
 export function sendWithdraw(address: string, amount: string, chainId: number, web3: any, onComplete: any) {
   return new Promise(async (resolve, reject) => {
     const pool = getBOContract(chainId, web3);
-
     await pool.methods
       .withdraw(amount)
       .send(
@@ -886,15 +796,12 @@ export function sendWithdraw(address: string, amount: string, chainId: number, w
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
       .on('confirmation', onComplete)
       .on('error', onComplete)
-
   });
-
 }
 
 export function getPoolLockedAmount(chainId: number, web3: any) {
@@ -908,15 +815,11 @@ export function getPoolLockedAmount(chainId: number, web3: any) {
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
   })
 }
-
-
-
 
 export function callMaxRounds(chainId: number, web3: any) {
   return new Promise(async (resolve, reject) => {
@@ -929,7 +832,6 @@ export function callMaxRounds(chainId: number, web3: any) {
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -947,13 +849,11 @@ export function callMinRounds(chainId: number, web3: any) {
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
   })
 }
-
 
 export function callMaxMin(chainId: number, web3: any) {
   return new Promise(async (resolve, reject) => {
@@ -962,42 +862,32 @@ export function callMaxMin(chainId: number, web3: any) {
       const min = callMinRounds(chainId, web3);
       resolve({ max, min });
     } catch (e) {
-       
       console.log(`error loading max min ${e}`);
       reject({ max: 3, min: 1 });
     }
   })
 }
 
-
-
 // binary options functions
 export function makeBet(address: string, amount: string, callOption: boolean, time: number, priceProvider: string, chainId: number, web3: any, onComplete: any) {
   return new Promise(async (resolve, reject) => {
-
-     
     console.log(`make bet 2  senbt vy ${address} priceprovider ${priceProvider}, amount ${amount}`);
     const pool = getBOContract(chainId, web3);
 
-
-
     const formattedAmount = bigNumberStringToInt(amount);
-     
+
     console.log(`bet amuynt raw type ${typeof (amount)}`);
-     
+
     console.log(`bet amuynt raw ${amount}`);
-    
+
     console.log(`bet amuynt raw ${formattedAmount}`);
 
     const poolLockedAmount = await getPoolLockedAmount(chainId, web3);
-    
-    console.log(`pool locked amount${poolLockedAmount}`);
-    
-    console.log(`formatted amount ${formattedAmount}`);
-    
-    //   console.log(`possible payout ${possiblePaout}`);
 
-    
+    console.log(`pool locked amount${poolLockedAmount}`);
+
+    console.log(`formatted amount ${formattedAmount}`);
+
     console.log(`${callOption} ${priceProvider} ${time} ${BO_CONTRACT[chainId].address}`);
     await pool.methods
       .bet(callOption, priceProvider, time)
@@ -1007,7 +897,6 @@ export function makeBet(address: string, amount: string, callOption: boolean, ti
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -1020,7 +909,7 @@ export function getPossiblePayout(amount: string, web3: any, chainId: number) {
   return new Promise(async (resolve, reject) => {
     const bin = getBOContract(chainId, web3);
     const formattedAmount = bigNumberStringToInt(amount);
-    
+
     console.log(`formatted amount ${formattedAmount}`);
     await bin.methods
       .calculatePossiblePayout(formattedAmount)
@@ -1030,7 +919,6 @@ export function getPossiblePayout(amount: string, web3: any, chainId: number) {
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -1048,7 +936,6 @@ export function getTotalInterchange(web3: any, chainId: number) {
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -1066,7 +953,6 @@ export function getOptionData(optionId: any, web3: any, chainId: number) {
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -1077,7 +963,7 @@ export function getOptionData(optionId: any, web3: any, chainId: number) {
 export function sendComplete(address: string, optionId: any, chainId: number, web3: any, onComplete: any) {
   return new Promise(async (resolve, reject) => {
     const bin = getBOContract(chainId, web3);
-    
+
     console.log(`expiring option #${optionId}`);
     await bin.methods
       .complete(optionId)
@@ -1087,7 +973,6 @@ export function sendComplete(address: string, optionId: any, chainId: number, we
           if (err) {
             reject(err)
           }
-
           resolve(data)
         }
       )
@@ -1133,7 +1018,6 @@ export function getOptionCreation(chainId: number, web3: any, blockNum: number) 
       if (error) {
         reject(error);
       }
-
       resolve(events);
     })
   })
@@ -1149,7 +1033,6 @@ export function getOptionExpiration(chainId: number, web3: any, blockNum: number
       if (error) {
         reject(error);
       }
-
       resolve(events);
     })
   })
@@ -1166,7 +1049,6 @@ export function getOptionExercise(chainId: number, web3: any, blockNum: number) 
       if (error) {
         reject(error);
       }
-
       resolve(events);
     })
   })

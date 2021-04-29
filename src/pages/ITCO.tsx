@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import i18n from "../i18n";
-import { /*initiateSwapIfAvailable,*/ getETHBalance, callITCOAmountSold, buyFromITCO, callBIOPBalance } from "../helpers/web3";
+import { getETHBalance, callITCOAmountSold, buyFromITCO, callBIOPBalance } from "../helpers/web3";
 import ReactTooltip from 'react-tooltip';
-// import Right from "../assets/right.png";
 import { DEFAULT_LANG, enabledPricePairs } from "../constants";
 import Column from 'src/components/Column';
 import Button from 'src/components/Button';
 import Loading from 'src/components/Loading';
 import ITCOChart from 'src/components/ITCOChart';
 import { colors, fonts } from 'src/styles';
-import { useActiveWeb3React } from '../hooks'
-import { /* convertAmountFromRawNumber, */ formatFixedDecimals, divide, /* greaterThan, multiply,  *//* convertToDecimals */ } from 'src/helpers/bignumber';
+import { useActiveWeb3React } from '../hooks';
+import { formatFixedDecimals, divide } from 'src/helpers/bignumber';
 import { initWeb3 } from '../utils';
+import Footer from '../components/Footer';
 
 const SBet = styled.div`
   width: 100%;
@@ -152,7 +152,7 @@ const Trade = () => {
   }, [chainId]);
 
   useEffect(() => {
-    if (!!address && !!networkId) {
+    if (!!address && !!web3) {
       getBalance();
       getAmountSold();
     }
@@ -286,20 +286,25 @@ const Trade = () => {
   const height = window.innerHeight;
 
   return (
-    <SBet>
-      {
-        pendingRequest || !web3 || !address ?
-          <Loading />
-          :
-          <SRow style={{ flexDirection: width > height ? "row" : "column" }}>
-            <ITCOChart web3={web3} chainId={networkId} tier={tier} />
-            <div style={{ width: 150, height: 10 }} />
-            <SInterface>
-              {renderInput()}
-            </SInterface>
-          </SRow>
-      }
-    </SBet >
+    <>
+      <SBet>
+        {
+          pendingRequest || !web3 || !address ?
+            <Loading />
+            :
+            <SRow style={{ flexDirection: width > height ? "row" : "column" }}>
+              <ITCOChart web3={web3} chainId={networkId} tier={tier} />
+              <div style={{ width: 150, height: 10 }} />
+              <SInterface>
+                {renderInput()}
+              </SInterface>
+            </SRow>
+        }
+      </SBet >
+      <Footer
+        locale={locale}
+      />
+    </>
   )
 }
 
