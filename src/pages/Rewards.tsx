@@ -84,7 +84,7 @@ const Stake = () => {
 
   return (
     <SRewards>
-      <div style={{ marginTop: 200, fontSize: 40, color: `rgb(${colors.black})` }}><b>Earn Rewards</b></div>
+      <div style={{ paddingTop: 200, fontSize: 40, color: `rgb(${colors.black})` }}><b>Earn Rewards</b></div>
       <div style={{ color: `rgb(${colors.black})` }}>BIOP governance tokens earned for utilizing the protocol.</div>
       {loading ?
         <Loading />
@@ -98,7 +98,7 @@ const Stake = () => {
       <br />
       <SHelper style={{ color: `rgb(${colors.black})` }}>Governance will be available here soon</SHelper>
 
-      <div style={{ opacity: "0%" }}>
+      <div style={{ display: "none" }}>
         {
           web3 && address ?
             <div>

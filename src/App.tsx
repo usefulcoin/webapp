@@ -20,6 +20,7 @@ import Trade from './pages/Trade';
 import Exercise from './pages/Exercise';
 import Landing from './pages/Landing';
 import ITCO from './pages/ITCO';
+import WalletModal from './components/WalletModal';
 
 const SLayout = styled.div`
   position: relative;
@@ -98,28 +99,29 @@ function App() {
           <Redirect to={{ ...location, pathname: '/home' }} />
         </Switch>
 
-          <Modal show={showModal} toggleModal={toggleModal}>
-            {pendingRequest ? (
-              <SModalContainer>
-                <SModalTitle>{"Pending Call Request"}</SModalTitle>
-                <SContainer>
-                  <Loader />
-                  <SModalParagraph>
-                    {"Approve or reject request using your wallet"}
-                  </SModalParagraph>
-                </SContainer>
-              </SModalContainer>
-            ) : result ? (
-              <SModalContainer>
-                <SModalTitle>{"Call Request Approved"}</SModalTitle>
-                <ModalResult>{result}</ModalResult>
-              </SModalContainer>
-            ) : (
-              <SModalContainer>
-                <SModalTitle>{"Call Request Rejected"}</SModalTitle>
-              </SModalContainer>
-            )}
-          </Modal>
+        <Modal show={showModal} toggleModal={toggleModal}>
+          {pendingRequest ? (
+            <SModalContainer>
+              <SModalTitle>{"Pending Call Request"}</SModalTitle>
+              <SContainer>
+                <Loader />
+                <SModalParagraph>
+                  {"Approve or reject request using your wallet"}
+                </SModalParagraph>
+              </SContainer>
+            </SModalContainer>
+          ) : result ? (
+            <SModalContainer>
+              <SModalTitle>{"Call Request Approved"}</SModalTitle>
+              <ModalResult>{result}</ModalResult>
+            </SModalContainer>
+          ) : (
+            <SModalContainer>
+              <SModalTitle>{"Call Request Rejected"}</SModalTitle>
+            </SModalContainer>
+          )}
+        </Modal>
+        <WalletModal />
       </SLayout>
     </Web3ReactManager>
   );
