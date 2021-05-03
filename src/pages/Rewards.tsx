@@ -1,185 +1,142 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { callBIOPPendingBalance, callBIOPBalance, claimRewards} from "../helpers/web3";
+import { callBIOPPendingBalance, callBIOPBalance, claimRewards } from "../helpers/web3";
 
 import Button from "../components/Button";
 import Loading from "../components/Loading";
 import ClaimETHRewards from "../components/governance/ClaimETHRewards";
 import Delegate from "../components/governance/Delegate";
 import StakeBIOP from "../components/governance/StakeBIOP";
-import {  convertAmountFromRawNumber } from 'src/helpers/bignumber';
-import {colors} from "../styles";
+import { convertAmountFromRawNumber } from 'src/helpers/bignumber';
+import { colors } from "../styles";
+import { useActiveWeb3React } from '../hooks';
+import { initWeb3 } from '../utils';
+
+const height = window.innerHeight;
 
 const SRewards = styled.div`
-    width:100%;
-    height:100%;
+  height: ${height - 70}px;
 `
 const SHelper = styled.div`
     font-size: x-small;
 `
 
-interface IRewardsProps {
-    address: string
-    chainId: number
-    web3: any
-}
+const Stake = () => {
+  const { account, chainId } = useActiveWeb3React();
 
+  const [address, setAddress] = useState<string>('');
+  const [web3, setWeb3] = useState<any>('');
+  const [networkId, setNetworkId] = useState<number>(1);
+  // @ts-ignore
+  const [pendingRequest, setPendingRequest] = useState<boolean>(false);
+  // @ts-ignore
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [biopPendingBalance, setBiopPendingBalance] = useState<number>(0);
+  const [biopBalance, setBiopBalance] = useState<number>(0);
 
-interface IRewardsState {
-    address: string;
-    web3: any;
-    chainId: number;
-    pendingRequest: boolean;
-    error: string;
-    biopPendingBalance: number;
-    biopBalance: number;
-    loading: boolean;
-}
-
-const INITIAL_STATE: IRewardsState = {
-    address: "",
-    web3: null,
-    chainId: 0,
-    pendingRequest: false,
-    error: "",
-    biopPendingBalance: 0,
-    biopBalance: 0,
-    loading: false
-};
-class Stake extends React.Component<any, any> {
-    // @ts-ignore
-    public state: IRewardsState;
-
-    constructor(props: IRewardsProps) {
-        super(props);
-        this.state = {
-            ...INITIAL_STATE
-        };
-        this.state.web3 = props.web3;
-        this.state.address = props.address;
-        this.state.chainId = props.chainId;
+  useEffect(() => {
+    if (!!account) {
+      setAddress(account);
     }
+  }, [account]);
 
-    public componentDidMount() {
-        this.getAvailableClaims();
-        this.getCurrentBalance();
+  useEffect(() => {
+    if (!!chainId) {
+      setNetworkId(chainId)
+      setWeb3(initWeb3(chainId));
     }
+  }, [chainId]);
 
-
-    public async getAvailableClaims() {
-        const {chainId, web3, address} = this.state;
-
-        const biopBalance = await callBIOPBalance(address, chainId, web3);
-
-
-            
-            console.log("presend");
-            
-            console.log(biopBalance);
-        this.setState({biopBalance})
+  useEffect(() => {
+    if (web3 && address) {
+      getAvailableClaims();
+      getCurrentBalance();
     }
+  }, [address, web3]);
 
-    public async getCurrentBalance() {
-        const {chainId, web3, address} = this.state;
+  const getAvailableClaims = async () => {
+    const _biopBalance = await callBIOPBalance(address, networkId, web3);
+    setBiopBalance(Number(_biopBalance));
+  }
 
-        const biopPendingBalance = await callBIOPPendingBalance(address, chainId, web3);
+  const getCurrentBalance = async () => {
+    const _biopPendingBalance = await callBIOPPendingBalance(address, networkId, web3);
+    setBiopPendingBalance(Number(_biopPendingBalance));
+  }
 
+  const handleClaimRewards = () => {
+    setLoading(true);
+    claimRewards(address, networkId, web3, (res: any) => {
+      getCurrentBalance();
+      getAvailableClaims();
+      setLoading(false);
+    });
+  }
 
-            
-            console.log("presend");
-            
-            console.log(biopPendingBalance);
-        this.setState({biopPendingBalance})
+  const showClaimButton = () => {
+    if (biopPendingBalance > 0) {
+      return <Button onClick={() => handleClaimRewards()}>Claim rewards</Button>
+    } else {
+      return null;
     }
+  }
 
-    public async handleClaimRewards() {
-        this.setState({loading: true});
-        const {address, web3, chainId} = this.state;
-        claimRewards(address, chainId, web3, (res: any) => {
+  return (
+    <SRewards>
+      <div style={{ marginTop: 200, fontSize: 40, color: `rgb(${colors.black})` }}><b>Earn Rewards</b></div>
+      <div style={{ color: `rgb(${colors.black})` }}>BIOP governance tokens earned for utilizing the protocol.</div>
+      {loading ?
+        <Loading />
+        :
+        <div>
+          <div style={{ color: `rgb(${colors.black})` }}>Claims: <b>{convertAmountFromRawNumber(biopPendingBalance, 18)} BIOP</b></div>
+          <div style={{ color: `rgb(${colors.black})` }}>Balance: <b>{convertAmountFromRawNumber(biopBalance, 18)} BIOP</b></div>
+          {showClaimButton()}
+        </div>
+      }
+      <br />
+      <SHelper style={{ color: `rgb(${colors.black})` }}>Governance will be available here soon</SHelper>
 
-            this.getCurrentBalance();
-            this.getAvailableClaims();
-            this.setState({loading: false});
-        })
+      <div style={{ opacity: "0%" }}>
+        {
+          web3 && address ?
+            <div>
+              <div style={{ border: "1px solid black" }}>
+                <StakeBIOP web3={web3} chainId={chainId} address={address} />
+              </div>
 
-    }
+              <div style={{ border: "1px solid black" }}>
+                <ClaimETHRewards web3={web3} chainId={chainId} address={address} />
+              </div>
 
-
-
-    public showClaimButton() {
-        const {biopPendingBalance} = this.state;
-        if (biopPendingBalance > 0) {
-            return <Button onClick={()=>this.handleClaimRewards()}>Claim rewards</Button>
-        } else {
-            return <></>;
+              <div style={{ border: "1px solid black" }}>
+                <Delegate web3={web3} chainId={chainId} address={address} />
+              </div>
+            </div>
+            :
+            null
         }
-    }
-
-
-
-
-
-
-    public render() {
-        const {biopPendingBalance, biopBalance, loading, web3, chainId, address} = this.state;
-        return(
-            <SRewards>
-
-                <h1 style={{color: `rgb(${colors.black})`}}>Earn Rewards</h1>
-                <p style={{color: `rgb(${colors.black})`}}>BIOP governance tokens earned for utilizing the protocol.</p>
-                {loading ?
-                <Loading/>
-                :
-                <div>
-                <p  style={{color: `rgb(${colors.black})`}}>Claims: <b>{convertAmountFromRawNumber(biopPendingBalance, 18)} BIOP</b></p>
-                <p style={{color: `rgb(${colors.black})`}}>Balance: <b>{convertAmountFromRawNumber(biopBalance, 18)} BIOP</b></p>
-                {this.showClaimButton()}
-                </div>
-                }
-                <br/>
-                <SHelper style={{color: `rgb(${colors.black})`}}>Governance will be available here soon</SHelper>
-
-                <div style={{opacity: "0%"}}>
-                <div style={{border: "1px solid black"}}>
-
-                    <StakeBIOP web3={web3} chainId={chainId} address={address}/>
-                </div>
-
-                <div style={{border: "1px solid black"}}>
-
-                    <ClaimETHRewards web3={web3} chainId={chainId} address={address}/>
-                </div>
-
-
-               <div style={{border: "1px solid black"}}>
-                    <Delegate web3={web3} chainId={chainId} address={address}/>
-               </div>
-
-               <div style={{border: "1px solid black"}}>
-                    <h3>Governance🏦</h3>
-                    <SHelper>Governance actions will be available here soon.</SHelper>
-
-                    <h4>Tier 1: 50%</h4>
-                    <Button disabled>Update Max Option Time</Button>
-                    <Button disabled>Update Min Option Time</Button>
-                    <h4>Tier 2: 66%</h4>
-                    <Button disabled>Update Exercise/Expire Fee</Button>
-                    <Button disabled>Update Trade Pairs and RateCalcs</Button>
-                    <h4>Tier 3: 75%</h4>
-                    <Button disabled>Update Bet Fee</Button>
-                    <Button disabled>Update pool lock time</Button>
-                    <Button disabled>Update staking rewards length epoch</Button>
-                    <h4>Tier 4: 90%</h4>
-                    <Button disabled>Change Governance Tier Levels</Button>
-                    <Button disabled>Close Pool From New Deposits</Button>
-               </div>
-               </div>
-
-            </SRewards>
-
-        )
-    }
-
+        <div style={{ border: "1px solid black" }}>
+          <h3>Governance🏦</h3>
+          <SHelper>Governance actions will be available here soon.</SHelper>
+          <h4>Tier 1: 50%</h4>
+          <Button disabled>Update Max Option Time</Button>
+          <Button disabled>Update Min Option Time</Button>
+          <h4>Tier 2: 66%</h4>
+          <Button disabled>Update Exercise/Expire Fee</Button>
+          <Button disabled>Update Trade Pairs and RateCalcs</Button>
+          <h4>Tier 3: 75%</h4>
+          <Button disabled>Update Bet Fee</Button>
+          <Button disabled>Update pool lock time</Button>
+          <Button disabled>Update staking rewards length epoch</Button>
+          <h4>Tier 4: 90%</h4>
+          <Button disabled>Change Governance Tier Levels</Button>
+          <Button disabled>Close Pool From New Deposits</Button>
+        </div>
+      </div>
+    </SRewards>
+  )
 }
 
 export default Stake

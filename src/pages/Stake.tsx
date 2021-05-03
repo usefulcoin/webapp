@@ -39,11 +39,11 @@ const Stake = () => {
   // @ts-ignore
   const [staked, setStaked] = useState<number>(0);
   const [totalStaked, setTotalStaked] = useState<number>(0);
-  const [staking, setStaking] = useState<boolean>(Boolean);
+  const [staking, setStaking] = useState<boolean>(false);
   const [nextWithdraw, setNextWithdraw] = useState<number>(0);
   const [locktotalLocked, setLocktotalLocked] = useState<number>(0);
   const [poolBalance, setPoolBalance] = useState<number>(0);
-  const [changeAmount, setChangeAmount] = useState<number>(0)
+  const [changeAmount, setChangeAmount] = useState<number>(0);
 
   useEffect(() => {
     if (!!account) {
@@ -60,7 +60,7 @@ const Stake = () => {
 
   // @ts-ignore
   useEffect(() => {
-    if (web3) {
+    if (web3 && address) {
       getStaked();
     }
   }, [address, web3]);
@@ -164,80 +164,76 @@ const Stake = () => {
     }
   }
 
-  if (!!web3) {
-    return (
-      <SStake>
-        <div style={{
-          backgroundColor: '#F6F6F6',
-          boxShadow: '0px 5px 6px #00000029',
-          borderRadius: 20,
-          padding: 20,
-          color: '#3F3F4F',
-          width: '60%',
-          minWidth: 480
-        }}
-        >
-          <div style={{ fontSize: 36 }}>
-            <b>Sell Options</b>
-          </div>
-          <div style={{ fontSize: 22, marginTop: 10 }}>
-            Contribute to the liquidity pool and passively earn premiums.
-          </div>
+  return (
+    <SStake>
+      <div style={{
+        backgroundColor: '#F6F6F6',
+        boxShadow: '0px 5px 6px #00000029',
+        borderRadius: 20,
+        padding: 20,
+        color: '#3F3F4F',
+        width: '60%',
+        minWidth: 480
+      }}
+      >
+        <div style={{ fontSize: 36 }}>
+          <b>Sell Options</b>
         </div>
-        <div style={{
-          backgroundColor: '#F6F6F6',
-          boxShadow: '0px 5px 6px #00000029',
-          borderRadius: 20,
-          padding: 20,
-          marginTop: 50,
-          marginBottom: 150,
-          color: '#3F3F4F',
-          fontSize: 22,
-          width: '60%',
-          minWidth: 480
-        }}
-        >
-          <div style={{ color: `rgb(${colors.black})` }}>
-            <b>{convertToDecimals(`${formatFixedDecimals(`${web3.utils.fromWei(`${poolBalance}`, "ether")}`, 5)}`, 2)} ETH</b> Total Staked
-            (<b>{formatFixedDecimals(`${web3.utils.fromWei(`${subtract(poolBalance, locktotalLocked)}`, "ether")}`, 5)}</b> Available)
+        <div style={{ fontSize: 22, marginTop: 10 }}>
+          Contribute to the liquidity pool and passively earn premiums.
           </div>
-          <div style={{ color: `rgb(${colors.black})` }}>
-            Your contribution: <b>{convertAmountFromRawNumber(staked, 18)} ETH</b>
+      </div>
+      <div style={{
+        backgroundColor: '#F6F6F6',
+        boxShadow: '0px 5px 6px #00000029',
+        borderRadius: 20,
+        padding: 20,
+        marginTop: 50,
+        marginBottom: 150,
+        color: '#3F3F4F',
+        fontSize: 22,
+        width: '60%',
+        minWidth: 480
+      }}
+      >
+        <div style={{ color: `rgb(${colors.black})` }}>
+          <b>{web3 ? convertToDecimals(`${formatFixedDecimals(`${web3.utils.fromWei(`${poolBalance}`, "ether")}`, 5)}`, 2) : '0.00'} ETH</b> Total Staked
+            (<b>{web3 ? formatFixedDecimals(`${web3.utils.fromWei(`${subtract(poolBalance, locktotalLocked)}`, "ether")}`, 5) : '0.00'}</b> Available)
           </div>
-          <div style={{ color: `rgb(${colors.black})` }}>
-            <b>{convertToDecimals(`${((staked / totalStaked)) * 100}`, 2)}%</b> of total staked.
+        <div style={{ color: `rgb(${colors.black})` }}>
+          Your contribution: <b>{convertAmountFromRawNumber(staked, 18)} ETH</b>
+        </div>
+        <div style={{ color: `rgb(${colors.black})` }}>
+          <b>{convertToDecimals(`${((staked / totalStaked)) * 100}`, 2)}%</b> of total staked.
           </div>
-          {renderStakeWithdrawSwitch()}
-          <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
-          {
-            pendingRequest ?
-              <Loading />
-              :
-              <>
-                <Input value={changeAmount} placeholder={`Amount To ${staking ? "Stake" : "Withdraw"}`}
-                  onChange={(e: any) => {
-                    setChangeAmount(e.target.value);
-                  }}
-                  id="amountStake" />
-                <SHelper style={{ color: `rgb(${colors.black})` }}>
-                  Amount In ETH
+        {renderStakeWithdrawSwitch()}
+        <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
+        {
+          pendingRequest ?
+            <Loading />
+            :
+            <>
+              <Input value={changeAmount} placeholder={`Amount To ${staking ? "Stake" : "Withdraw"}`}
+                onChange={(e: any) => {
+                  setChangeAmount(e.target.value);
+                }}
+                id="amountStake" />
+              <SHelper style={{ color: `rgb(${colors.black})` }}>
+                Amount In ETH
                 </SHelper>
-                {staking ?
-                  renderStake()
-                  :
-                  renderWithdrawAvailable()
-                }
-              </>
-          }
-        </div>
-        <Footer
-          locale={locale}
-        />
-      </SStake >
-    )
-  } else {
-    return null;
-  }
+              {staking ?
+                renderStake()
+                :
+                renderWithdrawAvailable()
+              }
+            </>
+        }
+      </div>
+      <Footer
+        locale={locale}
+      />
+    </SStake >
+  )
 }
 
 export default Stake

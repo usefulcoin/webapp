@@ -158,8 +158,6 @@ export function getRate(currentPrice: number, pair: string, dir: boolean, time: 
   })
 }
 
-
-
 // biop rewards functions
 export function getBIOPContract(chainId: number, web3: any) {
   const bp = new web3.eth.Contract(

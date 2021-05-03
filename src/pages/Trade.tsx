@@ -212,7 +212,7 @@ const Trade = () => {
         }, 30000)
       );
     }
-    if (!!address && !!web3) {
+    if (address && web3) {
       fetchData();
     }
   }, [address, web3]);
@@ -516,26 +516,25 @@ const Trade = () => {
     )
   }
 
-  if (!!web3) {
-    return (
-      <SBet>
-        <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
-        {
-          pendingRequest ?
-            <Loading />
-            :
-            <div style={{ width: '100%', height: '100%' }}>
-              <SInputContainer>
-                {renderPairSelect()}
-                {renderRoundsSelect()}
-              </SInputContainer>
-              <SInterface>
-                {renderBetApprove()}
-                {renderInput()}
-              </SInterface>
-            </div>
-        }
-        {/* <SHelper >Trading Volume: {formatFixedDecimals(web3.utils.fromWei(`${totalInterchange}`, "ether"), 8)} ETH</SHelper>
+  return (
+    <SBet>
+      <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
+      {
+        pendingRequest ?
+          <Loading />
+          :
+          <div style={{ width: '100%', height: '100%' }}>
+            <SInputContainer>
+              {renderPairSelect()}
+              {renderRoundsSelect()}
+            </SInputContainer>
+            <SInterface>
+              {renderBetApprove()}
+              {renderInput()}
+            </SInterface>
+          </div>
+      }
+      {/* <SHelper >Trading Volume: {formatFixedDecimals(web3.utils.fromWei(`${totalInterchange}`, "ether"), 8)} ETH</SHelper>
         {
           hasBet ?
             <SHelper>Share your price prediction with the world:
@@ -565,11 +564,8 @@ const Trade = () => {
           :
           <></>
         } */}
-      </SBet>
-    )
-  } else {
-    return null;
-  }
+    </SBet>
+  )
 }
 
 export default Trade

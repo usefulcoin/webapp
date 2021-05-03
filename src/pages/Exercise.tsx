@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { getOptionsAndCloses, sendComplete, getLatestPrice, getOptionData, callCurrentRoundID } from "../helpers/web3";
 import { add, floorDivide } from '../helpers/bignumber';
@@ -8,6 +8,8 @@ import OptionTable from 'src/components/OptionTable';
 import Loading from 'src/components/Loading';
 import { colors } from 'src/styles';
 import { enabledPricePairs } from "../constants";
+import { useActiveWeb3React } from '../hooks';
+import { initWeb3 } from '../utils';
 
 const SStake = styled.div`
     width:100%;
@@ -17,113 +19,75 @@ const SHelper = styled.div`
     font-size: x-small;
 `
 
-interface IExerciseProps {
-  address: string
-  chainId: number
-  web3: any
-}
+const Exercise = () => {
 
+  const { account, chainId } = useActiveWeb3React();
 
-interface IExerciseState {
-  address: string;
-  web3: any;
-  chainId: number;
-  pendingRequest: boolean;
-  error: string;
-  options: [];
-  currentPrice: number;
-  priceInterval: any;
-  optionsInterval: any;
-  calls: number;
-  puts: number;
-  exercised: number;
-  expired: number;
-  avgValue: number;
-  currentRound: any;
-}
-
-const INITIAL_STATE: IExerciseState = {
-  address: "",
-  web3: null,
-  chainId: 1,
-  pendingRequest: false,
-  error: "",
-  options: [],
-  currentPrice: 0,
-  priceInterval: null,
-  optionsInterval: null,
-  currentRound: 0,// current oracle round
-
-  // used for snapshot visualization
-  calls: 0,
-  puts: 0,
-  exercised: 0,
-  expired: 0,
-  avgValue: 0
-};
-class Exercise extends React.Component<any, any> {
+  const [address, setAddress] = useState<string>('');
+  const [web3, setWeb3] = useState<any>('');
+  const [networkId, setNetworkId] = useState<number>(1);
+  const [pendingRequest, setPendingRequest] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
   // @ts-ignore
-  public state: IExerciseState;
+  const [options, setOptions] = useState<[]>([]);
+  const [currentPrice, setCurrentPrice] = useState<number>(0);
+  const [priceInterval, setPriceInterval] = useState<any>();
+  const [optionsInterval, setOptionsInterval] = useState<any>();
+  const [currentRound, setCurrentRound] = useState<number>(0);
+  const [calls, setCalls] = useState<number>(0);
+  const [puts, setPuts] = useState<number>(0);
+  const [exercised, setExercised] = useState<number>(0);
+  const [expired, setExpired] = useState<number>(0);
+  const [avgValue, setAvgValue] = useState<number>(0);
 
-  constructor(props: IExerciseProps) {
-    super(props);
-    this.state = {
-      ...INITIAL_STATE
-    };
-    this.state.web3 = props.web3;
-    this.state.address = props.address;
-    this.state.chainId = props.chainId;
+  useEffect(() => {
+    if (!!account) {
+      setAddress(account);
+    }
+  }, [account]);
+
+  useEffect(() => {
+    if (!!chainId) {
+      setNetworkId(chainId)
+      setWeb3(initWeb3(chainId));
+    }
+  }, [chainId]);
+
+  // @ts-ignore
+  useEffect(() => {
+    if (web3 && address) {
+      loadOpenOptions();
+      loadCurrentPrice();
+
+      if (priceInterval > 0) {
+        clearInterval(priceInterval);
+      }
+      let _priceInterval = setInterval(async () => {
+        loadCurrentPrice();
+      }, 10000);
+      setPriceInterval(_priceInterval);
+
+      if (optionsInterval > 0) {
+        clearInterval(optionsInterval);
+      }
+      let _optionsInterval = setInterval(async () => {
+        loadOpenOptions();
+      }, 30000);
+      setOptionsInterval(_optionsInterval);
+    }
+  }, [address, web3]);
+
+  const loadCurrentPrice = async () => {
+    const latestPrice = await getLatestPrice(networkId, web3);
+    setCurrentPrice(Number(latestPrice));
   }
 
-  public componentDidMount() {
-    this.loadOpenOptions();
-    this.loadCurrentPrice();
+  const loadOpenOptions = async () => {
+    const options: any = await getOptionsAndCloses(networkId, web3);
+    const cr: any = await callCurrentRoundID(networkId, web3, enabledPricePairs[0].address);
 
-    this.setState({
-      priceInterval: setInterval(() => {
-        this.loadCurrentPrice()
-      }, 10000)
-    });
-    this.setState({
-      optionInterval: setInterval(() => {
-        this.loadOpenOptions()
-      }, 30000)
-    });
-  }
-
-
-  public componentWillUnmount() {
-    clearInterval(this.state.priceInterval);
-    clearInterval(this.state.optionsInterval);
-  }
-
-  public async loadCurrentPrice() {
-    const { chainId, web3 } = this.state;
-    const latestPrice = await getLatestPrice(chainId, web3);
-
-
-    console.log(`latestRound is ${latestPrice}`);
-    this.setState({ currentPrice: latestPrice });
-  }
-
-  public async loadOpenOptions() {
-    const { chainId, web3 } = this.state;
-
-    const options: any = await getOptionsAndCloses(chainId, web3);
-
-    const cr: any = await callCurrentRoundID(chainId, web3, enabledPricePairs[0].address);
-
-
-
-    console.log("options");
-
-    console.log(options);
     const optionsObjects = {};
     for (let i = 0; i < options.length; i++) {
-
-      console.log(`loaded event ${options[i]}`);
-
-      console.log(options[i]);
       if (options[i].returnValues) {
         if (options[i].returnValues.id !== undefined) {// ensurese we skip other events
           if (options[i].returnValues.sP === undefined) {
@@ -138,11 +102,8 @@ class Exercise extends React.Component<any, any> {
               }
             }
           } else {
-            const optionData: any = await getOptionData(options[i].returnValues.id, web3, chainId);
+            const optionData: any = await getOptionData(options[i].returnValues.id, web3, networkId);
 
-            console.log("loaded option data");
-
-            console.log(optionData);
             optionsObjects[options[i].returnValues.id] = {
               blockNumber: options[i].blockNumber,
               purchaseRound: options[i].returnValues.pR,
@@ -158,120 +119,97 @@ class Exercise extends React.Component<any, any> {
           }
         }
       }
-
-
     }
 
     const sorted = Object.keys(optionsObjects).sort((a: any, b: any) => b - a);
 
-
-    console.log(`sorted $`);
-
-    console.log(sorted);
-    let calls = 0;
-    let puts = 0;
-    let exercised = 0;
-    let expired = 0;
-    let avgValue: any = 0;
+    let _calls = 0;
+    let _puts = 0;
+    let _exercised = 0;
+    let _expired = 0;
+    let _avgValue: any = 0;
     const sortedOptions: any = [];
     sorted.forEach((id: any) => {
       if (optionsObjects[id].type === "1") {
-        calls += 1;
+        _calls += 1;
       } else {
-        puts += 1;
+        _puts += 1;
       }
       if (optionsObjects[id].exercised) {
-        exercised += 1;
+        _exercised += 1;
       } else if (optionsObjects[id].expired) {
-        expired += 1;
+        _expired += 1;
       }
 
-
       console.log(`avgValue ${avgValue}`);
-      avgValue = add(avgValue, optionsObjects[id].lockedValue);
-
+      _avgValue = add(avgValue, optionsObjects[id].lockedValue);
 
       console.log(`avgValue after ${avgValue}. purchase value of option = ${optionsObjects[id].purchaseValue}`);
       sortedOptions.push(optionsObjects[id]);
-
     });
 
-
     console.log(`totalValue ${avgValue}`);
-    avgValue = floorDivide(avgValue, sorted.length);
+    _avgValue = floorDivide(avgValue, sorted.length);
 
     console.log(`avgValue ${avgValue}`);
-
-
     console.log(sortedOptions);
-    this.setState({ options: sortedOptions, calls, puts, exercised, expired, avgValue, currentRound: cr })
+
+    setOptions(sortedOptions);
+    setCalls(_calls);
+    setPuts(_puts);
+    setExercised(_exercised);
+    setExpired(_expired);
+    setAvgValue(_avgValue);
+    setCurrentRound(cr);
   }
 
-
-
-
-
-  public async handleComplete(optionId: any) {
-    this.setState({ pendingRequest: true });
-    const { address, chainId, web3 } = this.state
+  const handleComplete = async (optionId: any) => {
+    setPendingRequest(true);
     try {
-
-
       console.log(`sending exercise for opton ${optionId}`);
-      await sendComplete(address, optionId, chainId, web3, (p1: any, p2: any) => {
-
-
+      await sendComplete(address, optionId, networkId, web3, (p1: any, p2: any) => {
         console.log(p1, p2);
-        this.loadOpenOptions();
-        this.setState({ error: "", pendingRequest: false });
-
+        loadOpenOptions();
+        setError("");
+        setPendingRequest(false);
       });
     } catch (e) {
-      this.setState({ error: "Exercise Failed", pendingRequest: false });
+      setError("Exercise Failed");
+      setPendingRequest(false);
     }
   }
 
-
-  public render() {
-    const { currentRound, avgValue, calls, puts, exercised, expired, pendingRequest, error, web3, options, currentPrice } = this.state;
-
-    return (
-      <SStake>
-
-        <h1 style={{ color: `rgb(${colors.black})` }}>Settle Options</h1>
-        <p style={{ color: `rgb(${colors.black})` }}>Earn a settlement fee for exercising in-the-money options or unlocking expired options.</p>
-        <SHelper style={{ color: `rgb(${colors.black})` }}>Settlement fees shown do not include gas/transaction fees.</SHelper>
-        <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
-        {
-          pendingRequest ?
-            <Loading />
-            :
-            <>
-              <OptionTable
-                showFee={true}
-                web3={web3}
-                options={options}
-                handleComplete={(optionId: any) => this.handleComplete(optionId)}
-                currentPrice={currentPrice}
-                currentRound={currentRound}
-              />
-
-            </>
-        }
-        <OptionVis
-          calls={calls}
-          puts={puts}
-          exercised={exercised}
-          expired={expired}
-          avgValue={web3.utils.fromWei(`${avgValue}`, "ether")}
-        />
-
-
-      </SStake>
-
-    )
-  }
-
+  return (
+    <SStake>
+      <h1 style={{ color: `rgb(${colors.black})` }}>Settle Options</h1>
+      <p style={{ color: `rgb(${colors.black})` }}>Earn a settlement fee for exercising in-the-money options or unlocking expired options.</p>
+      <SHelper style={{ color: `rgb(${colors.black})` }}>Settlement fees shown do not include gas/transaction fees.</SHelper>
+      <SHelper style={{ color: `rgb(${colors.red})` }}>{error}</SHelper>
+      {
+        pendingRequest ?
+          <Loading />
+          :
+          <>
+            <OptionTable
+              showFee={true}
+              web3={web3}
+              options={options}
+              handleComplete={(optionId: any) => handleComplete(optionId)}
+              currentPrice={currentPrice}
+              currentRound={currentRound}
+            />
+          </>
+      }
+      <OptionVis
+        calls={calls}
+        puts={puts}
+        exercised={exercised}
+        expired={expired}
+        avgValue={0}
+      // avgValue={web3.utils.fromWei(`${avgValue}`, "ether")}
+      />
+    </SStake>
+  )
 }
 
-export default Exercise
+export default Exercise;
