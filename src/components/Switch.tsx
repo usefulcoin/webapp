@@ -11,10 +11,6 @@ interface ISwitchProps {
   vertical: boolean;
 }
 
-
-
-
-
 const SToggleSwitch = styled.div`
     border-radius: 8px;
     height: 44px;
@@ -31,15 +27,14 @@ const SToggleChild = styled.button`
     font-size: ${fonts.size.medium}
 `
 
-
 const Switch = (props: ISwitchProps) => {
   const { on, onTap, offTap, onLabel, offLabel, vertical } = props
 
   return (
-    <SToggleSwitch style={{flexDirection: vertical ? "column" : "row"}}>
+    <SToggleSwitch style={{ flexDirection: vertical ? "column" : "row" }}>
       <SToggleChild onClick={onTap} style={on ? { color: `rgb(${colors.blue})`, backgroundColor: "white" } : { color: "white", backgroundColor: `rgb(${colors.blue})` }}>
         {onLabel}
-          </SToggleChild>
+      </SToggleChild>
       <SToggleChild onClick={offTap} style={!on ? { color: `rgb(${colors.blue})`, backgroundColor: "white" } : { color: "white", backgroundColor: `rgb(${colors.blue})` }}>
         {offLabel}
       </SToggleChild>
@@ -47,8 +42,5 @@ const Switch = (props: ISwitchProps) => {
 
   )
 }
-
-
-
 
 export default Switch
