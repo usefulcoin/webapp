@@ -8,7 +8,7 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 export const DEFAULT_LANG = "EN🇨🇦";
 
 // pages
-export const BUY_BIOP = "Buy BIOP";
+export const BUY_BIOP = "BIOP";
 export const STAKE = "Stake";
 export const HOME_PAGE = "Home";
 export const BUY_SELL = "Exchange";
